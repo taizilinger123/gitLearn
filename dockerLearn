@@ -1,0 +1,726 @@
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+sudo touch /etc/apt/sources.list.d/docker.list && echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" >>/etc/apt/sources.list.d/docker.list
+sudo apt-get  upgrade
+sudo apt-get  update
+sudo apt-get install docker-engine
+sudo usermod -aG docker yi
+sudo systemctl start docker
+sudo systemctl enable docker
+root@sige:~# mkdir  -p  /etc/systemd/system/docker.service.d/
+root@sige:~# cat  /etc/systemd/system/docker.service.d/http-proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://child-prc.intel.com:913"
+Environment="HTTPS_PROXY=http://child-prc.intel.com:913"
+Environment="FTP_PROXY=http://child-prc.intel.com:913"
+Environment="SOCKS_PROXY=http://child-prc.intel.com:913"
+root@sige:~# sudo systemctl daemon-reload
+root@sige:~# systemctl show --property=Environment docker
+Environment=HTTP_PROXY=http://child-prc.intel.com:913 HTTPS_PROXY=http://child-prc.intel.com:913 FTP_PROXY=http://child-prc.intel.com:913 SOCKS_PROXY=http://child-prc.intel.com:913
+root@sige:~# sudo systemctl restart docker
+root@sige:~# docker  search  ubuntu
+root@sige:~# docker run  ubuntu  echo "Hello World"
+root@sige:~# cat      /etc/docker/daemon.json
+{
+  "registry-mirrors": ["https://hccwwfjl.mirror.aliyuncs.com"]
+}
+root@sige:~# sudo systemctl restart docker
+root@sige:~# docker run  ubuntu  echo "Hello World"   #这样子就解决了很快就下载完了
+
+
+
+root@sige:~# sudo  groupadd  docker
+groupadd: group 'docker' already exists
+root@sige:~# sudo gpasswd -a  root  docker   #把当前的用户加到docker用户组
+Adding user root to group docker
+root@sige:~# systemctl  restart  docker
+退出登录重新登录一下，然后普通用户就可以正常使用docker了
+root@sige:~# docker   version
+root@sige:~# docker run  ubuntu  echo "Hello World"
+Hello World
+root@sige:~# docker run  -i  -t ubuntu  /bin/bash
+root@39744ead2841:/# ls
+root@39744ead2841:/# ps
+  PID TTY          TIME CMD
+    1 ?        00:00:00 bash
+   12 ?        00:00:00 ps
+root@sige:~# docker  run  -it  --name  nwtl ubuntu   /bin/bash
+root@sige:~# docker  ps  -a
+root@sige:~# docker  stop   1790f8dca366
+root@sige:~# docker  start   1790f8dca366
+root@sige:~# docker  restart   1790f8dca366
+root@sige:~# docker  rm  nwtl
+root@sige:~# docker  rm   1790f8dca366
+root@sige:~# docker run ubuntu:15.10 /bin/echo "Hello world"
+root@sige:~# docker run -i -t ubuntu:15.10 /bin/bash
+root@456a3adc4091:/# cat /proc/version     #查看服务器版本
+root@456a3adc4091:/#exit
+root@sige:~# docker pull training/webapp
+root@sige:~# docker run -d -P training/webapp python app.py
+root@sige:~# docker  ps
+root@sige:~# docker  logs  -f   322d44ada1f4
+root@sige:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+centos              latest              5182e96772bf        37 hours ago        200MB
+ubuntu              latest              735f80812f90        12 days ago         83.5MB
+ubuntu              15.10               9b9cb95443b5        2 years ago         137MB
+training/webapp     latest              6fae60ef3446        3 years ago         349MB
+root@sige:~#  docker run -t -i ubuntu:15.10 /bin/bash
+root@e25f1c8154d3:/#exit
+root@sige:~# docker run -t -i ubuntu:14.04 /bin/bash
+Unable to find image 'ubuntu:14.04' locally
+14.04: Pulling from library/ubuntu
+8284e13a281d: Pull complete
+26e1916a9297: Pull complete
+4102fc66d4ab: Pull complete
+1cf2b01777b2: Pull complete
+7f7a2d5e04ed: Pull complete
+Digest: sha256:71529e96591eb36a4100cd0cc5353ff1a2f4ee7a85011e3d3dd07cb5eb524a3e
+Status: Downloaded newer image for ubuntu:14.04
+root@f51789de8d0e:/# ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:03
+          inet addr:172.17.0.3  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:3336 (3.3 KB)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+root@sige:~# sudo  brctl show
+bridge name	bridge id		STP enabled	interfaces
+br0		8000.000000000000	no
+docker0		8000.0242d959013a	no          vethb72e7fc   #多了一个接口名字
+							vethb7f576b
+virbr0		8000.000000000000	yes
+root@sige:~# ifconfig  docker0  192.168.10.1  netmask  255.255.255.0   #修改docker0的网卡的IP
+root@sige:~# ifconfig
+root@sige:~# sudo  brctl addbr  br1
+root@sige:~# sudo ifconfig  br1 192.168.100.1 netmask 255.255.255.0
+root@sige:~# ifconfig
+root@sige:~# tail  -1  /etc/default/docker
+DOCKER_OPTS="-b=br1"
+root@sige:~# service  docker  restart
+root@sige:~# ps aux |  grep  docker
+root@sige:~# docker run -t -i ubuntu:14.04 /bin/bash
+root@f51789de8d0e:/# ifconfig
+root@cb298725ed6c:/# cat    /etc/environment
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+http_proxy="http://child-prc.intel.com:913/"
+https_proxy="https://child-prc.intel.com:913/"
+ftp_proxy="ftp://child-prc.intel.com:913/"
+socks_proxy="socks://child-prc.intel.com:913/"
+root@cb298725ed6c:/# export http_proxy="http://child-prc.intel.com:913/"
+root@cb298725ed6c:/# export https_proxy="https://child-prc.intel.com:913/"
+root@cb298725ed6c:/# export ftp_proxy="ftp://child-prc.intel.com:913/"
+root@cb298725ed6c:/# export socks_proxy="socks://child-prc.intel.com:913/"
+root@cb298725ed6c:/# apt-get  update
+root@cb298725ed6c:/# apt-get  install  curl
+root@sige:~# docker search tutorial
+root@sige:~# docker  pull  learn/tutorial
+root@sige:~# docker  run  learn/tutorial  echo 'hello world'     #启动下载的镜像容器
+root@sige:~# docker  run  learn/tutorial  apt-get  install  -y  ping   #安装ping命令
+root@sige:~# docker  ps  -l   #查看有哪些docker容器
+root@sige:~# docker  ps  -a  #查看所有容器
+root@sige:~# docker  commit  dcde62832fd3  learn/ping   #提交新建好的容器
+root@sige:~# docker  run  learn/ping  ping  www.google.com  #ping一个google网站
+root@sige:~# docker  ps   #查看正在运行的容器
+root@sige:~# docker  inspect   322d44ada1f4   #查看容器内容
+root@sige:~# docker  images   #查看有哪些镜像
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+learn/ping          latest              2de65d8430be        2 hours ago         139MB
+centos              latest              5182e96772bf        2 days ago          200MB
+ubuntu              latest              735f80812f90        13 days ago         83.5MB
+ubuntu              14.04               971bb384a50a        3 weeks ago         188MB
+ubuntu              15.10               9b9cb95443b5        2 years ago         137MB
+training/webapp     latest              6fae60ef3446        3 years ago         349MB
+learn/tutorial      latest              a7876479f1aa        5 years ago         128MB
+root@sige:~# docker  push  sige/training/webapp
+The push refers to a repository [docker.io/sige/training/webapp]
+An image does not exist locally with the tag: sige/training/webapp
+root@sige:~# docker  tag 6fae60ef3446  sige/training/webapp
+root@sige:~# docker  push  sige/training/webapp
+The push refers to a repository [docker.io/sige/training/webapp]
+5f70bf18a086: Preparing
+b44b0832d4c6: Preparing
+6bbb1d0f8452: Preparing
+3ee91c5cb95b: Preparing
+5c121779bb29: Preparing
+b75c0703b86b: Waiting
+37ee47034d9b: Waiting
+528c8710fd95: Waiting
+1154ba695078: Waiting
+denied: requested access to the resource is denied   #会报错
+root@sige:~# docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: 13764236450
+Password: lpwoaini123
+Login Succeeded
+root@sige:~# docker  tag  a7876479f1aa  13764236450/a7876479f1aa
+root@sige:~# docker  push  13764236450/a7876479f1aa
+The push refers to a repository [docker.io/13764236450/a7876479f1aa]
+ee1ba0cc9b81: Layer already exists
+latest: digest: sha256:0eef45340c47d4e5dbb6d501b7be5fa54d5878a470369c633187b1c39b95eccb size: 528
+root@sige:~# docker  push  training/webapp   #保存到仓库去
+root@sige:~#  cat /etc/resolv.conf | grep nameserver
+nameserver 127.0.1.1
+nameserver 8.8.8.8
+root@sige:~# vim  /etc/resolv.conf
+root@sige:~#  nmcli dev show | grep IP4.DNS
+IP4.DNS[1]:                             10.248.2.5
+IP4.DNS[2]:                             172.17.6.9
+IP4.DNS[3]:                             10.239.27.228
+root@sige:~# cat  /etc/resolv.conf
+# Dynamic resolv.conf(5) file for glibc resolver(3) generated by resolvconf(8)
+#     DO NOT EDIT THIS FILE BY HAND -- YOUR CHANGES WILL BE OVERWRITTEN
+#nameserver 127.0.1.1
+nameserver  10.248.2.5
+nameserver  172.17.6.9
+nameserver  10.239.27.228
+search sh.intel.com
+root@sige:~# cat  /etc/apt/sources.list
+deb http://mirrors.aliyun.com/ubuntu/ trusty main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu/ trusty-security main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main multiverse restricted universe
+更新Ubuntu是出现AppStream cache update completed, but some metadata was ignored due to errors.
+解决方式：
+sudo rm /var/lib/dpkg/lock
+root@sige:~# ifconfig
+root@sige:~# sudo  apt-get install bridge-utils
+root@sige:~# sudo  brctl  show
+bridge name	bridge id		STP enabled	interfaces
+br0		8000.000000000000	no
+docker0		8000.0242d959013a	no		vethb72e7fc
+virbr0		8000.000000000000	yes
+root@sige:~# docker  ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+9bf0730af557        306650123af2        "/bin/sh -c 'apt-g..."   8 minutes ago       Up 8 minutes                            jolly_thompson
+root@sige:~# docker  attach  9bf0730af557   #重新进入交互式容器
+root@sige:~# docker  info
+root@sige:~# mkdir  dockerfile
+root@sige:~# cd  dockerfile
+root@sige:~/dockerfile# mkdir cct
+root@sige:~/dockerfile# cd  cct
+root@sige:~/dockerfile/cct# cat     Dockerfile
+FROM ubuntu:14.04
+env   http_proxy="http://child-prc.intel.com:913/"
+env   https_proxy="https://child-prc.intel.com:913/"
+env   ftp_proxy="ftp://child-prc.intel.com:913/"
+env   socks_proxy="socks://child-prc.intel.com:913/"
+RUN apt-get install -y  ping
+RUN apt-get update
+RUN apt-get install -y nginx
+RUN apt-get install -y curl
+EXPOSE 80
+CMD /bin/bash
+root@sige:~/dockerfile/cct# docker build -t dormancypres/cct .
+root@sige:~/dockerfile/cct# cd
+root@sige:~# docker run  -it  --name  cct1  dormancypres/cct
+root@ad484ab693d6:/# nginx     起nginx服务
+root@ad484ab693d6:/# root@sige:~# (ctrl+p,ctrl+q)
+root@sige:~# docker run  -it  --name  cct2  dormancypres/cct
+root@a3a858a6c1fd:/# ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:03
+          inet addr:172.17.0.3  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:25 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:3738 (3.7 KB)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+root@a3a858a6c1fd:/# root@sige:~#
+root@sige:~# docker attach  cct1       #返回cct1
+root@ad484ab693d6:/#
+root@ad484ab693d6:/#
+root@ad484ab693d6:/# ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:02
+          inet addr:172.17.0.2  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:32 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:4326 (4.3 KB)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+root@ad484ab693d6:/# ping  172.17.0.3
+PING 172.17.0.3 (172.17.0.3) 56(84) bytes of data.
+64 bytes from 172.17.0.3: icmp_seq=1 ttl=64 time=0.058 ms
+64 bytes from 172.17.0.3: icmp_seq=2 ttl=64 time=0.040 ms
+64 bytes from 172.17.0.3: icmp_seq=3 ttl=64 time=0.042 ms
+root@ad484ab693d6:/# root@sige:~#
+root@sige:~# docker attach  cct2
+root@a3a858a6c1fd:/#
+root@a3a858a6c1fd:/# curl  http://172.17.0.2
+root@sige:~# docker  stop  cct1
+cct1
+root@sige:~# docker  restart   cct1
+cct1
+root@sige:~# docker  attach  cct1
+root@ad484ab693d6:/#
+root@ad484ab693d6:/#
+root@ad484ab693d6:/# ifconfig   #ip会变化
+root@sige:~# docker  run  -it  --name cct3  --link=cct1:webtest  dormancypres/cct    #给容器cct1起别名webtest
+root@9515b77d7d9c:/#
+root@9515b77d7d9c:/#
+root@9515b77d7d9c:/# ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:04
+          inet addr:172.17.0.4  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:17 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:2661 (2.6 KB)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@9515b77d7d9c:/# ping  webtest
+PING webtest (172.17.0.2) 56(84) bytes of data.
+64 bytes from webtest (172.17.0.2): icmp_seq=1 ttl=64 time=0.071 ms
+64 bytes from webtest (172.17.0.2): icmp_seq=2 ttl=64 time=0.037 ms
+root@9515b77d7d9c:/# env    #查看容器的环境变量
+HOSTNAME=9515b77d7d9c
+WEBTEST_ENV_http_proxy=http://child-prc.intel.com:913/
+WEBTEST_ENV_ftp_proxy=ftp://child-prc.intel.com:913/
+TERM=xterm
+WEBTEST_NAME=/cct3/webtest
+WEBTEST_ENV_https_proxy=https://child-prc.intel.com:913/
+http_proxy=http://child-prc.intel.com:913/
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:
+ftp_proxy=ftp://child-prc.intel.com:913/
+WEBTEST_PORT_80_TCP_ADDR=172.17.0.2
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+socks_proxy=socks://child-prc.intel.com:913/
+WEBTEST_PORT_80_TCP=tcp://172.17.0.2:80
+WEBTEST_PORT=tcp://172.17.0.2:80
+WEBTEST_PORT_80_TCP_PROTO=tcp
+https_proxy=https://child-prc.intel.com:913/
+SHLVL=1
+HOME=/root
+WEBTEST_PORT_80_TCP_PORT=80
+LESSOPEN=| /usr/bin/lesspipe %s
+WEBTEST_ENV_socks_proxy=socks://child-prc.intel.com:913/
+LESSCLOSE=/usr/bin/lesspipe %s %s
+_=/usr/bin/env
+root@9515b77d7d9c:/# cat   /etc/hosts
+127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+172.17.0.2	webtest ad484ab693d6 cct1
+172.17.0.4	9515b77d7d9c
+root@9515b77d7d9c:/# root@sige:~#
+root@sige:~# service   docker   restart
+root@sige:~# docker  ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+root@sige:~# docker  restart  cct1  cct2  cct3
+cct1
+cct2
+cct3
+root@sige:~# docker attach  cct3
+root@9515b77d7d9c:/#
+root@9515b77d7d9c:/#
+root@9515b77d7d9c:/# ping  webtest
+PING webtest (172.17.0.2) 56(84) bytes of data.
+64 bytes from webtest (172.17.0.2): icmp_seq=1 ttl=64 time=0.061 ms
+64 bytes from webtest (172.17.0.2): icmp_seq=2 ttl=64 time=0.041 ms
+root@9515b77d7d9c:/# cat  /etc/hosts
+127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+172.17.0.2	webtest ad484ab693d6 cct1
+172.17.0.4	9515b77d7d9c
+root@9515b77d7d9c:/# env
+# docker阻止容器之间的连接
+root@sige:~# tail  -2   /etc/default/docker
+#DOCKER_OPTS="-b=br1"
+DOCKER_OPTS="--icc=false"
+root@sige:~# service  docker  restart
+root@sige:~# ps  -ef | grep  docker
+root@sige:~# tail  -2   /etc/default/docker
+#DOCKER_OPTS="-b=br1"
+DOCKER_OPTS="--icc=false"
+root@sige:~# service  docker  restart
+root@sige:~# ps  -ef | grep  docker
+root     25393     1  1 16:55 ?        00:00:00 /usr/bin/dockerd -H fd://
+root     25416 25393  0 16:55 ?        00:00:00 docker-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --shim docker-containerd-shim --runtime docker-runc
+root     25579  4667  0 16:55 pts/19   00:00:00 grep --color=auto docker
+root@sige:~# docker   restart   cct1  cct2  cct3
+cct1
+cct2
+cct3
+root@sige:~# docker  attach   cct3
+root@9515b77d7d9c:/#
+root@9515b77d7d9c:/# ping  webtest  #就不通了
+root@sige:~# ps  -ef  |  grep  docker
+root@sige:~# sysctl  net.ipv4.conf.all.forwarding
+net.ipv4.conf.all.forwarding = 1
+root@sige:~# sudo iptables  -L –n
+root@sige:~# docker run  -it  -p  80  --name cct5  dormancypres/cct
+root@82dce1abf412:/# nginx
+root@82dce1abf412:/# root@sige:~#(ctrl+p，ctrl+q)
+root@sige:~# docker  port  cct5
+80/tcp -> 0.0.0.0:32768
+root@sige:~# curl  127.0.0.1:32768
+root@sige:~# docker  run  -it -p 80 --name cct6  dormancypres/cct
+root@82dce1abf412:/# nginx
+root@82dce1abf412:/# root@sige:~#(ctrl+p，ctrl+q)
+root@sige:~#sudo iptables  -I   DOCKER   -s  10.211.55.3  -d  172.17.0.7  -p  TCP  --dport 80  -j  DORP
+root@sige:~# sudo iptables  -L –n
+root@sige:~# docker run  -it  -v  ~/datavolume:/data  ubuntu  /bin/bash
+root@b626f5ae42d2:/# ls –l
+root@b626f5ae42d2:/# touch  /data/c1
+root@b626f5ae42d2:/# echo "I'm  in  container" > /data/c1
+root@b626f5ae42d2:/# exit
+exit
+root@sige:~# ls -l  datavolume
+total 4
+-rw-r--r-- 1 root root 19 9æœˆ  10 15:34 c1
+root@sige:~# cat   datavolume/c1
+I'm  in  container
+
+
+root@sige:~# docker ps  -l
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+b626f5ae42d2        ubuntu              "/bin/bash"         19 minutes ago      Exited (0) 2 minutes ago                       inspiring_allen
+root@sige:~# docker  inspect  b626f5ae42d2
+      "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/root/datavolume",    #挂载了数据卷
+                "Destination": "/data",
+                "Mode": "",
+                "RW": true,        #写权限
+                "Propagation": ""
+            }
+        ],
+root@sige:~# docker run  -it  -v  ~/datavolume:/data:ro --name dvt1   ubuntu  /bin/bash
+root@e06348e6161e:/# ls –l  data/
+root@e06348e6161e:/# touch  data/c2
+touch: cannot touch 'data/c2': Read-only file system
+root@e06348e6161e:/# ls data
+c1
+root@e06348e6161e:/# cat  data/c1
+I'm  in  container
+root@e06348e6161e:/# exit
+root@sige:~#mkdir  -p  /dockerfile/dvt
+root@sige:~/dockerfile/dvt# pwd
+/root/dockerfile/dvt
+
+root@sige:~/dockerfile/dvt# cat  Dockerfile
+#for  Data volume  Test
+FROM  ubuntu:14.04
+VOLUME  ["/datavolume1","/datavolume2"]
+CMD  /bin/bash
+root@sige:~/dockerfile/dvt# docker  build  -t  dormancypres/dvt  .
+root@sige:~/dockerfile/dvt# docker  run  --name  dvt3  -it  dormancypres/dvt
+root@5497597b3ff3:/# ls
+bin  boot  datavolume1  datavolume2  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@5497597b3ff3:/# exit
+exit
+root@sige:~/dockerfile/dvt# docker  inspect  dvt3
+       "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "2dd0e5a9183a0a2824d156da4cf732587c03f1b5ee557d2b7cf1d8ebd8074b5d",
+                "Source": "/var/lib/docker/volumes/2dd0e5a9183a0a2824d156da4cf732587c03f1b5ee557d2b7cf1d8ebd8074b5d/_data",
+                "Destination": "/datavolume2",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            },
+            {
+                "Type": "volume",
+                "Name": "d28b50939cc5080635fa64d45446fb316c71cdfc455d47108213b5845ca27b15",
+                "Source": "/var/lib/docker/volumes/d28b50939cc5080635fa64d45446fb316c71cdfc455d47108213b5845ca27b15/_data",
+                "Destination": "/datavolume1",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+root@sige:~# docker  run  -it --name  dvt5  dormancypres/dvt
+root@16921f3f1116:/# ls
+bin  boot  datavolume1  datavolume2  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@16921f3f1116:/# touch   datavolume1/dvt4_1
+root@16921f3f1116:/# ls  /datavolume1
+dvt4_1
+root@16921f3f1116:/# exit
+root@sige:~# docker  run  -it  --name  dvt6  --volumes-from  dvt5  ubuntu  /bin/bash    #挂在数据卷dvt5
+root@c7cea517b40e:/# ls
+bin  boot  datavolume1  datavolume2  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@c7cea517b40e:/# ls  /datavolume1
+dvt4_1
+root@c7cea517b40e:/# touch  /datavolume1/dvt5_1
+root@c7cea517b40e:/# ls  /datavolume1
+dvt4_1  dvt5_1
+root@c7cea517b40e:/# exit
+
+root@sige:~# docker  run  -it  --name  dvt7  --volumes-from  dvt5  ubuntu  /bin/bash
+root@2f0e5e4f0f75:/# ls
+bin  boot  datavolume1  datavolume2  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@2f0e5e4f0f75:/# ls /datavolume1
+dvt4_1  dvt5_1
+root@2f0e5e4f0f75:/# exit
+exit
+root@sige:~# docker  inspect  --format="{{.Volumes}}" dvt6
+
+Template parsing error: template: :1:2: executing "" at <.Volumes>: map has no entry for key "Volumes"
+root@sige:~# docker  inspect  --format="{{.Config.Volumes}}" dvt6
+map[]
+root@sige:~# docker  inspect  --format="{{.Mounts}}" dvt6
+[{ 23f151124a49000c3255b0b7a6a39a582f417776e119223f9aa185c18ee95d3d /var/lib/docker/volumes/23f151124a49000c3255b0b7a6a39a582f417776e119223f9aa185c18ee95d3d/_data /datavolume1 local  true } { 012d1b8d750e6f1484424040553dbb2eb4cfd08d3aeabc1224f10d7170ed1873 /var/lib/docker/volumes/012d1b8d750e6f1484424040553dbb2eb4cfd08d3aeabc1224f10d7170ed1873/_data /datavolume2 local  true }]
+root@sige:~# docker  inspect  --format="{{.Mounts}}" dvt7
+[{ 23f151124a49000c3255b0b7a6a39a582f417776e119223f9aa185c18ee95d3d /var/lib/docker/volumes/23f151124a49000c3255b0b7a6a39a582f417776e119223f9aa185c18ee95d3d/_data /datavolume1 local  true } { 012d1b8d750e6f1484424040553dbb2eb4cfd08d3aeabc1224f10d7170ed1873 /var/lib/docker/volumes/012d1b8d750e6f1484424040553dbb2eb4cfd08d3aeabc1224f10d7170ed1873/_data /datavolume2 local  true }]
+root@sige:~# docker  rm  dvt5
+dvt5
+root@sige:~# docker  restart  dvt6
+dvt6
+root@sige:~# docker   attach  dvt6
+root@c7cea517b40e:/# ls
+bin  boot  datavolume1  datavolume2  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@c7cea517b40e:/# ls  datavolume1
+dvt4_1  dvt5_1
+root@c7cea517b40e:/# touch  datavolume1/dvt5_2
+root@c7cea517b40e:/# ls  datavolume1
+dvt4_1  dvt5_1  dvt5_2
+root@c7cea517b40e:/# exit
+exit
+root@sige:~# docker  run  --name  dvt8  dormancypres/dvt
+root@sige:~# docker  run  --name  dvt9  -it --volumes-from  dvt8  ubuntu  /bin/bash
+root@485fe558634f:/# ls
+bin  boot  datavolume1  datavolume2  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@485fe558634f:/# touch  /datavolume1/dvt9_1
+root@485fe558634f:/# ls /datavolume1
+dvt9_1
+root@485fe558634f:/# exit
+exit
+root@sige:~# docker  rm -v  dvt8
+dvt8
+root@sige:~# docker  restart  dvt9
+dvt9
+root@sige:~# docker  attach dvt9
+root@485fe558634f:/# ls
+bin  boot  datavolume1  datavolume2  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@485fe558634f:/# touch  datavolume1/dvt9_2
+root@485fe558634f:/# ls  datavolume1
+dvt9_1  dvt9_2
+root@sige:~# docker  run  --volumes-from  dvt6  -v  ~/backup:/backup  --name  dvt10  ubuntu  tar  cvf  /backup/dvt6.tar  /datavolume1   #备份数据卷
+tar: Removing leading `/' from member names
+/datavolume1/
+/datavolume1/dvt5_2
+/datavolume1/dvt4_1
+/datavolume1/dvt5_1
+root@sige:~# ls  backup/
+dvt6.tar
+root@sige:~# docker  run  --volumes-from  dvt6  -v  ~/backup:/backup  --name  dvt10  ubuntu  tar  xvf  /backup/dvt6.tar  /datavolume1 #还原数据卷
+2台ubuntu14.04
+apt-get  install  bridge-utils
+host1:10.211.55.3
+host2:10.211.55.5
+
+物理机
+docker0：172.17.42.1
+eth0:10.211.55.5
+$sudo vim /etc/network/interfaces
+auto  lo
+iface br0 inet  loopback
+
+auto br0
+iface br0 inet static
+address 10.211.55.5
+netmask 255.255.255.0
+gateway 10.211.55.1
+bridge_ports eth0
+
+$sudo vim /etc/default/docker
+DOCKER_OPTS=“-b=br0  --fixed-cidr=10.211.55.128/26”
+
+Reboot
+#重启过后的物理机只有一个IP是br0
+br0:10.211.55.5
+
+
+
+
+
+ps  -ef | grep  docker
+/usr/bin/docker  -d  -b=br0  --fixed-cidr='10.211.55.128/26'
+docker  run  -it  ubuntu   /bin/bash
+root@485fe558634f:/# ifconfig
+                    eth0:10.211.55.129
+root@485fe558634f:/# ping  10.211.55.3
+root@485fe558634f:/# ping  www.baidu.com
+
+另一台物理机：
+eth0:10.211.55.3
+$sudo vim /etc/network/interfaces
+auto  lo
+iface br0 inet  loopback
+
+auto br0
+iface br0 inet static
+address 10.211.55.3
+netmask 255.255.255.0
+gateway 10.211.55.1
+bridge_ports eth0
+
+$sudo vim /etc/default/docker
+DOCKER_OPTS=“-b=br0  --fixed-cidr=10.211.55.64/26”
+reboot
+ifconfig
+br2:10.211.55.3
+ps  -ef |  grep  docker
+/usr/bin/docker  -d  -b=br2  --fixed-cidr='10.211.55.64/26'
+docker  run  -it  ubuntu   /bin/bash
+root@565fe558634f:/# ifconfig
+                                       eth0:10.211.55.66
+root@565fe558634f:/# ping 10.211.55.129
+两台ubuntu14.04虚拟机
+双网卡，host-only & NAT
+安装Open vSwitch:
+     apt-get  install  openvswitch-switch
+安装网桥管理工具：
+     apt-get  install  bridge-utils
+IP地址：  Host1: 192.168.59.103
+         Host2: 192.168.59.104
+
+在物理机192.168.59.103Host1里：
+docker0: 172.17.42.1
+eth0:    192.168.59.103
+eth1:    10.0.3.15   #NAT转发用
+sudo  ovs-vsctl  show
+#ovs_version:"2.0.2"
+sudo  ovs-vsctl  add-br  obr0
+sudo  ovs-vsctl  add-port obr0  gre0
+sudo  ovs-vsctl  set  interface  gre0  type=gre  options:remote_ip=192.168.59.104
+sudo  ovs-vsctl  show
+sudo  brctl  addbr  br0
+sudo  ifconfig br0 192.168.1.1  netmask  255.255.255.0
+sudo  brctl  addif  br0  obr0
+sudo  brctl  show
+$ sudo vim /etc/default/docker
+DOCKER_OPTS = “obr0 ”
+$sudo service docker restart
+$docker run -it ubuntu /bin/bash  :  建立一个容器
+#ifcinfig  :   已经使用了刚刚确定的网络地址
+192.168.1.2
+#ping  192.168.59.104 另一台主机的ip（不使用gre协议是ping不通的）
+ping  192.168.2.4  #不通
+route
+sudo  ip  route  add  192.168.2.0/24  via  192.168.59.104  dev  eth0
+route
+docker  run  -it  ubuntu  /bin/bash
+ping  192.168.2.4 #通了
+ifconfig
+环境准备：https://www.cnblogs.com/yaowen/p/8431732.html
+2台ubuntu虚拟机，双网卡：host-only 和 NAT，IP地址：Host1：192.168.59.103 和 192.168.59.104
+操作：
+1.安装weave
+2.在安装weave的docker主机上启动weave，$weave launch
+3.通过weave连接不同的主机
+4.通过weave指定ip地址从而启动容器
+
+$下载weave，并且保存在user/bin/weave文件夹下，  sudo wget -0 /usr/bin/weave http://raw.githubsercontent.com/zetttto/weave/master/weave（host1上）
+$更改weave文件夹的格式，是他可以执行，sudo  chmod  a+x  /usr/bin/weave（host1上）
+$weave launch  启动weave，会在docker中运行一个docker的容器，（host1上）
+$docker ps -l   可以看到刚刚运行的docker容器（host1上）
+以同样的方式，在另一台机器上操作。不过启动weave时使用host1的ip地址，$weave launch 192.168.59.104，这是为了使2个host正确的连在一起。（host2上）
+$（host2上）启动一个容器  c2=$(weave  run  192.168.1.2/24  -it  ubuntu  /bin/bash)，192.168.1.2/24这个ip地址是我们在启动的容器中分配的ip地址，这个ip地址由weave来维护。将weave这条命令的返回值赋值给了c2这个变量，c2实际上就是启动容器的容器id，
+$echo $c2  返回的就是运行的容器id
+$docker  attach  $c2   进入这个容器，也可以在run命令里面指定name选项，后面根据这个name来进入容器
+# ifconfig  现在已经进入容器中了，查看容器的网络设置，容器中多了一个网络设备ethwe，这个设备的ip地址就是运行weave中指定的ip地址，原有的docker0网桥分配的ip地址依然在容器中
+$（host1上）启动一个容器，$ weave  run  192.168.1.10/24  -it  --name  wc1  ubuntu  /bin/bash，以name方式，192.168.10/24是与host2中运行的容器相同网段的ip地址，
+$ docker attach wc1     进入容器
+#ifconfig
+#ping  192.168.1.2，可以ping通
+
+使用weave工具可以非常容易的给docker容器指定一个任意希望分配的ip地址。并且非常方便的划分ip地址段，从而将不同主机的容器划分在不同的网段中。
+Cat  Dockerfile
+#first  dockerfile  for  test
+FROM     ubuntu:14.04
+MAINTAINER   dormancypres  “dormancypres@docker.com”
+ENV    REFRESH_DATE  2015-04-01
+RUN  apt-get  update &  apt-get install  -y  nginx
+EXPOSE  80
+Docker build  -t =”dormancypres/df_test1”.
+Docker build  -t =”dormancypres/df_test1” –no-cache  .   #去掉缓存
+容器生命周期管理
+•	run
+•	start/stop/restart
+•	kill
+•	rm
+•	pause/unpause
+•	create
+•	exec
+容器操作
+•	ps
+•	inspect
+•	top
+•	attach
+•	events
+•	logs
+•	wait
+•	export
+•	port
+容器rootfs命令
+•	commit
+•	cp
+•	diff
+镜像仓库
+•	login
+•	pull
+•	push
+•	search
+本地镜像管理
+•	images
+•	rmi
+•	tag
+•	build
+•	history
+•	save
+•	import
+info|version
+•	info
+•	version
+root@sige:~# docker  top  cct5
+docker   history  dormancypres/df_test1
+

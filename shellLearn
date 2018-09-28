@@ -1,0 +1,159 @@
+jenkins
+#!/bin/bash –xe
+set -xe
+cd /home/lab_idljenk/conv_perf_bench
+python mkldnn_sha_monitor.py
+
+#!/bin/bash -xe
+cd /home/lab_idljenk/conv_perf_bench
+./weekly.sh
+
+case "$DATA_TYPE" in
+        TxtDataLayer)
+            DATA_TYPE="image"
+            DATABASE="ImageDataLayer"
+            ;;
+        LMDBDataLayer)
+            DATA_TYPE="lmdb"
+            DATABASE="LMDBDataLayer"
+            ;;
+        Compressed_LMDBDataLayer)
+            DATA_TYPE="lmdb"
+            DATABASE="Compressed_LMDBDataLayer"
+            ;;
+        NoDataLayer)
+            DATA_TYPE="nodata"
+            DATABASE="NoDataLayer"
+            ;;
+Esac
+  if [ $SHA != "NULL" ]; then
+    git checkout $SHA
+  fi
+
+
+SERVERS=($(echo $BUILDS | sed "s/,/ /g"))
+for SERVER in ${SERVERS[@]}
+do
+  wget -O "${SERVER}.out" http://10.91.54.11:8080/job/IntelCaffe_Artemis_Multinode_Train/label=Artemis/${SERVER}/consoleText
+done
+  if [ $(cat iter.log | wc -l) -lt 100 ]; then
+    ACC=1
+  else
+    ACC=$[$(cat iter.log | wc -l)/$ACCURACY]
+  Fi
+  i=0
+  while [ $i -lt $NODES_NUMBER ]
+  do
+      grep "Iteration" consoleText | grep "^\[${i}]" | sed "s/.*loss = //" > ${i}.log
+      echo "\"stat_$SERV.chart\" using 1:$[$i+3]:xtic(2) with linespoints pt 7 title \"NODE_${i}\", \\" >> chart_${SERV}.in
+      i=$[$i+1]
+  done
+  i=1
+  while [ $i -le $max ]
+  do
+      ITER=`sed -n "$i"p iter.log`
+      j=0
+      while [ $j -lt $NODES_NUMBER ]
+      do
+          NODE=`sed -n "$i"p ${j}.log`
+          ITER="$ITER $NODE"
+          j=$[$j+1]
+      done
+      echo "$i $ITER"
+      echo "$i $ITER" >> stat_${SERV}.chart
+      i=$[$i+$ACC]
+  done
+if [ "${TEST_START_TIME}" == NULL ];
+then
+curl "http://intel-caffe.sh.intel.com/intelcaffe_dashboard_revision_te-caffe_dashboard/index.php?r=er/index"
+else
+curl "http://intel-caffe.sh.intel.com/intelcaffe_dashboard_revision_te-caffe_dashboard/index.php?r=er/index&test_start_time=$(echo ${TEST_START_TIME} | sed "s/ /%20/g" )"
+fi
+function CollectResults() {
+
+    cd ${target_work_dir}/DeepBench/code/intel/spmm
+
+    line=$(cat spmm_bench_1.log |wc -l)
+    for ((i=1;i<=${line};i++))
+    do
+
+        j=0
+        sum=0
+        for f in spmm_bench_*.log
+        do
+            awk -v i=$i -v j=$j -F '|' '{
+                if (NR == i){
+                    if (j == 0){
+                        printf ("%s\t%s\t%s\t%s|\t%s|\t",$1,$2,$3,$4,$5)
+                    }else {
+                        printf ("%s|\t",$5)
+                    }
+                }
+            }' $f
+
+            tmp=$(awk -v i=$i -F '|' '{
+                if (NR == i){
+                    printf ("%f",$5)
+                }
+            }' $f)
+            sum=$(echo |awk -v tmp=${tmp} -v sum=${sum} '{
+                printf ("%f",tmp + sum)
+            }')
+            ((j++))
+        done
+
+        # AVG
+        avg=$(echo |awk -v j=$j -v sum=$sum '{
+            printf ("%f",sum/j)
+        }')
+
+        # STD
+        j=0
+        sum=0
+        for f in spmm_bench_*.log
+        do
+            tmp=$(awk -v i=$i -F '|' '{
+                if (NR == i){
+                    printf ("%f",$5)
+                }
+            }' $f)
+            sum=$(echo |awk -v tmp=${tmp} -v avg=${avg} -v sum=${sum} '{
+                printf ("%0.1000f",(tmp - avg) * (tmp - avg) + sum)
+            }')
+            ((j++))
+        done
+        std=$(echo |awk -v j=$j -v sum=${sum} '{
+            printf ("%0.20f",sum/j)
+        }')
+
+        # Print avg,std
+        if [ $i -eq 1 ];then
+            printf "[ avg\tstd ]\n"
+        else
+            printf "[ ${avg}\t${std} ]\n"
+        fi
+    done
+}
+if [ $(echo $?) -eq 0 ];then
+    CollectResults
+Fi
+
+cat > ${CAFFE_HOME}/run_fast_rcnn.sh << EOF
+export http_proxy=http://child-prc.intel.com:913
+export https_proxy=http://child-prc.intel.com:913
+export ftp_proxy=http://child-prc.intel.com:913
+cd $SCRIPT_HOME
+/bin/bash -x ./Faster-RCNN_test.sh $CAFFE_HOME
+if [ \$? -ne 0 ];then
+	exit 1
+fi
+if [ ${CODE_COVERAGE} == true ];then
+	bash -xe ${CAFFE_HOME}/caffe-ccov/ccov.sh ${CAFFE_HOME}
+fi
+EOF
+srun -p skx-8180 --qos por-val bash -x ${CAFFE_HOME}/run_fast_rcnn.sh
+srun -p ${HOSTNAME} bash -x ${CAFFE_HOME_A}/test_faster_rcnn.sh
+git clone https://github.com/Microsoft/caffe.git caffe-fast-rcnn
+cd caffe-fast-rcnn
+patch -p1 <${TARGET_WORK_DIR}/caffe.patch
+git show

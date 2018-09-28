@@ -1,0 +1,3354 @@
+                                                               Python笔记
+http://www.bejson.com/
+def GenRnnTable(tableTitle, tableHeads, tableContents):
+    res = """
+             <h2>%s</h2>
+             <table border=1 style="text-align:center;font-family:Times New Roman">
+                <tr>""" % tableTitle
+    for tableHead in tableHeads:
+        res += '<th>%s</th>' % tableHead
+    res += '</tr>'                                                  ###注意这种表达
+
+    #print("tableContents:{}".format(tableContents))
+#for content in tableContents:
+
+ for tdContents in tableContents:
+        topology = tdContents["key"]
+        value = tdContents["value"]
+        #print(topology)
+        #print(value)
+        value_len = 4 if value[0].has_key("Uptade") else 3       #注意这种表达，判断字典有没有key，4行还是3行
+        res += '<tr>'
+        res += '<td rowspan="%d">%s</td>
+<td rowspan="%d">%s</td>
+<td>%s</td>
+<td>%s</td>
+<td>%s</td>' %(value_len,
+                             topology,
+                             value_len,
+                             value[0]["batch_size"],
+                            "Forward(sps)",
+                         value[0]["Forward"],
+                         value[1]["Forward"])
+        res += '</tr>'
+
+        res += '<tr>'
+        res += '<td>%s</td><td>%s</td><td>%s</td>' %("Backward(sps)",value[0]["Backward"],value[1]["Backward"])
+        res += '</tr>'
+
+        if  value[0].has_key("Uptade"):
+            res += '<tr>'
+            res += '<td>%s</td><td>%s</td><td>%s</td>' %("Update(sps)",value[0]["Uptade"],value[1]["Uptade"])
+            res += '</tr>'
+        res += '<tr>'
+        res += '<td>%s</td><td>%s</td><td>%s</td>' %("Total(sps)",value[0]["Total"],value[1]["Total"])
+        res += ''
+        res += '</tr>'
+return res + '</table>'
+
+[sys_dltest2@mlt-ace RNN]$ cat   merge_gpu_allRNN_result2.py
+import json
+import os
+import sys
+import argparse
+import re
+import  json
+sys.path.append(os.path.expanduser('~')+"/Documents/dl_framework-intel_chainer_validation/scripts")
+#from helper import GetHostModel, get_python_version,get_arch_name
+from  config  import  archs
+from helper import *
+import time
+from datetime import datetime
+import traceback
+
+parser = argparse.ArgumentParser(description="""This script is for the rnn  gtest.""")
+parser.add_argument("--directory", "-d", help="gtest directory")
+parser.add_argument("--date", "-dt", default="2018-03-28", help="the day info you would like to show")
+parser.add_argument("--reportReceiver", "-r", help="send report to receiver")
+args = parser.parse_args()
+
+print(args.directory)
+projectDir = os.path.abspath(args.directory)
+filename = 'train_attention.json'
+fileName = os.path.join(projectDir, filename)
+with open(fileName) as f:
+    train_attention = json.load(f)
+
+testDir=os.path.expanduser('~')+"/scripts/RNN/allRNN/skx_8180"
+os.chdir(testDir)
+filename = 'train_attention.json'
+fileName = os.path.join(testDir, filename)
+with open(fileName) as f:
+    train_attention1 = json.load(f)
+#print(train_attention)
+#print(train_attention1)
+results = []
+for d1 in train_attention:
+    for d2 in train_attention1:
+        for d3 in train_big_lstm_text:
+            for d4 in train_big_lstm_text1:
+                for d5 in train_small_lstm_text:
+                    for d6 in train_small_lstm_text1:
+                        for d7 in n_step_lstm:
+                            for d8 in n_step_lstm1:
+                                for d9 in train_audio:
+                                    for d10 in train_audio1:
+                                        for d11 in train_encdec:
+                                            for d12 in train_encdec1:
+                                                value1 = []
+                                                value1.append(d1['value'])
+                                                value1.append(d2['value'])
+                                                value2 = []
+                                                value2.append(d3['value'])
+                                                value2.append(d4['value'])
+                                                value3 = []
+                                                value3.append(d5['value'])
+                                                value3.append(d6['value'])
+                                                value4 = []
+                                                value4.append(d7['value'])
+                                                value4.append(d8['value'])
+                                                value5 = []
+                                                value5.append(d9['value'])
+                                                value5.append(d10['value'])
+                                                value6 = []
+                                                value6.append(d11['value'])
+                                                value6.append(d12['value'])
+                                                result = [
+                                                    {'key': d1['key'],
+                                                    'value': value1 },
+                                                    {'key': d3['key'],
+                                                    'value': value2 },
+                                                    {'key': d5['key'],
+                                                    'value': value3,},
+                                                    {'key': d7['key'],
+                                                    'value': value4 },
+                                                    {'key': d9['key'],
+                                                    'value': value5 },
+                                                    {'key': d11['key'],
+                                                    'value': value6}
+
+                                                ]
+                                                #results.append(result)
+#all_results = {
+#    'category': "Rnning",
+#    'date': args.date,
+#    'results': result
+#}
+filename = 'allRNN_rnning.json'
+fileName = os.path.join(projectDir, filename)
+with open(fileName, 'w') as f:
+    #json.dump(all_results, f)
+    json.dump(result, f)
+print("merge done")
+
+if __name__ == "__main__":
+
+
+         parser = argparse.ArgumentParser(description="""This script is for the rnn  gtest.""")
+         parser.add_argument("--directory", "-d", help="gtest directory")
+         parser.add_argument("--date", "-dt", default="2018-03-28", help="the day info you would like to show")
+         parser.add_argument("--reportReceiver", "-r", help="send report to receiver")
+         args = parser.parse_args()
+
+
+         try:
+
+             hostModel = GetHostModel()
+             mailContent = GenRnnTable("Rnning Test Result " + hostModel,
+                                    ['Topology', 'batchSize', 'Type', 'P100', 'skx-8180'],result)
+
+             mailTitle = "Intel  Rnning Test Report " + datetime.now().strftime("%Y-%m-%d")
+             reportSender = "dl_test@intel.com"
+
+             html = """\
+             <html>
+               <body>
+                 <h1 style="text-align:center;font-family:Times New Roman"><a name=Top>""" + mailTitle + """</a></h1>
+                 """ + mailContent + """
+               </body>
+             </html>
+             """
+
+             SendReport(reportSender, args.reportReceiver, mailTitle, html)
+
+             print("Scoring Results Processing Test Done!")
+         except Exception as e:
+             print(e)
+             traceback.print_exc()
+             sys.exit(-1)
+[sys_dltest2@mlt-ace RNN]$ cat    train2_audio.py
+import argparse
+
+import chainer
+from chainer import functions as F
+from chainer import links as L
+from chainer import optimizers as O
+from chainer import cuda
+import numpy
+import six
+
+from deepmark_chainer import net
+from deepmark_chainer.utils import timer
+from deepmark_chainer.utils import cache
+from contextlib import contextmanager
+import  json
+import  sys
+import  os
+sys.path.append(os.path.expanduser('~')+"/Documents/dl_framework-intel_chainer_validation/scripts")
+from helper import GetHostModel, get_python_version,get_arch_name
+from  config  import  archs
+
+
+parser = argparse.ArgumentParser(description='Deepmark benchmark for audio data.')
+parser.add_argument('--predictor', '-p', type=str, default='deepspeech2',
+                    choices=('deepspeech2', 'fc5'),
+                    help='Network architecture')
+parser.add_argument('--seed', '-s', type=int, default=0,
+                    help='Random seed')
+parser.add_argument('--iteration', '-i', type=int, default=10,
+                    help='The number of iteration to be averaged over.')
+parser.add_argument('--timestep', '-t', type=int, default=200,
+                    help='Timestep')
+parser.add_argument('--gpu', '-g', type=int, default=-1, help='GPU to use. Negative value to use CPU')
+parser.add_argument('--cudnn', '-c', action='store_true', help='If this flag is set, cuDNN is enabled.')
+parser.add_argument('--cache-level', '-C', type=str, default='none',
+                    choices=('none', 'memory', 'disk'),
+                    help='This option determines the type of the kernel cache used.'
+                    'By default, memory cache and disk cache are removed '
+                    'at the beginning of every iteration. '
+                    'Otherwise, elapsed times of each iteration are '
+                    'measured with corresponding cache enabled. '
+                    'If either cache is enabled, this script operates one additional '
+                    'iteration for burn-in before measurement. '
+                    'This iteration is not included in the mean elapsed time.'
+                    'If we do not use GPU, we do not clear cache at all regardless of the value of '
+                    'this option.')
+parser.add_argument('--batchsize', '-b', type=int, default=32, help='Batchsize')
+args = parser.parse_args()
+@contextmanager
+def train_open(name, mode):
+    try:
+        if os.path.exists(name):
+            f = open(name, mode)
+        else:
+            f = open(name, "w")
+        yield f
+    except Exception as e:
+        print("Exception", ":", e)
+    finally:
+        f.close()
+
+
+def store_train_audio_json(file_name, data):
+    with train_open(file_name, 'w') as json_file:
+        json_file.write(json.dumps(data))
+
+
+def load_train_audio_json(file_name):
+    data = {}
+    with train_open(file_name, 'r') as json_file:
+        data = json.load(json_file)
+    return data
+args = parser.parse_args()
+
+def store_train_test_result(archname, batchsize,forward, backward, update,total):
+    VAL_DIR = os.path.expanduser('~')+ "/scripts/RNN"
+    hostModel = GetHostModel()
+    hModel = hostModel.lower()
+    resFileName = "train_audio.json"
+    json_data_list = []
+    json_data = {}
+    if hModel == "":
+        trainaudioFolder = os.path.join(VAL_DIR + "/allRNN", "unknown")
+    else:
+        trainaudioFolder = os.path.join(VAL_DIR + "/allRNN", hModel)
+
+    if not os.path.exists(trainaudioFolder):
+        os.makedirs(trainaudioFolder)
+
+
+    net = {"key":"{0}".format("DS2")}
+
+    unit = "SPS"
+    if  args.gpu == -1 :
+
+        config_value = "MKLDNN"
+    else :
+
+        config_value = "p100"
+
+    json_data = {
+            "config" : config_value,
+            "batch_size": batchsize,
+            "Forward": forward,
+            "Backward": backward,
+            "Update": update,
+            "unit":  unit,
+            "Total": total
+
+    }
+    net["value"] = json_data
+    json_data_list.append(net)
+    print(json_data_list)
+    store_train_audio_json(trainaudioFolder + os.sep + resFileName, json_data_list)
+    return
+store_train_test_result(result["arch_name"] ,result["batch_size"],result["Forward"], result["Backward"], result["Uptade"], result["Total"])
+
+print(result)
+
+
+
+
+
+
+  def GetGitLogInfo(chainer_path):
+    """Get the git info of a directory.
+    :arg: string, The directory path.
+    :return: array, [0] is branch, [1] is commit id, [2] is the author and [3] is commit time. If the path not exists or
+             is not valid, all the elements will be empty.
+    """
+    commit_id = ""
+    author = ""
+    branch = ""
+    commit_time = ""
+    # check whether the dir exists
+    if not os.path.exists(project_dir):
+        print("folder not exists: " + project_dir)
+        return (branch, commit_id, author, commit_time)
+
+    os.chdir(project_dir)
+    # get the commit info
+    commit_info = subprocess.check_output(['git', 'log', '-1']).decode('utf-8').splitlines()
+    for line in commit_info:
+        line = line.strip()
+        if line.startswith('commit'):
+            commit_id = line.replace('commit', '').strip()
+        elif line.startswith('Author:'):
+            author_info = line.replace('Author:', '').strip().split('<')
+            author = author_info[0].strip()
+        elif line.startswith('Date:'):
+            data_detail = line.replace('Date:', '').strip().split(' ')
+            commit_time = '{0} {1} {2}'.format(data_detail[1], data_detail[2], data_detail[3])
+split以后就是列表了,任何东西都可以转成列表。
+    # get the branch info
+    branch_info = subprocess.check_output(['git', 'branch']).decode('utf-8').splitlines()
+    for line in branch_info:
+        if line.startswith('*'):
+            branch = line.replace('*', '').strip()
+            break
+return [branch, commit_id, author, commit_time]
+#学习这种函数的表达方式
+def post_result(log_path,date):
+    ref_file = os.path.join(log_path, "scoring.json")
+    with open(ref_file, 'r') as f:                               #with  open(“scoring.json”, “r”)  as f:
+        all_data = f.read()
+    # all_data = copy.deepcopy(ref_data)
+    all_data = ast.literal_eval(all_data)                #将json””变成’’字典格式
+    #print(all_data)
+    model = get_cpu_info()[0]
+    CPUs = get_cpu_info()[2]
+Cores = get_cpu_info()[1]
+
+
+
+def get_cpu_info():
+    """Get the cpu information, including cpu model name, the number of cores and threads.
+    :return: tuple, [0] is cpu model name, [1] is the number of cores, and [2] is the number of threads
+    """
+    lscpu = subprocess.check_output(["lscpu"])
+    lscpu = lscpu.splitlines()
+    model_name = ""
+    for line in lscpu:
+        line = line.strip().decode("utf-8")
+        if line.startswith("CPU("):
+            threads = line.replace("CPU(s):", "").strip()
+        elif line.startswith("Co"):
+            cores_per_socket = line.replace("Core(s) per socket:", "").strip()
+        elif line.startswith("So"):
+            sockets = line.replace("Socket(s):", "").strip()
+        elif line.startswith("Model "):
+            model_name = line.replace("Model name:", "").strip()
+    cores = int(cores_per_socket) * int(sockets)
+    threads = int(threads)
+    return (model_name, cores, threads)
+
+>>> import  socket
+>>> socket.gethostname()
+'mlt-ace'
+>>> socket.getfqdn()
+'mlt-ace.sh.intel.com'
+>>> from datetime import datetime
+>>> currentTime = datetime.now()
+>>> print(currentTime)
+2018-05-23 15:58:09.130701
+>>> strCurrentTime = currentTime.strftime("%Y-%m-%d_%H-%M-%S")
+>>> print(strCurrentTime)
+2018-05-23_15-58-09
+>>> import  time
+>>> time.strftime("%Y-%m-%d")
+'2018-06-20'
+   child = subprocess.Popen("mv .coverage " + coverageLogFolder + "/.coverage_cosimTest_" + strCurrentTime, shell=True)
+       child.wait()
+>>> import   os
+>>> os.environ['HOME']
+'/home/sys_dltest2'
+>>> import  sys
+>>> sys.version_info
+sys.version_info(major=2, minor=7, micro=10, releaselevel='final', serial=0)
+>>> sys.version_info[0]
+2
+>>> sys.version_info[1]
+7
+>>> import  os
+>>> os.path.join("logFolder", "focusTest.log")
+'logFolder/focusTest.log'
+
+>>> import  subprocess
+>>> subprocess.check_call("free -m" , shell=True)
+              total        used        free      shared  buff/cache   available
+Mem:         191926        5704      184765          97        1456      184983
+Swap:             0           0           0
+>>> subprocess.check_call("vmstat")
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 0  0      0 189199376     12 1491936    0    0     7     3    0    0 16  1 83  0  0
+0
+>>> subprocess.check_output("vmstat")
+'procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----\n r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st\n 0  0      0 189199024     12 1491968    0    0     7     3    0    0 16  1 83  0  0\n'
+>>> res = subprocess.call('ls')
+>>> res = subprocess.call('ls -l', shell = True)  #多个参数则要加shell=True   ==  res = subprocess.call(['ls', '-l'])   #单个不用加shell
+>>> subprocess.check_output(['ls', '-l'])  #输出字符串
+  try:
+           ret = subprocess.check_call(pytestCommand, shell=True)
+  except subprocess.CalledProcessError:
+           crash = True
+  except OSError:
+           crash = True
+
+
+>>> getopt.getopt(sys.argv[1:], 'hd:g:r:s:n', ['dir=', 'isCPU=', 'receiver=', 'help', 'silence', 'nibushi'])
+([], [])返回值是一个元祖的列表
+-h  -d:要加参数  -g,r,s,n:参数     --dir=要加参数，--help不用加参数
+python中 getopt 模块，
+该模块是专门用来处理命令行参数的
+函数getopt(args, shortopts, longopts = [])
+参数args一般是sys.argv[1:]
+shortopts  短格式 (-)
+longopts 长格式(--)
+命令行中输入：
+python test.py -i 127.0.0.1 -p 80 55 66
+
+python test.py --ip=127.0.0.1 --port=80 55 66
+if __name__ == "__main__":
+    # extract the opts and args
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'hd:g:r:s:n', ['dir=', 'isCPU=', 'receiver=', 'help', 'silence', 'nibushi'])
+    except getopt.GetoptError as err:
+        print("Argument Error!")
+        Usage()
+        sys.exit(-1)
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'hp:d:r:', ['dir=', 'receiver=', 'help'])
+    except getopt.GetoptError as err:
+        print("Argument Error!")
+        Usage()
+        sys.exit(-1)
+    # check args
+    dirPath = None
+    patchId = None
+    reportReceiver = "zao.huang@intel.com"
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            Usage()
+            sys.exit(-1)
+        elif o in ("-d", "--dir"):
+            dirPath = a
+        elif o in ("-p", "--patchid"):
+            patchId = a
+        elif o in ("-r", "--receiver"):
+            reportReceiver = a
+    if dirPath is None or patchId is None:
+        print("Argument Error!")
+        Usage()
+        sys.exit(-1)
+    home_dir = os.path.dirname(os.path.realpath(__file__))
+    # check args
+    dirPath = None
+    coverage = False
+    isCPU = True
+    silenceMode = False
+    nibushi = False
+    reportReceiver = "mingxiao.huang@intel.com"
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            Usage()
+            sys.exit(-1)
+        elif o in ("-d", "--dir"):
+            dirPath = a
+        elif o in ("-g", "--isCPU"):
+            isCPU = False
+        elif o in ("-r", "--receiver"):
+            reportReceiver = a
+        elif o in ("-s", "--silence"):
+            silenceMode = True
+        elif o in ("-n", "--nibushi"):
+            nibushi = True
+if dirPath is None:
+        print("Argument Error!")
+        Usage()
+        sys.exit(-1)
+
+>>> import  re
+>>> m = re.match("([abc])+", "abc")
+>>> print m.group()
+abc
+>>> print m.groups()
+('c',)
+        mailTitle = "Intel Chainer Focus Test Report " + datetime.now().strftime("%Y-%m-%d")
+        reportSender = "dl_test@intel.com"
+
+        html = """\
+        <html>
+          <body>
+            <h1 style="text-align:center;font-family:Times New Roman"><a name=Top>""" + mailTitle + """</a></h1>
+            """ + mailContent + """
+          </body>
+        </html>
+        """
+
+# -*- coding: utf-8 -*-
+from contextlib import contextmanager
+@contextmanager
+def myOpen(name, state):
+  try:
+    f = open(name, state)
+    yield f
+  finally:
+      f.close()
+if __name__ == "__main__":
+  with myOpen("test.txt", "w") as f:
+      f.write("hello world!")
+
+
+
+
+from contextlib import contextmanager
+@contextmanager
+def infer_open(name, mode):
+    try:
+        if os.path.exists(name):
+            f = open(name, mode)
+        else:
+            f = open(name, "w")
+        yield f
+    except Exception, e:
+        print Exception, ":", e
+    finally:
+        f.close()
+lpc_fp = open(lpc_path, 'w') if lpc_path else None     ##注意这种写法
+        self.dir = os.path.abspath(dir)
+        os.chdir(self.dir)
+
+import logging
+class InstallChecker:
+    def __init__(self, dir, log_path=None, timeout=1200):
+        self.dir = os.path.abspath(dir)
+        os.chdir(self.dir)
+        # setup the logging
+        self.logger = logging.getLogger(__name__)
+        console_handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s %(filename)s [line:%(lineno)d] %(levelname)s %(message)s')
+        console_handler.setFormatter(formatter)
+        self.logger.addHandler(console_handler)
+        # If exists log_path, then add the file handler
+        if log_path:
+            file_handler = logging.FileHandler(filename=log_path)
+            file_handler.setFormatter(formatter)
+            self.logger.addHandler(file_handler)
+        self.logger.setLevel(logging.DEBUG)
+        self.time_out = timeout
+        self.log_path = log_path
+   def __clean__(self):
+        subprocess.call('python setup.py clean --all', shell=True)
+        subprocess.call('rm -rf build/ dist/', shell=True)
+        subprocess.call('pip uninstall chainer -y', shell=True)
+   copyfile(log_file, os.path.join(log_path, os.path.basename(log_file)))  #
+[sys_dltest2@mlt-ace scripts]$ cat  push_all_inference2.py
+import argparse
+import os
+import time
+import sys
+import json
+import ast
+import  subprocess
+from helper import get_cpu_info,GetGitLogInfo,get_memory_info,GetHostModel,get_python_version
+
+def post_result(log_path,date):
+    testDir=os.path.expanduser('~')+"/Documents/dl_framework-intel_chainer_validation/dl_test_framework"
+    os.chdir(testDir)
+    data4db=subprocess.check_output("ls -ltr| tail -1 | awk '{print $9}'",shell=True)
+    data4db = data4db.strip()
+    ref_file = os.path.join(log_path, data4db)
+    with open(ref_file, 'r') as f:
+        all_data = f.read()
+    # all_data = copy.deepcopy(ref_data)
+    # all_data = ast.literal_eval(all_data)
+        print(all_data)
+
+
+    # POST to the server
+    if sys.version_info[0] == 2:
+        from urllib2 import urlopen
+        from urllib2 import Request
+    else:
+        from urllib.request import urlopen
+        from urllib.request import Request
+
+    #req = Request("http://ctsautotest2.sh.intel.com:8080/api/storedata/chainer/inference", data=result_json)
+    req = Request("http://heims.sh.intel.com/api/storedata/chainer/performance", data=all_data)
+    req.add_header("Content-Type", "application/json")
+    res = urlopen(req)
+    print("Server response: {0}".format(res.getcode()))
+
+# DIR = os.path.expanduser('~')+ "/chainer/logs/inference/bdw/"
+# post_result(DIR)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="""This script is used for pushing test result to dashboard.""")
+    parser.add_argument("--log_dir", "-p", help="inference result path", required=True)
+    parser.add_argument("--date", "-d", help="input test date", required=True)
+    args = parser.parse_args()
+    post_result(args.log_dir, args.date)
+
+[sys_dltest2@mlt-ace scripts]$ python push_all_inference2.py  -p  ~/Documents/dl_framework-intel_chainer_validation/dl_test_framework   -d 2018-05-25
+Cd  /home/sys_dltest2/Documents/dl_framework-intel_chainer_validation/dl_test_framework
+[sys_dltest2@mlt-ace dl_test_framework]$ cat  moduleinference.tpl
+{
+	"results": [{
+			"value": {
+				"topology": "alexnet",
+				"batchsize": "1",
+				"p100_top1": "9",
+				"p100_top5": "1",
+				"top1": "123",
+				"top5": "123"
+			},
+			"key": "alexnet#1"
+		},
+		{
+			"value": {
+				"topology": "alexnet",
+				"batchsize": "2",
+				"p100_top1": "9",
+				"p100_top5": "1",
+				"top1": "123",
+				"top5": "123"
+			},
+			"key": "alexnet#2"
+		}
+	],
+	"category": "chainer_accuracy_table",
+	"date": "2018-05-21",
+	"device": "SKX_8180",
+	"environment": {
+		"CPU Config": "Turbo on, HT on, NUMA on",
+		"RAM Capacity": "192G = 16G*12*1",
+		"RAM Bandwith": "255GB/s = 2.66*12*8(2666MHz DDR4)",
+		"model": "Intel(R) Xeon(R) Platinum 8180 CPU @ 2.50GHz",
+		"CPU/GPU Model, Core, Socket#": "Xeon Platinum 8180, 56, 2S",
+		"CPU/GPU TFLOPS(FP32)": "-",
+		"chainer": {
+			"author": "author",
+			"date": "-",
+			"id": "version",
+			"branch": "master"
+		},
+		"MKLDNN": {
+			"date": "-",
+			"id": "0e7ca73",
+			"branch": "-",
+			"author": "-"
+		},
+		"memory": "192 GB"
+	}
+}
+Vim  test.py
+#!/usr/bin/env  python
+#coding=utf-8
+import  json
+import  copy
+tpl_dict = {}
+with open("moduleinference.tpl","r") as tpl_h:
+        tpl_dict = json.load(tpl_h)
+
+with open("data4db.json.IB.20180525142542","r") as  f:
+	fcpu = json.load(f)
+        result_item =  {
+                            "value" : {
+                                "topology" : "-",
+                                "batchsize" : "-",
+                                "p100_top1" : "-",
+                                "p100_top5" : "-",
+                                "top1":"-",
+                                "top5":"-",
+                            },
+                            "key" : "-"
+                      }
+        result = []
+	for item_dict in fcpu["result"]:
+	        result_item["key"] =  item_dict["arch_name"] + "#" + str(item_dict["batch_size"])
+                result_item["value"]["topology"] = item_dict["arch_name"]
+                result_item["value"]["batchsize"] = item_dict["batch_size"]
+		result_item["value"]["top1"] = item_dict["top1_accurancy"]
+                result_item["value"]["top5"] = item_dict["top5_accurancy"]
+		result.append(copy.deepcopy(result_item))
+tpl_dict["result"] = result
+#with open("data4db.json.IB.20180514041721","r") as f:
+#	fgpu = json.load(f)
+with open("cpu_data.json","w") as  cpufile:
+        cpufile.write(json.dumps(tpl_dict))
+root@sige:~/dl_framework-intel_chainer_validation/scripts/rnn_evaluate# cat      tempfile_mkdtemp.py
+#!/usr/bin/env   python
+#coding:utf-8
+import tempfile
+temp_file = tempfile.mkstemp(prefix="performance")
+print(temp_file)
+print(temp_file[0])
+print(temp_file[1])
+root@sige:~/dl_framework-intel_chainer_validation/scripts/rnn_evaluate# python     tempfile_mkdtemp.py
+(3, '/tmp/performanceI3S78O')
+3
+/tmp/performanceI3S78O
+python
+>>> import  subprocess
+>>> p=subprocess.Popen("df -h",shell=True,stdout=subprocess.PIPE)
+>>> dir(p)
+['__class__', '__del__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_child_created', '_close_fds', '_communicate', '_communicate_with_poll', '_communicate_with_select', '_execute_child', '_get_handles', '_handle_exitstatus', '_internal_poll', '_set_cloexec_flag', '_translate_newlines', 'communicate', 'kill', 'pid', 'pipe_cloexec', 'poll', 'returncode', 'send_signal', 'stderr', 'stdin', 'stdout', 'terminate', 'universal_newlines', 'wait']
+>>> p.wait()  #先等待子进程是否结束，并返回值
+0
+
+>>> p.poll() #检查子进程是否结束，返回值
+0
+>>> p1=subprocess.Popen('cat /etc/passwd',shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+>>> p2=subprocess.Popen('grep 0:0',shell=True,stdin=p1.stdout,stdout=subprocess.PIPE)
+>>> print(p2)
+>>> p.communicate()
+('Filesystem      Size  Used Avail Use% Mounted on\nudev            3.9G     0  3.9G   0% /dev\ntmpfs           789M  9.7M  779M   2% /run\n/dev/sda1       213G   97G  105G  48% /\ntmpfs           3.9G  128K  3.9G   1% /dev/shm\ntmpfs           5.0M  4.0K  5.0M   1% /run/lock\ntmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup\ncgmfs           100K     0  100K   0% /run/cgmanager/fs\ntmpfs           789M   72K  788M   1% /run/user/0\ntmpfs           789M  8.0K  789M   1% /run/user/1000\n', None)
+>>> p2.communicate()
+('root:x:0:0:root:/root:/bin/bash\n', None)
+>>> p1.communicate()
+('', None)
+>>> p.pid
+19068
+>>> from  subprocess  import  *
+>>> p=Popen(['ls','-l'],stdout=PIPE).communicate()[0]
+>>> print(p)
+total 88
+-rw-r--r-- 1 root root 13442 6æœˆ   4 18:23 allfile20180604.tar.gz
+-rw-r--r-- 1 root root   166 6æœˆ   6 09:49 tempfile_mkdtemp.py
+-rw-r--r-- 1 root root   342 6æœˆ   6 09:09 tempfile_NamedTemporaryFile_args.py
+
+
+
+>>> p1=Popen(['df -h'],shell=True,stdout=PIPE)
+>>> p2=Popen(['last','-1'],stdin=p1.stdout,stdout=PIPE)
+>>> p2.communicate()    #其实就是df –h | last -1
+('root     pts/19       10.239.193.45    Mon Jun  4 09:58   still logged in\n\nwtmp begins Fri Jun  1 09:01:22 2018\n', None)
+root@sige:~# cat /etc/passwd | grep 0:0
+root:x:0:0:root:/root:/bin/bash
+root@sige:~# cat /etc/passwd | grep 0:0 | cut -d ":" -f 7
+/bin/bash
+等价于下面的脚本
+>>> from  subprocess  import  *
+>>> p1=subprocess.Popen('cat /etc/passwd',shell=True,stdout=subprocess.PIPE)
+>>> p2=subprocess.Popen('grep 0:0',shell=True,stdin=p1.stdout,stdout=subprocess.PIPE)
+>>> p3=subprocess.Popen("cut -d ':' -f 7",shell=True,stdin=p2.stdout,stdout=subprocess.PIPE)
+>>> print(p3.stdout.read())
+/bin/bash
+>>> import  os
+>>> os.system('ls ' + '-l')
+等效于下面的
+>>> import  subprocess
+>>> p=subprocess.Popen('ls -l',shell=True)
+参考脚本
+root@sige:~/dl_framework-intel_chainer_validation/scripts# vi ideep_installchecker.py
+root@sige:~/dl_framework-intel_chainer_validation/scripts# vi performance.py
+root@sige:~/dl_framework-intel_chainer_validation/scripts# vi daily_performance_test.py
+[sys_dltest2@mlt-ace scripts]$ pwd
+/home/sys_dltest2/Documents/dl_framework-intel_chainer_validation/scripts
+[sys_dltest2@mlt-ace scripts]$ vim GPU_Scoring.py
+
+
+DATA_STORE = os.path.expanduser('~') + "/chainer/logs/"
+parser = argparse.ArgumentParser(
+    description='GPU Perfroamnce Test')
+parser.add_argument("--por", "-p", type=bool, default=False, help="por mode.")
+parser.add_argument("--reportReceiver", "-r", default="mingxiao.huang@intel.com",help="send report to receiver")
+args = parser.parse_args()
+  homeFolder = os.environ['HOME']
+  coverageLogFolder = os.path.join(homeFolder, "rnn", "logs", "rnnResult", "RnnTestResult")
+  if not os.path.exists(coverageLogFolder):
+        os.makedirs(coverageLogFolder)
+if args.por == True:
+    from por_config import archs, test_params
+else:
+   from config import archs, test_params
+>>> import  os
+>>> os.environ['HOME']
+'/home/sys_dltest2'
+    homeFolder = os.environ['HOME']
+    coverageLogFolder = os.path.join(homeFolder, "chainer", "logs", "CoverageResult", "PerformanceTestCoverageResult")
+    if not os.path.exists(coverageLogFolder):
+        os.makedirs(coverageLogFolder)
+(py3-intel-chainer) [sys_dltest2@mlt-skx054 evaluate]$ cat rnn_test.py
+#!/usr/bin/env  python
+#coding:utf-8
+import  os
+import  subprocess
+import  json
+import  ast
+testDir=os.path.expanduser('~')+ "/chainer-deepmark/evaluate"
+homeFolder = os.environ['HOME']
+rnnFolder = os.path.join(homeFolder, "scripts", "RNN", "allRNN")
+if not os.path.exists(rnnFolder):
+    os.makedirs(rnnFolder)
+os.chdir(testDir)
+res=subprocess.Popen('python  train_audio.py -g -1', shell=True,stdout=subprocess.PIPE)
+res.wait()
+for line in res.stdout.readlines():
+    line = line.strip().decode("utf-8")
+    if line.startswith("{"):
+        line = ast.literal_eval(line)
+        filename = "train_audio_cpu.json"
+        fileName = os.path.join(rnnFolder,filename)
+        with open(fileName,"w") as f:
+            f.write(json.dumps(line))
+(py3-intel-chainer) [sys_dltest2@mlt-skx054 evaluate]$ cat  rnn_test.py
+#!/usr/bin/env  python
+#coding:utf-8
+import  os
+import  subprocess
+import  json
+import  ast
+import argparse
+Command_dict = {'skx-8180':[["python  train_audio.py -g -1","python train_text.py -g -1 -p big-lstm"],["train_audio_cpu.json","train_text_big-lstm_cpu.json"]],"p100":[["python train_audio.py -g 0 -c","train_audio_gpu.json"]]}
+parser = argparse.ArgumentParser(description='GPU and CPU rnn Test')
+parser.add_argument("--hardware", "-h", type=str, choices=Command_dict.keys(),required=True, help="specify server type")
+args = parser.parse_args()
+
+testDir=os.path.expanduser('~')+ "/chainer-deepmark/evaluate"
+homeFolder = os.environ['HOME']
+rnnFolder = os.path.join(homeFolder, "scripts", "RNN", "allRNN")
+if not os.path.exists(rnnFolder):
+    os.makedirs(rnnFolder)
+os.chdir(testDir)
+
+for  i  in  range(len(Command_dict[args.hardware][0]))
+    cmd = Command_dict[args.hardware][0][i]
+    result_file  = Command_dict[args.hardware][1][i]
+    run_cmd(cmd, result_file)
+
+def  run_cmd(cmd, result_file):
+    res=subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE)
+    res.wait()
+    for line in res.stdout.readlines():
+        line = line.strip().decode("utf-8")
+        if line.startswith("{"):
+            line = ast.literal_eval(line)
+            fileName = os.path.join(rnnFolder,result_file)
+            with open(fileName,"w") as f:
+                f.write(json.dumps(line))
+[sys_dltest2@mlt-ace rnn_evaluate]$ cat  rnn_test.py
+#!/usr/bin/env  python
+#coding:utf-8
+import  os
+import  subprocess
+import  json
+import  ast
+import argparse
+Command_dict = {'skx-8180':[["python  train_audio.py -g -1","python train_text.py -g -1 -p big-lstm","python train_text.py -g -1 -p small-lstm",". ./test_cpu.sh",". ./attention_sample_cpu.sh",". ./encdec_sample_cpu.sh"],["train_audio_cpu.json","train_text_big-lstm_cpu.json","train_text_small-lstm_cpu.json","test_run_cpu.json","attention_sample_cpu.json","encdec_sample_cpu.json"]],"p100":[["python train_audio.py -g 0 -c","python  train_text.py -g 0 -c -p big-lstm","python train_text.py -g 0 -c -p small-lstm",". ./test_gpu.sh",". ./attention_sample_gpu.sh",". ./encdec_sample_gpu.sh"],["train_audio_gpu.json","train_text_big-lstm_gpu.json","train_text_small-lstm_gpu.json","test_run_gpu.json","attention_sample_gpu.json","encdec_sample_gpu.json"]]}
+parser = argparse.ArgumentParser(description='GPU and CPU rnn Test')
+parser.add_argument("--hardware", "-w", type=str, choices=Command_dict.keys(),required=True, help="specify server type")
+args = parser.parse_args()
+
+testDir=os.path.expanduser('~')+ "/chainer-deepmark/evaluate"
+homeFolder = os.environ['HOME']
+rnnFolder = os.path.join(homeFolder, "scripts", "RNN", "allRNN")
+if not os.path.exists(rnnFolder):
+    os.makedirs(rnnFolder)
+os.chdir(testDir)
+
+def  run_cmd(cmd, result_file):
+    res=subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE)
+    res.wait()
+    for line in res.stdout.readlines():
+        line = line.strip().decode("utf-8")
+        if line.startswith("{"):
+            line = ast.literal_eval(line)
+            fileName = os.path.join(rnnFolder,result_file)
+            with open(fileName,"w") as f:
+                f.write(json.dumps(line))
+
+for  i  in  range(len(Command_dict[args.hardware][0])):
+    cmd = Command_dict[args.hardware][0][i]
+    result_file  = Command_dict[args.hardware][1][i]
+    if (cmd == ". ./test_cpu.sh") or (cmd == ". ./test_gpu.sh"):
+        lstmDir=os.path.expanduser('~')+ "/Documents/dl_framework-intel_chainer_validation/scripts/n_step_lstm_performance_test"
+        os.chdir(lstmDir)
+
+    if (cmd == ". ./attention_sample_cpu.sh") or (cmd == ". ./encdec_sample_cpu.sh") or (cmd == ". ./attention_sample_gpu.sh") or (cmd == ". ./encdec_sample_gpu.sh"):
+        nmtDir=os.path.expanduser('~')+ "/Documents/dl_framework-intel_chainer_validation/scripts/chainer_nmt_test/"
+        os.chdir(nmtDir)
+    run_cmd(cmd, result_file)
+
+[sys_dltest2@mlt-ace RNN]$ python
+>>> a = [{'value': [{'Total': 648.492, 'Update': 89.916, 'batch_size': 64, 'Forward': 277.13, 'Backward': 281.446, 'config': 'MKLDNN', 'unit': 'SPS'}, {'Total': 129.555, 'Update': 10.283, 'batch_size': 64, 'Forward': 44.385, 'Backward': 74.886, 'config': 'P100', 'unit': 'SPS'}], 'key': 'NMT_Attention'}, {'value': [{'Total': 488.281, 'Update': 82.937, 'batch_size': 64, 'Forward': 225.356, 'Backward': 179.989, 'config': 'MKLDNN', 'unit': 's'}, {'Total': 66.971, 'Update': 7.76, 'batch_size': 64, 'Forward': 24.473, 'Backward': 34.739, 'config': 'P100', 'unit': 's'}], 'key': 'NMT_Encdec'}]
+>>> print(a[0]["key"])
+NMT_Attention
+>>> print(a[1]["key"])
+NMT_Encdec
+>>> print(a[0]["value"])
+[{'Total': 648.492, 'Update': 89.916, 'batch_size': 64, 'Forward': 277.13, 'Backward': 281.446, 'config': 'MKLDNN', 'unit': 'SPS'}, {'Total': 129.555, 'Update': 10.283, 'batch_size': 64, 'Forward': 44.385, 'Backward': 74.886, 'config': 'P100', 'unit': 'SPS'}]
+>>> print(a[0]["value"][0])
+{'Total': 648.492, 'Update': 89.916, 'batch_size': 64, 'Forward': 277.13, 'Backward': 281.446, 'config': 'MKLDNN', 'unit': 'SPS'}
+>>> print(a[0]["value"][1])
+{'Total': 129.555, 'Update': 10.283, 'batch_size': 64, 'Forward': 44.385, 'Backward': 74.886, 'config': 'P100', 'unit': 'SPS'}
+>>> print(a[0]["value"][0]["Update"])
+89.916
+>>> print(a[0]["value"][1]["Update"])
+10.283
+[sys_dltest2@mlt-ace RNN]$ python
+>>> Asin = [{"Asin": "b2b"}]
+>>> print([item[key] for item in Asin for key in item])
+['b2b']
+>>> print(item.keys())
+['Asin']
+>>> print(Asin)
+[{'Asin': 'b2b'}]
+字典迭代
+>>> d = {'a': 1, 'b': 2, 'c': 3}
+>>> for key in d:
+...     print(key)
+...
+a
+c
+b
+>>> for value in d.values():
+...     print(value)
+...
+1
+3
+2
+列表的迭代
+>>> for x, y in [(1, 1), (2, 4), (3, 9)]:
+...     print(x, y)
+>>> for i, value in enumerate(['A', 'B', 'C']):
+...     print(i, value)
+
+def FindErrorMessage(res):
+    for result in res:
+        if 'error' in result.lower():
+            return True
+    return False
+
+
+def BuildProject(project_dir, log_file_dir):
+    build_folder = os.path.join(project_dir, "build")
+external_folder = os.path.join(project_dir, "external")
+
+list=[1,2,3,4,5,6]   #列 表
+for i,j  in enumerate(list):
+    print(i,j)
+
+0 1
+1 2
+2 3
+3 4
+4 5
+5 6
+list2=list[::-1]
+print(list2)
+[6, 5, 4, 3, 2, 1]
+list3=[i*2 for i in list if not i%2]
+print(list3)
+[4, 8, 12]
+
+for i,j in enumerate('abcde'):  #字符串
+    print(i,j)
+0 a
+1 b
+2 c
+3 d
+4 e
+for i,j in enumerate(('a','b','c')):#元组
+    print(i,j)
+0 a
+1 b
+2 c
+for i,j in enumerate({'a':1,'b':2}):  #字典
+    print(i,j)
+0 a
+1 b
+ # clean build files
+    if (os.path.exists(build_folder)):
+        shutil.rmtree(build_folder)
+    if (os.path.exists(external_folder)):
+        shutil.rmtree(external_folder)
+(py3-intel-chainer) [sys_dltest2@mlt-skx070 scripts]$ cat    merge_allRNN_result.py
+import json
+import os
+import sys
+import argparse
+import re
+import  json
+sys.path.append(os.path.expanduser('~')+"/Documents/dl_framework-intel_chainer_validation/scripts")
+from  config  import  archs
+from helper import *
+import time
+from datetime import datetime
+import traceback
+import subprocess
+import copy
+import  pdb
+
+testDir=os.path.expanduser('~')+"/scripts/RNN/allRNN/"
+os.chdir(testDir)
+branch_info = subprocess.check_output(['ls']).decode('utf-8').splitlines()
+results = []
+key_dict = {"train_audio":"DS2","train_text_big-lstm":"Big_LSTM","train_text_small-lstm":"Small_LSTM","test_run":"N_Step_LSTM","attention_sample":"NMT_Attention","encdec_sample":"NMT_Encdec"}
+def  dict_value(filename,value):
+    data = {}
+    with open(os.path.join(testDir,filename)) as f:
+        data = json.load(f)
+    value["Forward"] = data["Forward"] if "Forward" in data  else data["Forward(SPS)"]
+    value["Backward"] = data["Backward"] if "Backward" in data else data["Backward(SPS)"]
+    value["Update"] = data["Uptade"] if "Uptade" in  data  else "-"
+    value["Total"] = data["Total"] if "Total" in  data  else data["Total(SPS)"]
+    value["batch_size"] = data["batch_size"] if "batch_size" in  data  else 64
+    if filename.startswith("encdec_sample"):
+        value["unit"] = "s"
+for  filename  in  branch_info:
+
+    key = ""
+    item = { "value":[
+                {
+                    "config" : "MKLDNN",
+                    "Forward" : "-",
+                    "Backward" : "-",
+                    "Update" : "-",
+                    "Total" : "-",
+                    "unit" : "SPS",
+                    "batch_size" : "-"
+                },
+                {
+                    "config" : "P100",
+                    "Forward" : "-",
+                    "Backward" : "-",
+                    "Update" : "-",
+                    "Total" : "-",
+                    "unit" : "SPS",
+                    "batch_size" : "-"
+                }
+            ],
+            "key" : "-"
+}
+
+    fileName = os.path.join(testDir, filename)
+    if not os.path.isfile(fileName):
+        continue
+    if  "cpu"  in  filename:
+            value = item["value"][0]
+            dict_value(filename,value)
+    if  "gpu"  in  filename:
+            value = item["value"][1]
+            dict_value(filename,value)
+
+    for  k,v  in  key_dict.items():
+        if filename.startswith(k):
+            head, key = k, v
+            item["key"] = key
+            break
+    existed_flag = 0
+    print(results)
+    for  result  in  results:
+        if  result["key"] == item["key"]:
+            if "cpu"  in  filename:
+                result["value"][0] = item["value"][0]
+            if "gpu"  in  filename:
+                result["value"][1] = item["value"][1]
+
+            existed_flag = 1
+            break
+    if existed_flag == 0:
+        results.append(copy.deepcopy(item))
+
+filename = 'allRNN_rnning.json'
+restoreDir=os.path.expanduser('~')+"/scripts/RNN/"
+fileName = os.path.join(restoreDir, filename)
+with open(fileName, 'w') as f:
+    json.dump(results, f)
+    print(fileName)
+print("merge done")
+
+if __name__ == "__main__":
+         parser = argparse.ArgumentParser(description="""This script is for the rnn  gtest.""")
+         parser.add_argument("--directory", "-d", help="gtest directory")
+         parser.add_argument("--date", "-dt", default="2018-03-28", help="the day info you would like to show")
+         parser.add_argument("--reportReceiver", "-r", help="send report to receiver")
+         args = parser.parse_args()
+         try:
+
+             hostModel = GetHostModel()
+             mailContent = GenRnnTable("Rnning Test Result " + hostModel,
+                                    ['Topology', 'batchSize', 'Type', 'skx-8180', 'P100'],results)
+
+             mailTitle = "Intel  Rnning Test Report " + datetime.now().strftime("%Y-%m-%d")
+             reportSender = "dl_test@intel.com"
+
+             html = """\
+             <html>
+               <body>
+                 <h1 style="text-align:center;font-family:Times New Roman"><a name=Top>""" + mailTitle + """</a></h1>
+                 """ + mailContent + """
+               </body>
+             </html>
+             """
+
+             SendReport(reportSender, args.reportReceiver, mailTitle, html)
+
+             print("Scoring Results Processing Test Done!")
+         except Exception as e:
+             print(e)
+             traceback.print_exc()
+             sys.exit(-1)
+>>> import   pprint   #使输出更易于人观看
+>>> data = (
+...     "this is a string", [1, 2, 3, 4], ("more tuples",
+...     1.0, 2.3, 4.5), "this is yet another string"
+...     )
+>>> pprint.pprint(data)
+('this is a string',
+ [1, 2, 3, 4],
+ ('more tuples', 1.0, 2.3, 4.5),
+ 'this is yet another string')
+>>> d={'name':'Tom','age':'22'}
+>>> d['sex'] = 'man'
+>>> print d
+{'age': '22', 'name': 'Tom', 'sex': 'man'}
+>>> print d.pop('name')
+Tom
+>>> print d
+{'age': '22', 'sex': 'man'}
+>>> d.clear()
+>>> print d
+{}
+>>> d={'name':'Tom','age':'22'}
+>>> d['age'] = '11'
+>>> print d
+{'age': '11', 'name': 'Tom'}
+>>> print d.get('name')
+Tom
+>>> print d.get('test')
+None
+>>> print d.setdefault('name')
+Tom
+>>> print d.setdefault('test_1')
+None
+>>> print d.setdefault('test_2',80)
+80
+>>> print d
+{'age': '11', 'name': 'Tom', 'test_1': None, 'test_2': 80}
+>>> print  d.has_key('name')
+True
+>>> d={'name':'Tom','age':'22'}
+>>> print d.items()
+[('age', '22'), ('name', 'Tom')]
+>>> print d.values()
+['22', 'Tom']
+>>> print d.keys()
+['age', 'name']
+>>> d={'name':'Tom','age':'22'}
+>>> print d.iteritems()
+<dictionary-itemiterator object at 0x7f18d6e06050>
+>>> for  i  in d.iteritems():
+...     print i
+...
+('age', '22')
+('name', 'Tom')
+>>> d={'name':'Tom','age':'22'}
+>>> for  i  in  d.iterkeys():
+...     print  i
+...
+age
+name
+>>> for  i  in  d.itervalues():
+...     print i
+...
+22
+Tom
+>>> import  os
+>>> os.getcwd()   #获取当前所在的路径跟pwd一样
+'/home/sys_dltest2/Documents/dl_framework-intel_chainer_validation/scripts'
+def Store_data(results):
+    print("Store_data####",results)
+    TIME = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    hostModel = GetHostModel()
+    hModel = hostModel.lower()
+    resFileName = "titanx.json"
+    json_data_list = []
+    json_data = {}
+
+    if hModel == "":
+        #SocrFolder = os.path.join(DATA_STORE , "GPUScoring" , "unknown", TIME)
+        SocrFolder = os.path.join(os.getcwd() , "refs" , "unknown")
+    else:
+        #SocrFolder = os.path.join(DATA_STORE , "GPUScoring" ,  hModel , TIME)
+        SocrFolder = os.path.join(os.getcwd() , "refs" )
+
+    if not os.path.exists(SocrFolder):
+        os.makedirs(SocrFolder)
+    for res in results:
+        print("results",res)
+        fw = res[3]
+        bw = res[4]
+        tt = res[5]
+        bs = res[1]
+        size = res[2]
+        tp = res[0]
+        #net = {"key":"{0}#{3}*3*{1}*{2}".format(get_arch_name(tp), insize, insize, bs)}
+        net = "{0}#3*{1}*{2}#{3}".format(get_arch_name(tp), size, size, bs)
+        json_data[net] = {"config" : "Titan X Base1",
+                     "host" : get_host_name(),
+                     "Forward": fw,
+                     "Backward": bw,
+                     "Total": tt,
+                     "iterations" : 1.0,
+                     "batch_size" : bs,
+                     "epoch" : 13.0}
+
+    store_json(SocrFolder + os.sep + resFileName, json_data)
+    print("result path: ", SocrFolder)
+    return
+
+
+count = 0
+results = []
+for net in archs:
+    print(net)
+    if net in test_params:
+        for param in test_params[net]:
+                batchsize = param[0]
+                insize = param[1]
+                #if (param_x == 1) or (param_x == 4):
+                #    continue
+                print("batchsize", batchsize)
+                print("insize", insize)
+                print ("[" + str(count) + "]Begin to exet:" + net + " batchsize:" + str(batchsize) + " datasize:" + str(insize))
+                #train_loop()
+                temp_file = tempfile.mkstemp(prefix="performance")
+                os.close(temp_file[0])
+                temp_file_path = temp_file[1]
+                datasize = batchsize
+                if net == "ssd300":
+                    print('python ssd_performance.py -a {0} -b {1} -d {2} -e 13 -i 300 -r {3} -g 0'.format(
+                        net, batchsize, datasize, temp_file_path))
+
+                    p = subprocess.Popen(
+                        'python ssd_performance.py -a {0} -b {1} -d {2} -e 13 -i 300 -r {3} -g 0'.format(
+                        net, batchsize, datasize, temp_file_path),shell=True)
+                elif net == "googlenet_aist":
+                    print('python train_imagenet_cpu.py -a googlenet -B {0} -r {1} -g 0'.format(batchsize, temp_file_path))
+                    p = subprocess.Popen(
+                        'python train_imagenet_cpu.py -a googlenet -B {0} -r {1} -g 0'.format(batchsize, temp_file_path), shell=True)
+
+                else:
+                    print("python train_imagenet_gpu.py -a " + net + " -B " + str(batchsize) + " -r " + temp_file_path)
+                    p = subprocess.Popen("python train_imagenet_gpu.py -a " + net + " -B " + str(batchsize) + " -r " + temp_file_path, shell=True)
+
+                is_time_out = False
+                time_out_seconds = 600
+                start_time = time.time()
+                while True:
+                      if p.poll() is not None:
+                         break
+                      time_passed = time.time()
+                      if time_passed - start_time > time_out_seconds:
+                         is_time_out = True
+                         p.kill()
+                         break
+                      time.sleep(1)
+
+                if is_time_out:
+                    print('timeout...')
+                    out1 = "timeout"
+                    out2 = "timeout"
+                    out3 = "timeout"
+                if p.returncode == 0:
+                    with open(temp_file_path, 'r') as f:
+                        result_json = json.load(f)
+                    assert result_json
+                    os.remove(temp_file_path)
+                    out1 = result_json['Forward']
+                    out2 = result_json['Backward']
+                    out3 = result_json['Total']
+                else:
+                    print("runtime error")
+                    out1 = "Error"
+                    out2 = "Error"
+                    out3 = "Error"
+                result = [net, batchsize, insize, out1, out2, out3,]
+                results.append(result)
+                count = count + 1
+Store_data(results)
+(py2.7.10) [sys_dltest2@mlt-skx070 scripts]$ cat  hardware.ini
+[BDW]
+socket = 2s
+tuobo = Turbo on
+numa = NUMA off
+network = 10GB
+TFLOPS = 3.66T = 2.6G*44*32(AVX2)
+RAMBandwidth = 154GB/s = 2.4*8*8(PC2400 DDR4)
+RAMCapacity = 128G = 16G*8*1
+HT = HT off
+
+[SKX_8180]
+socket = 2s
+tuobo = Turbo on
+numa = NUMA on
+network = 10G, OPA
+TFLOPS = 8.96T = 2.5G*56*64(AVX512)
+RAMBandwidth = 255GB/s = 2.66*12*8(2666MHz DDR4)
+RAMCapacity = 192G = 16G*12*1
+HT = HT on
+
+[SKX_6148]
+socket = 2s
+tuobo = Turbo on
+numa = NUMA on
+network = 10G, OPA
+TFLOPS = 8.96T = 2.5G*56*64(AVX512)
+RAMBandwidth = 255GB/s = 2.66*12*8(2666MHz DDR4)
+RAMCapacity = 192G = 16G*12*1
+HT = HT on
+
+[KNL]
+socket = 1s
+tuobo = Turbo on
+numa = NUMA off
+network = OPA
+TFLOPS = 6.52T = 1.5G*68*64(AVX512)
+RAMBandwidth = 115.2GB/s = 2.4*6*8(PC2400 DDR4)
+RAMCapacity = 	192G = 32G*6*1
+HT = HT on
+
+[KNM]
+socket = 1s
+tuobo = Turbo on
+numa = NUMA on
+network = OPA
+TFLOPS = 13.82T = 1.5G*72*128(AVX512 QFMA)
+RAMBandwidth = 115.2GB/s = 2.4*6*8(PC2400 DDR4)
+RAMCapacity = 96G = 16G*6*1
+HT = HT on
+def Usage():
+        print('Usage:')
+        print('-c, --cpp: enable cpp coverage')
+        print('-g, --gpu: indicates gpu environment')
+        print('-r, --receiver: send email to receiver')
+        print('-h, --help: show the help information')
+homeFolder = os.environ['HOME']
+    currentTime = datetime.now()
+    strCurrentTime = currentTime.strftime("%Y-%m-%d_%H-%M-%S")
+    inf_script = "../../dl_framework-intel_chainer_inference_benchmark/inference.py"
+inf_cosim_script = "../../dl_framework-intel_chainer_inference_benchmark/inference_for_cosim_{0}.py".format(strCurrentTime)
+=============================
+import os
+import re
+from helper import *
+import getopt
+import sys
+from installchecker import install_check
+
+def Usage():
+        print('Usage:')
+        print('-c, --cpp: enable cpp coverage')
+        print('-g, --gpu: indicates gpu environment')
+        print('-r, --receiver: send email to receiver')
+        print('-h, --help: show the help information')
+
+
+def enableGcov():
+    with open("../../dl_framework-intel_chainer/mkldnn_setup.py", "r") as f:
+        lines = f.readlines()
+    with open("../../dl_framework-intel_chainer/mkldnn_setup.py", "w") as f_w:
+        for line in lines:
+            if "ccxx_opts += ['-fopenmp', '-DOPENMP_AFFINITY']" in line:
+               f_w.write(line)
+               compile_parameter_line=line
+               link_parameter_line=line
+               compile_parameter_line = compile_parameter_line.replace("['-fopenmpe', '-O0']")
+               link_parameter_line = link_parameter_line.replace("ccxx_opts += ['-
+               f_w.write(compile_parameter_line)
+               f_w.write(link_parameter_line)
+            else:
+               f_w.write(line)
+
+if __name__ == "__main__":
+
+        try:
+                opts, args = getopt.getopt(sys.argv[1:], 'h:c:g:r:',
+                                           ['cpp=', 'gpu=', 'receiver=', 'help'])
+        except getopt.GetoptError as err:
+                print("Argument Error!")
+                Usage()
+                sys.exit(-1)
+
+        # check args
+        reportReceiver = "mingxiao.huang@intel.com"
+        enable_cpp = False
+        dev = -1
+        for o, a in opts:
+                if o in ("-h", "--help"):
+                        Usage()
+                        sys.exit(-1)
+                elif o in ("-c", "--cpp"):
+                        enable_cpp = True
+                elif o in ("-g", "--gpu"):
+                        dev = a
+                elif o in ("-r", "--receiver"):
+                        reportReceiver = a
+
+        try:
+            if enable_cpp:
+               #prepare compile configuration
+               child = subprocess.Popen("cp ../../dl_framework-intel_chainer/mkldnk",
+                                     shell=True)
+               child.wait()
+               enableGcov()
+               coverage_scope = "py_and_cpp"
+               buildNeed = True
+            else:
+               coverage_scope = "py"
+               buildNeed = False
+            print("grep target files in mkldnn directory")
+            child = subprocess.check_output(['bash', 'coverage_file_filter.sh'])
+            file_list=[]
+            projectDir = os.path.abspath("../../dl_framework-intel_chainer")
+            with open('chainer.txt', 'r') as f:
+                lines = f.readlines()
+                for line in lines:
+                    line=line.strip()
+                    file_list.append(line)
+            with open('mkldnn.txt', 'r') as f:
+                lines = f.readlines()
+                for line in lines:
+                    line=line.strip()
+                    file_list.append(line)
+            str = ","
+            filesString = str.join(file_list)
+
+            pyVersion = get_python_version(2)
+            if pyVersion == '2.7':
+                filesString = filesString.replace("../../dl_framework-intel_chaine/python2.7/site-packages")
+            elif pyVersion == '3.5':
+                filesString = filesString.replace("../../dl_framework-intel_chaineon3.5/site-packages")
+            print (filesString)
+
+            testDir = os.path.abspath(os.curdir)
+            if buildNeed == True:
+               buildResult, buildContent = install_check(projectDir)
+            else:
+               buildResult = True
+               buildContent = 'building is ok'
+            if buildResult == True:
+               print (testDir)
+               os.chdir(testDir)
+               coverage_log_folder = os.environ['HOME'] + "/chainer/logs/CoverageR
+               child = subprocess.Popen(". ./coverage_test.sh" + " " + pyVersion +ge_scope + " " + dev + " " + reportReceiver, shell=True)
+               child.wait()
+               print (projectDir)
+
+            if enable_cpp == True:
+               child = subprocess.Popen("mv" + " " + projectDir + "/mkldnn_setup.p
+               child.wait()
+            print("Coverage Results Processing Test Done!")
+        except Exception as e:
+                print(e)
+                sys.exit(-1)
+   shareFolder = "\\\\{0}\\logs\\CosimTestResult\\{1}".format(get_host_name(), strCurrentTime)
+    print("STARTING to run cosim test ...\n\nLog Path: %s\n" % logFolder)
+
+def get_arch_name(arch):
+    arch_name = {
+        "resnet50" : "Resnet50",
+        "ssd300" : "SSD/VGG16",
+        "googlenet_v3" : "Inception_V3",
+        "GoogleNetV3" : "Inception_V3",
+        "ResNet50" : "Resnet50",
+        "SSD300" : "SSD/VGG16",
+        "SSD/VGG16" : "SSD/VGG16"
+    }
+    if arch not in arch_name:
+        raise ValueError("No such arch: {0}".format(arch))
+    return arch_name[arch]
+------------------------------------------------------------------------
+push_json_data = json.dumps(push_json_data).encode('utf-8')
+    print(push_json_data)
+def exec_dnet(path, arch, batchsize, insize, timeout):
+    # launch subprocess to start test.
+    if arch == "googlenet_aist":
+       arch_adapt = "googlenet"
+       p = subprocess.Popen([path, '-a', arch_adapt.replace("_", ""), '-b', batchsize, '-i', insize, '-n', str(DNET_EPOCH), '-v', '1'],
+                            stdout=subprocess.PIPE)
+    elif arch == "googlenet_v3" or arch == "ssd300":
+       print ("googlenet_v3 and ssd300 not supported yet")
+       store_dnet_test_result(arch, batchsize, insize, "NA", "NA", "NA")
+       return 0
+    else:
+       p = subprocess.Popen([path, '-a', arch.replace("_", ""), '-b', batchsize, '-i', insize, '-n', str(DNET_EPOCH), '-v', '1'],
+                            stdout=subprocess.PIPE)
+
+    is_time_out = False
+    start_time = time.time()
+    while True:
+        if p.poll() is not None:
+            break
+        time_passed = time.time()
+        if time_passed - start_time > timeout:
+            is_time_out = True
+            p.kill()
+            break
+        time.sleep(1)
+info = p.stdout.read().decode('utf-8').splitlines()
+     if line.startswith('Average Total: '):
+            line = line.replace('Average Total: ', '')
+            line = line.replace(' ms', '')
+            average_total = float(line.split(',')[0])
+            count += 1
+p.wait()
+##########################################
+class IdeepInstallChecker:
+    def __init__(self, dir, log_path=None, timeout=1200):
+        self.dir = os.path.abspath(dir)
+        os.chdir(self.dir)
+       self.logger = logging.getLogger(__name__)
+        console_handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s %(filename)s [line:%(lineno)d] %(levelname)s %(message)s')
+        console_handler.setFormatter(formatter)
+        self.logger.addHandler(console_handler)
+        # If exists log_path, then add the file handler
+        if log_path:
+            file_handler = logging.FileHandler(filename=log_path)
+            file_handler.setFormatter(formatter)
+            self.logger.addHandler(file_handler)
+        self.logger.setLevel(logging.DEBUG)
+        self.time_out = timeout
+        self.log_path = log_path
+    def __clean__(self):
+        subprocess.call('python setup.py clean --all', shell=True)
+        subprocess.call('rm -rf build/ dist/', shell=True)
+        subprocess.call('pip uninstall ideep4py -y', shell=True)
+•	其中subprocess.call用于代替os.system，示例：
+•	import subprocess
+•	returnCode = subprocess.call('adb devices')
+•	print returnCode
+1.	执行结果保存在文件
+cmd = "adb shell ls /sdcard/ | findstr aa.png"
+fhandle = open(r"e:\aa.txt", "w")
+pipe = subprocess.Popen(cmd, shell=True, stdout=fhandle).stdout
+fhandle.close()
+ 2.执行结果使用管道输出
+pipe=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE).stdout
+print pipe.read()
+使用commands.getstatusoutput() 方法就可以获得到返回值和输出：
+(status, output) = commands.getstatusoutput('sh hello.sh')
+print status, output
+    def __install__(self):
+        install_cmd = 'python setup.py install'
+        ret = os.system('which timeout')
+        if ret == 0:
+            install_cmd = 'timeout %d %s' % (self.time_out, install_cmd)
+        p = subprocess.Popen(install_cmd, stderr=subprocess.PIPE, shell=True)
+        start_time = time.time()
+        is_time_out = False
+        (stdout_output, error_output) = p.communicate()
+
+        if time.time() - start_time >= self.time_out:
+            is_time_out = True
+       error_output = error_output.decode('utf-8').split('\n')
+        for line in error_output:
+            if line.find('warning'):
+                self.logger.warn(line)
+            else:
+                self.logger.error(line)
+        if is_time_out:
+            return 1
+        elif p.returncode != 0:
+            return 2
+        elif not os.listdir(os.path.join(self.dir, 'build')):
+            return 3
+        else:
+            return 0
+
+
+
+   current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
+    log_file_name = "{0}.log".format(current_time)
+    log_file_dir = os.path.join(os.environ['HOME'], 'chainer', 'logs', 'IdeepBuildTest')
+    if not os.path.exists(log_file_dir):
+        os.makedirs(log_file_dir)
+ homeFolder = os.environ['HOME']
+ currentTime = datetime.now()
+ strCurrentTime = currentTime.strftime("%Y-%m-%d_%H-%M-%S")
+install_checker = IdeepInstallChecker(dir, os.path.join(log_file_dir, log_file_name))
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Install checker: check the install process of ideep.')
+    parser.add_argument("--dir", "-d", help="ideep project dir", required=True)
+    parser.add_argument("--log", "-l", help="Log file path")
+    args = parser.parse_args()
+    install_checker = IdeepInstallChecker(args.dir, args.log)
+    retruncode = install_checker.__install_test__()
+sys.exit(retruncode)
+                p = subprocess.Popen('. ./ideep_unit_test.sh {0} {1}'.format(fileName, fileLogName, fileLogName_error), shell=True)
+                p.wait()
+[sys_dltest2@mlt-ace scripts]$ cat  ideep_unit_test.py
+import os
+import sys
+import argparse
+import re
+from datetime import datetime
+from helper import *
+
+
+if __name__ == "__main__":
+
+         # parse the opts and args
+         parser = argparse.ArgumentParser(description="""This script is for the ideep gtest.""")
+         parser.add_argument("--directory", "-d", help="gtest directory")
+         parser.add_argument("--silence", "-s", default=0, type=int, help="negative value indicates silence mode")
+         parser.add_argument("--reportReceiver", "-r", help="send report to receiver")
+
+         args = parser.parse_args()
+
+         try:
+             homeFolder = os.environ['HOME']
+             currentTime = datetime.now()
+             strCurrentTime = currentTime.strftime("%Y-%m-%d_%H-%M-%S")
+             hostName = get_host_name().replace(".sh.intel.com", '')
+             #only chainer-test1 support samba, you need to rsy the log with chainer-test1 later
+             shareFolder = "\\\\chainer-test1.sh.intel.com\\logs\\UnitTestResult\\{0}\\{1}".format(hostName, strCurrentTime)
+             logFolder = os.path.join(homeFolder, "chainer", "logs", "UnitTestResult", hostName, strCurrentTime)
+             if not os.path.exists(logFolder):
+                os.makedirs(logFolder)
+
+             projectDir = os.path.abspath(args.directory)
+             if not os.path.exists(projectDir):
+                print("%s does not exist. Please input the path of focus test scripts." % projectDir)
+                sys.exit(-1)
+
+
+             allFiles = GetAllSpecificFiles(projectDir, "test_")
+             results = []
+             test_results = []
+             print("all files:", allFiles)
+             unitResult = "PASS"
+             for testFile in allFiles:
+                testFile = testFile.replace('.cc','')
+                fileName = os.path.join(projectDir, testFile)
+                fileLogName = os.path.join(logFolder, testFile)
+                fileLogName_error = os.path.join(logFolder, testFile + "error")
+                print("test file is ", testFile)
+                p = subprocess.Popen('. ./ideep_unit_test.sh {0} {1}'.format(fileName, fileLogName, fileLogName_error), shell=True)
+                p.wait()
+
+                # Main process wait
+                time_out_seconds = 600
+                is_time_out = False
+                start_time = time.time()
+                while True:
+                   if p.poll() is not None:
+                       break
+                   time_passed = time.time()
+                   if time_passed - start_time > time_out_seconds:
+                       is_time_out = True
+                       p.kill()
+                       break
+                   time.sleep(1)
+
+                if is_time_out:
+                    print('timeout...')
+                    result={
+                    "test_case": testFile,
+                    "test_result": "timeout"
+                    }
+                    unitResult = "FAIL"
+                elif p.returncode == 0:
+                    print('test pass...')
+                    result={
+                    "test_case": testFile,
+                    "test_result": "PASS"
+                    }
+
+                else:
+                    print('test fail...')
+                    result={
+                    "test_case": testFile,
+                    "test_result": "FAIL"
+                    }
+                    unitResult = "FAIL"
+                results.append(result)
+                test_results.append([result['test_case'], result['test_result']])
+
+             commitInfo = GetGitLogInfo(projectDir)
+             cpuModel = get_cpu_info()[0]
+             commitInfo.append(cpuModel)
+             gccVer = get_gcc_version()
+             commitInfo.append(gccVer)
+             mailContent = GenTable("", ['Branch', 'Commit Id', 'Author', 'Commit Time', 'Test Environment', 'gcc Version'], [commitInfo])
+
+             if unitResult == "PASS":
+                 unitMailContent = '<h2 style="color:green"> Ideep Unit Test Result: PASS </h2>'
+             else:
+                 unitMailContent = '<h2 style="color:red"> Ideep Unit Test Result: FAIL </h2>'
+
+
+             mailContent += unitMailContent
+             hostModel = GetHostModel()
+             mailContent += GenTable("Ideep Unit Test Result on " + hostModel,
+                                    ['Test Case', 'Test Result'], test_results)
+
+             mailTitle = "Intel Ideep Unit Test Report " + datetime.now().strftime("%Y-%m-%d")
+             reportSender = "dl_test@intel.com"
+
+             html = """\
+             <html>
+               <body>
+                 <h1 style="text-align:center;font-family:Times New Roman"><a name=Top>""" + mailTitle + """</a></h1>
+                 <p> Ideep Unit Test Data: <a href=""" + shareFolder + """> """ + shareFolder + """</a></p>
+                 """ + mailContent + """
+               </body>
+             </html>
+             """
+             if args.silence >= 0:
+                SendReport(reportSender, args.reportReceiver, mailTitle, html)
+             elif unitResult != "PASS":
+                SendReport(reportSender, args.reportReceiver, mailTitle, html)
+             else:
+                print("will not send test report")
+             print("Ideep Unit Results Processing Test Done!")
+             if unitResult != "PASS":
+                sys.exit(-1)
+             else:
+                sys.exit(0)
+         except Exception as e:
+             print(e)
+             sys.exit(-1)
+-----------------------------------------------------------------------
+results = []
+for d100 in p100_data:
+    for d40 in p40_data:
+       for d4 in p4_data:
+           if d100['key'] == d40['key'] == d4['key']:
+              value = []
+              value.append(d100['value'])
+              value.append(d40['value'])
+              value.append(d4['value'])
+              result = {
+              'key': d100['key'],
+              'value': value
+              }
+              results.append(result)
+all_results = {
+'category': "scoring",
+'date': args.date,
+'results': results
+}
+    if not os.path.exists(GPU_SCORING_RESULT):
+        logging.error("Could not find GPU Scoring reference file: %s, please check..." % GPU_SCORING_RESULT)
+    all_scoring_data = []
+    for i in gpu_data['results']:
+        key1 = i['key']
+        for j in cpu_data:
+            key2 = j['key']
+            if key1 == key2:
+                for ite in j["value"]:
+                    i["value"].append(ite)
+                    result = i["value"]
+                all_scoring_data.append({"key":key1,"value":i["value"]})
+json_data = {
+        "environment": {
+                "python": python_info,
+                "model": model,
+                "CPU(s)": CPUs,
+                "Cores": Cores,
+                "memory": "{0} GB".format(get_memory_info()),
+                "mkldnn": {
+                    "branch": mkldnn_git_info[0],
+                    "id": mkldnn_git_info[1][:5],
+                    "author": mkldnn_git_info[2],
+                    "date": mkldnn_git_info[3]
+                },
+                "ideep": {
+                    "branch": ideep_git_info[0],
+                    "id": ideep_git_info[1][:5],
+                    "author": ideep_git_info[2],
+                    "date": ideep_git_info[3]
+                },
+                "chainer": {
+                    "branch": chainer_git_info[0],
+                    "id": chainer_git_info[1][:5],
+                    "author": chainer_git_info[2],
+                    "date": chainer_git_info[3]
+                },
+                "dnet": {
+                    "branch": dnet_git_info[0],
+                    "id": dnet_git_info[1][:5],
+                    "author": dnet_git_info[2],
+                    "date": dnet_git_info[3]
+                }
+            },
+        "memory": "{0} GB".format(get_memory_info()),
+        "device": GetHostModel(),
+        "date": date,
+        "category": "scoring",
+        "results": all_scoring_data
+    }
+    result_json = json.dumps(json_data).encode('utf-8')
+    print result_json
+
+
+    # POST to the server
+    if sys.version_info[0] == 2:
+        from urllib2 import urlopen
+        from urllib2 import Request
+    else:
+        from urllib.request import urlopen
+        from urllib.request import Request
+
+    # req = Request("http://ctsautotest2.sh.intel.com/api/storedata/chainer/performance", data=result_json)
+    req = Request("http://heims.sh.intel.com/api/storedata/chainer/inference", data=result_json)
+    req.add_header("Content-Type", "application/json")
+    res = urlopen(req)
+    print("Server response: {0}".format(res.getcode()))
+cat   multi_instance_test.sh
+script=$1
+arch=$2
+insize=$3
+CHAINER_TYPE_CHECK=0 OMP_NUM_THREADS=1 numactl --physcpubind=0 --membind=0 python $script -a $arch -b 1 -d 1 -e 13 -i $insize -r tmp_result_${arch}_1_0 -c True &
+Wait
+if __name__ == "__main__":
+
+        # parse the opts and args
+        parser = argparse.ArgumentParser(description="""
+                  This script is for the preci performance test.
+                  """)
+        parser.add_argument("--arch", "-a", help="Convnet architectures: alex, googlenet, vgga, overfeat", required=True)
+        parser.add_argument("--batchsize", "-b", type=int, help="Minibatch size", required=True)
+        parser.add_argument("--insize", "-i", type=int, help="Insize: Set the w*h = insize*insize", required=True)
+        parser.add_argument("--datasize", "-d", type=int, help="Dataset size", required=True)
+        parser.add_argument("--epoch", "-e", type=int, help="Epoch", required=True)
+        parser.add_argument("--level", "-l", type=int, help="Level", required=True)
+
+        args = parser.parse_args()
+
+        try:
+            regression = performance_test_for_preci(args.arch, args.datasize, args.batchsize, args.insize, args.epoch, args.level*(-0.05))
+            print('Regression(True or False):{}'.format(regression))
+            sys.exit(regression)
+        except Exception as e:
+            print(e)
+            sys.exit(-1)
+def __log__(logger, msg):
+    logger.write(msg)
+    logger.flush()
+        performance_log_file = os.path.join(PERFORMANCE_LOG_DIR, arch)
+        if os.path.exists(performance_log_file):
+            os.remove(performance_log_file)
+        # Writing JSON data
+        with open(performance_log_file, 'w') as f:
+            json.dump(results, f)
+  lpc_fp = open(lpc_path, 'w') if lpc_path else None
+  timer_hook = TimerHook() if lpc_path else None
+
+
+def MergeResult(all_ref_info, all_run_info):
+    for run_info in all_run_info:
+        run_key = run_info['key']
+        run_value = run_info['value']
+
+        index = 0
+        while index < len(all_ref_info):
+            ref_key = all_ref_info[index]['key']
+            if (ref_key == run_key):
+                for item in run_value:
+                    all_ref_info[index]['value'].append(item)
+            index += 1
+    return all_ref_info
+      jsonLog = os.path.join(case_log, "result.json")
+        fp = open(jsonLog, "w")
+        json.dump(json_result, fp)
+        fp.close()
+is_timeout, res = CallSimpleCommand("git diff-tree --no-commit-id --name-only -r " + commit_id + " | grep -E '.*\.py$' | xargs git show " + commit_id + " | flake8 --diff --max-line-length=256 | grep -v -E '^mkldnn/__init__\.py'", 120)
+diff -Naur old new > foo.patch    #打补丁
+ patch -Np0 < foo.patch   #应用补丁
+ patch -Rp0 < foo.patch    #还原补丁
+patch <../../../foo.patch     #最后一层直接应用补丁，不需要加-p0了
+patch -R <../../../foo.patch  #最后一层还原补丁，不需要加-p0了
+
+def GetInferenceLogInfo(dirPath):
+         projectDir = os.path.abspath(dirPath)
+         if not os.path.exists(projectDir):
+             print("%s does not exist. Please input the path of inference test scripts." % projectDir)
+             sys.exit(-1)
+
+>>> import  os,sys
+>>> path = "/var/www/html"
+>>> dirs = os.listdir(path)   #会列出被给的目录下的所有文件或者文件夹
+>>> print(dirs)
+['repo', 'software', 'ks.cfg']
+def GetInferenceLogInfo(dirPath):
+         projectDir = os.path.abspath(dirPath)
+         if not os.path.exists(projectDir):
+             print("%s does not exist. Please input the path of inference test scripts." % projectDir)
+             sys.exit(-1)
+         # list all available files in given directory
+         filelist=os.listdir(LOG_DIR)
+         # sort the files
+         sortedFilelist = sorted(filelist)
+         print ("list sorted files:")
+         print (sortedFilelist)
+         results=[]
+         for files in sortedFilelist:
+           filePath=os.path.join(LOG_DIR,files)
+
+           #get the data from related inference log file
+           with open(filePath, 'r') as f:
+             d = json.load(f)
+             result=[d.get('topology'), d.get('total_time'), d.get('average_time'), d.get('images/sec'), d.get('top5_accuracy'), d.get('top1_accuracy')]
+             results.append(result)
+         return results
+
+
+import getopt
+def Usage():
+    print('Usage:')
+    print('-r, --receiver: send email to receiver')
+    print('-n, --net: list the networks')
+    print('-b, --bsize: the batch size')
+    print('-c, --caf: use caffe emulator to inference')
+    print('-m, --mean: mean file')
+    print('-g, --gpu: gpu info')
+    print('-l, --lay: enable layer by layer time measurement')
+    print('-h, --help: show the help information')
+if __name__ == "__main__":
+        try:
+             opts, args = getopt.getopt(sys.argv[1:], 'hmgl:n:b:c:r:', ['net=', 'batchsize=', 'caffemodel=', 'mean', 'gpu', 'layertimer', 'receiver=', 'help'])
+        except getopt.GetoptError as err:
+             print("Argument Error!")
+             Usage()
+             sys.exit(-1)
+        # check args
+        network = None
+        batchsize = 128
+        mean = '../../dl_framework-intel_chainer_inference_benchmark/ilsvrc_2012_mean.npy'
+        gpu = -1
+        caffemodel = True
+        layertimer = False
+        reportReceiver = "mingxiao.huang@intel.com"
+        for o, a in opts:
+             if o in ("-h", "--help"):
+                 Usage()
+                 sys.exit(-1)
+             elif o in ("-n", "--net"):
+                 network = a
+             elif o in ("-b", "--batchsize"):
+                 batchsize = int(a)
+             elif o in ("-c", "--caffemodel"):
+                 caffemodel = a
+             elif o in ("-m", "--mean"):
+                 mean = a
+             elif o in ("-g", "--gpu"):
+                 gpu = a
+             elif o in ("-l", "--layertimer"):
+                 layertimer = a
+             elif o in ("-r", "--receiver"):
+                 reportReceiver = a
+  if network is None:
+             print("Argument Error!")
+             Usage()
+             sys.exit(-1)
+try:
+             ####
+             networkList = network.strip().split(',')
+             for net in networkList:
+                   inference_test(net, batchsize, mean, gpu, caffemodel, layertimer)
+
+
+             results = GetInferenceLogInfo(LOG_DIR)
+
+             hostModel = GetHostModel()
+             #print (hostModel)
+             #hModel = hostModel.lower()
+             #print(hMOdel)
+             mailContent = GenTable("Inference Test Result on " + hostModel, ['topology', 'total_time(ms)', 'average_time(ms)', r'images/sec', r'top5_accuracy(%)', 'top1_accuracy(%)'], results)
+
+             mailTitle = "Intel Chainer Inference Test Report " + datetime.now().strftime("%Y-%m-%d")
+             reportSender = "dl_test@intel.com"
+
+             html = """\
+             <html>
+               <body>
+                 <h1 style="text-align:center;font-family:Times New Roman"><a name=Top>""" + mailTitle + """</a></h1>
+                 """ + mailContent + """
+               </body>
+             </html>
+             """
+
+             SendReport(reportSender, reportReceiver, mailTitle, html)
+
+             print("Inference Results Processing Test Done!")
+        except Exception as e:
+             print(e)
+             sys.exit(-1)
+
+
+
+hardware.ini
+[sys_dltest2@mlt-ace scripts]$ cat  hardware.ini
+[BDW]
+socket = 2s
+tuobo = Turbo on
+numa = NUMA off
+network = 10GB
+TFLOPS = 3.66T = 2.6G*44*32(AVX2)
+RAMBandwidth = 154GB/s = 2.4*8*8(PC2400 DDR4)
+RAMCapacity = 128G = 16G*8*1
+HT = HT off
+
+[SKX_8180]
+socket = 2s
+tuobo = Turbo on
+numa = NUMA on
+network = 10G, OPA
+TFLOPS = 8.96T = 2.5G*56*64(AVX512)
+RAMBandwidth = 255GB/s = 2.66*12*8(2666MHz DDR4)
+RAMCapacity = 192G = 16G*12*1
+HT = HT on
+
+[SKX_6148]
+socket = 2s
+tuobo = Turbo on
+numa = NUMA on
+network = 10G, OPA
+TFLOPS = 8.96T = 2.5G*56*64(AVX512)
+RAMBandwidth = 255GB/s = 2.66*12*8(2666MHz DDR4)
+RAMCapacity = 192G = 16G*12*1
+HT = HT on
+
+[KNL]
+socket = 1s
+tuobo = Turbo on
+numa = NUMA off
+network = OPA
+TFLOPS = 6.52T = 1.5G*68*64(AVX512)
+RAMBandwidth = 115.2GB/s = 2.4*6*8(PC2400 DDR4)
+RAMCapacity = 	192G = 32G*6*1
+HT = HT on
+
+[KNM]
+socket = 1s
+tuobo = Turbo on
+numa = NUMA on
+network = OPA
+TFLOPS = 13.82T = 1.5G*72*128(AVX512 QFMA)
+RAMBandwidth = 115.2GB/s = 2.4*6*8(PC2400 DDR4)
+RAMCapacity = 96G = 16G*6*1
+HT = HT on
+helper.py
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import socket
+import uuid
+import os
+import time
+import subprocess
+import sys
+import ast
+import json
+from contextlib import contextmanager
+VAL_DIR = os.path.expanduser('~')+ "/Documents/dl_framework-intel_chainer_validation/scripts"
+@contextmanager
+def performance_open(name, mode):
+    try:
+        if os.path.exists(name):
+            f = open(name, mode)
+        else:
+            f = open(name, "w")
+        yield f
+    except Exception as e:
+        print("Exception", ":", e)
+    finally:
+        f.close()
+
+
+def store_performance_json(file_name, data):
+    with performance_open(file_name, 'w') as json_file:
+        json_file.write(json.dumps(data))
+
+
+def load_performance_json(file_name):
+    data = {}
+    with performance_open(file_name, 'r') as json_file:
+        data = json.load(json_file)
+    return data
+def store_performance_test_result(arch, batchsize, insize, forward, backward, total):
+    #homeFolder = os.environ['HOME']
+    hostModel = GetHostModel()
+    hModel = hostModel.lower()
+    #pyBigVersion = GetBigMainPythonVersion()
+    net = "{0}#3*{1}*{2}#{3}".format(get_arch_name(arch), insize, insize, batchsize)
+    print("net ..... ", batchsize)
+    pythonVer = get_python_version(2)
+    resFileName = pythonVer + ".json"
+
+    if hModel == "":
+        performanceFolder = os.path.join(VAL_DIR + "/refs/", "unknown" + "/performance")
+    else:
+        performanceFolder = os.path.join(VAL_DIR + "/refs/", hModel + "/performance")
+
+    #net = "{0}#3*{1}*{2}*{3}".format(arch, insize, insize, batchsize)
+    # check whether net folder exists
+    if not os.path.exists(performanceFolder):
+        os.makedirs(performanceFolder)
+
+    # update data to json file
+    json_data = load_performance_json(performanceFolder + os.sep + resFileName)
+    # print type(json_data),json_data
+    # add a performance test result
+    json_data[net] = {"config": "performance Base3",
+                      "Forward": forward,
+                      "Backward": backward,
+                      "Total": total,
+                      "epoch": 13.0,
+                      "batch_size" : int(batchsize),
+                      "iterations": 1}
+    store_performance_json(performanceFolder + os.sep + resFileName, json_data)
+    return
+
+def store_numpy_test_result(arch, batchsize, insize, forward, backward, total):
+    #homeFolder = os.environ['HOME']
+    hostModel = GetHostModel()
+    hModel = hostModel.lower()
+    #pyBigVersion = GetBigMainPythonVersion()
+    net = "{0}#3*{1}*{2}#{3}".format(get_arch_name(arch), insize, insize, batchsize)
+    print("net ..... ", batchsize)
+    pythonVer = get_python_version(2)
+    resFileName = pythonVer + ".json"
+
+    if hModel == "":
+        performanceFolder = os.path.join(VAL_DIR + "/refs/", "unknown" + "/official")
+    else:
+        performanceFolder = os.path.join(VAL_DIR + "/refs/", hModel + "/official/")
+
+    #net = "{0}#3*{1}*{2}*{3}".format(arch, insize, insize, batchsize)
+    # check whether net folder exists
+    if not os.path.exists(performanceFolder):
+        os.makedirs(performanceFolder)
+
+    # update data to json file
+    json_data = load_performance_json(performanceFolder + os.sep + resFileName)
+    # print type(json_data),json_data
+    # add a performance test result
+    json_data[net] = {"config": "Chainer Base2",
+                      "Forward": forward,
+                      "Backward": backward,
+                      "Total": total,
+                      "epoch": 13.0,
+                      "batch_size" : int(batchsize),
+                      "iterations": 1}
+    store_performance_json(performanceFolder + os.sep + resFileName, json_data)
+    return
+
+
+def SendReport(reportSender, reportReceiver, title, html):
+    sendMessage = MIMEMultipart('alternative')
+    sendMessage['Subject'] = title
+    sendMessage['From'] = reportSender
+    sendMessage['To'] = reportReceiver
+    sendType = MIMEText(html, 'html', 'utf-8')
+    sendMessage.attach(sendType)
+    sendMail = smtplib.SMTP('smtp.intel.com')
+    sendMail.sendmail(reportSender, reportReceiver, sendMessage.as_string())
+    sendMail.quit()
+
+def SendFocusTestReport(reportSender, reportReceiver, title, attached, html):
+    sendMessage = MIMEMultipart('alternative')
+    #att1 = MIMEText(open(attached, 'rb').read(), 'html', 'utf-8')
+    #att1["Content-Type"] = 'text/html'
+    #att1["Content-Disposition"] = 'attachment; filename= focusTestReport.html'
+    #sendMessage.attach(att1)
+
+    att2 = MIMEText(open(attached, 'rb').read(), 'base64', 'gb2312')
+    att2["Content-Type"] = 'application/octet-stream'
+    att2["Content-Disposition"] = 'attachment; filename=focusTestReport.log'
+    sendMessage.attach(att2)
+
+    sendMessage['From'] = reportSender
+    sendMessage['To'] = reportReceiver
+    sendMessage['Subject'] = title
+    sendType = MIMEText(html, 'html', 'utf-8')
+    #sendType = MIMEText(file, 'base64', 'gb2312')
+    sendMessage.attach(sendType)
+    sendMail = smtplib.SMTP('smtp.intel.com')
+    sendMail.sendmail(reportSender, reportReceiver, sendMessage.as_string())
+    sendMail.quit()
+
+def GetHostModel():
+    cpu = get_cpu_info()[0]
+    model = ""
+    if cpu.strip() == "Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz":
+        model = "HSW"
+    elif cpu.strip() == "Intel(R) Xeon Phi(TM) CPU 7250 @ 1.40GHz":
+        model = "KNL"
+    elif cpu.strip() == "Intel(R) Xeon(R) CPU E5-2699 v4 @ 2.20GHz":
+        model = "BDW"
+    elif cpu.strip() == "Intel(R) Xeon Phi(TM) CPU 7295 @ 1.50GHz":
+        model = "KNM"
+    elif cpu.strip() == "Intel(R) Genuine Intel(R) CPU 0000 @ 1.40GHz":
+        model = "KNM"
+    elif cpu.strip() == "Intel(R) Xeon(R) Platinum 8180 CPU @ 2.50GHz":
+        model = "SKX_8180"
+    elif cpu.strip() == "Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz":
+        model = "SKX_6148"
+    elif "Intel(R) Core(TM)" in cpu:
+        model = "Core"
+    return model
+
+
+def get_host_name():
+    """Get the host name.
+    :return: string, host name, like pc.sh.intel.com
+    """
+    hostName = socket.getfqdn()
+    if ".sh.intel.com" in hostName:
+        return hostName
+    else:
+        return hostName + ".sh.intel.com"
+
+
+def get_python_version(level=3):
+    """Get the Python version.
+        :arg: int, level number, default is 3, which will return ``MAJOR.MINOR.PATCH''. When level is 1, this function
+              only returns the major version. And it returns ``MAJOR.MINOR'' as level is 2.
+        :return: string, python version.
+    """
+    if level == 1:
+        return '{0}'.format(sys.version_info[0])
+    elif level == 2:
+        return '{0}.{1}'.format(sys.version_info[0], sys.version_info[1])
+    elif level == 3:
+        return '{0}.{1}.{2}'.format(sys.version_info[0], sys.version_info[1], sys.version_info[2])
+    else:
+        raise ValueError("The level must be 1 - 3.")
+
+def get_gcc_version():
+    gcc_version = subprocess.check_output(['gcc', '--version']).decode('utf-8').splitlines()
+    for line in gcc_version:
+        line = line.strip()
+        if line.startswith("gcc"):
+            gcc_v = line
+    return gcc_v
+
+
+def CallSimpleCommand(command, timeout):
+    isTimeOut = False
+
+    p = subprocess.Popen(command, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, shell=True)
+    t_beginning = time.time()
+
+    while True:
+        if p.poll() is not None:
+            break
+        seconds_passed = time.time() - t_beginning
+        if seconds_passed > timeout:
+            isTimeOut = True
+            p.kill()
+            break
+        time.sleep(0.1)
+    res = p.stdout.readlines()
+    return isTimeOut, res
+
+
+def CallCommand(command, timeout):
+    logfileName = str(uuid.uuid4()) + ".txt"
+    errfileName = str(uuid.uuid4()) + ".txt"
+
+    if os.path.exists(logfileName):
+        os.remove(logfileName)
+    if os.path.exists(errfileName):
+        os.remove(errfileName)
+
+    logfile = open(logfileName, "w")
+    errfile = open(errfileName, "w")
+
+    isTimeOut = False
+    p = subprocess.Popen(command, stderr=errfile, stdout=logfile, shell=True)
+    t_beginning = time.time()
+    res = []
+
+    while True:
+        if p.poll() is not None:
+            break
+        seconds_passed = time.time() - t_beginning
+        if seconds_passed > timeout:
+            isTimeOut = True
+            p.kill()
+            break
+        time.sleep(0.1)
+
+    logfile.close()
+    errfile.close()
+
+    with open(errfileName) as f:
+        res = f.readlines()
+
+    if os.path.exists(logfileName):
+        os.remove(logfileName)
+    if os.path.exists(errfileName):
+        os.remove(errfileName)
+
+    return isTimeOut, res
+
+
+def GetAllFiles(folderName, suffix=None):
+    allFiles = []
+    for paths, dirs, files in os.walk(folderName):
+        for file in files:
+            fileName = os.path.join(paths, file)
+            if suffix != None:
+                if fileName.endswith(suffix):
+                    allFiles.append(fileName)
+            else:
+                allFiles.append(fileName)
+    return allFiles
+
+def GetAllSpecificFiles(folderName, suffix=None):
+    files = subprocess.check_output(['ls', folderName]).decode('utf-8').splitlines()
+    allFiles = []
+    for file in files:
+      if suffix != None:
+         if file.startswith(suffix):
+             allFiles.append(file)
+    return allFiles
+
+
+def isNumber(var):
+    try:
+        n = int(var)
+        return True
+    except Exception:
+        return False
+
+
+def GenTable(tableTitle, tableHeads, tableContents):
+    res = """
+             <h2>%s</h2>
+             <table border=1 style="text-align:center;font-family:Times New Roman">
+                <tr>""" % tableTitle
+    for tableHead in tableHeads:
+        res += '<th>%s</th>' % tableHead
+    res += '</tr>'
+
+    for tdContents in tableContents:
+        res += '<tr>'
+        for eachValue in tdContents:
+            res += '<td>%s</td>' % eachValue
+        res += '</tr>'
+    return res + '</table>'
+
+def GenRnnTable(tableTitle, tableHeads, tableContents):
+    res = """
+             <h2>%s</h2>
+             <table border=1 style="text-align:center;font-family:Times New Roman">
+                <tr>""" % tableTitle
+    for tableHead in tableHeads:
+        res += '<th>%s</th>' % tableHead
+    res += '</tr>'
+
+    for  k,v  in enumerate(tableContents):
+        topology = v["key"]
+        value  = v["value"]
+
+        if value[0]["unit"] == "s":
+            Unit = "s"
+        else:
+            Unit = "sps"
+        value_len = 4 if value[0]["Update"] != "-"  else 3
+        res += '<tr>'
+        res += '<td rowspan="%d">%s</td><td rowspan="%d">%s</td><td>%s%s)</td><td>%s</td><td>%s</td>' %(value_len,topology,value_len,value[0]["batch_size"],"Forward(",Unit,value[0]["Forward"],value[1]["Forward"])
+        res += '</tr>'
+        res += '<tr>'
+        res += '<td>%s%s)</td><td>%s</td><td>%s</td>' %("Backward(",Unit,value[0]["Backward"],value[1]["Backward"])
+        res += '</tr>'
+        if  value[0]["Update"] != "-":
+            res += '<tr>'
+            res += '<td>%s%s)</td><td>%s</td><td>%s</td>' %("Update(",Unit,value[0]["Update"],value[1]["Update"])
+            res += '</tr>'
+
+        res += '<tr>'
+        res += '<td>%s%s)</td><td>%s</td><td>%s</td>' %("Total(",Unit,value[0]["Total"],value[1]["Total"])
+        res += ''
+        res += '</tr>'
+
+    return res + '</table>'
+
+def GenTableWithColor(tableTitle, tableHeads, tableContents):
+    res = """
+             <h2>%s</h2>
+             <table border=1 style="text-align:center;font-family:Times New Roman">
+                <tr>""" % tableTitle
+    for tableHead in tableHeads:
+        res += '<th>%s</th>' % tableHead
+    res += '</tr>'
+
+    for tdContents in tableContents:
+        res += '<tr>'
+        for eachValue in tdContents:
+            if ('/' in eachValue):
+                passNumber = eachValue.split('/')[0]
+                totalNumber = eachValue.split('/')[1]
+                if (isNumber(passNumber) and isNumber(totalNumber)):
+                    if (int(passNumber) < int(totalNumber)):
+                        res += '<td style="color:red">%s</td>' % eachValue
+                    else:
+                        res += '<td>%s</td>' % eachValue
+                else:
+                    res += '<td>%s</td>' % eachValue
+            else:
+                res += '<td>%s</td>' % eachValue
+        res += '</tr>'
+
+    return res + '</table>'
+
+
+def GenDetailTable(tableTitle, tableHeads, tableContents):
+    res = """
+             <h2>%s</h2>
+             <table border=1 style="text-align:center;font-family:Times New Roman">
+                <tr>""" % tableTitle
+    for tableHead in tableHeads:
+        res += '<th>%s</th>' % tableHead
+    res += '</tr>'
+
+    for tdContents in tableContents:
+        res += '<tr>'
+        if len(tdContents) != 3:
+            continue
+        res += '<td><a href=%s>%s</a></td>' % (tdContents[2], tdContents[0])
+
+        if ('/' in tdContents[1]):
+            passNumber = tdContents[1].split('/')[0]
+            totalNumber = tdContents[1].split('/')[1]
+            if (isNumber(passNumber) and isNumber(totalNumber)):
+                if (int(passNumber) < int(totalNumber)):
+                    res += '<td style="color:red">%s</td>' % tdContents[1]
+                else:
+                    res += '<td>%s</td>' % tdContents[1]
+            else:
+                res += '<td>%s</td>' % tdContents[1]
+        else:
+            res += '<td>%s</td>' % tdContents[1]
+
+        res += '</tr>'
+    return res + '</table>'
+
+
+def get_cpu_info():
+    """Get the cpu information, including cpu model name, the number of cores and threads.
+    :return: tuple, [0] is cpu model name, [1] is the number of cores, and [2] is the number of threads
+    """
+    lscpu = subprocess.check_output(["lscpu"])
+    lscpu = lscpu.splitlines()
+    model_name = ""
+    for line in lscpu:
+        line = line.strip().decode("utf-8")
+        if line.startswith("CPU("):
+            threads = line.replace("CPU(s):", "").strip()
+        elif line.startswith("Co"):
+            cores_per_socket = line.replace("Core(s) per socket:", "").strip()
+        elif line.startswith("So"):
+            sockets = line.replace("Socket(s):", "").strip()
+        elif line.startswith("Model "):
+            model_name = line.replace("Model name:", "").strip()
+    cores = int(cores_per_socket) * int(sockets)
+    threads = int(threads)
+    return (model_name, cores, threads)
+
+
+def Division(_numerator, _denominator):
+    try:
+        numerator = float(_numerator)
+        denominator = float(_denominator)
+    except:
+        return 'NA'
+
+    ret = 0.0
+    if denominator == 0.0:
+        return ret
+    else:
+        ret = numerator / denominator
+        if ret < 1.0:
+            ret = round(ret * 100.0, 2)
+            return str(ret) + "%"
+        else:
+            return round(ret, 4)
+
+
+def GetGitLogInfo(project_dir):
+    """Get the git info of a directory.
+    :arg: string, The directory path.
+    :return: array, [0] is branch, [1] is commit id, [2] is the author and [3] is commit time. If the path not exists or
+             is not valid, all the elements will be empty.
+    """
+    commit_id = ""
+    author = ""
+    branch = ""
+    commit_time = ""
+    # check whether the dir exists
+    if not os.path.exists(project_dir):
+        print("folder not exists: " + project_dir)
+        return (branch, commit_id, author, commit_time)
+
+    cur_dir = os.path.abspath('.')
+    os.chdir(project_dir)
+    # get the commit info
+    commit_info = subprocess.check_output(['git', 'log', '-1']).decode('utf-8').splitlines()
+    for line in commit_info:
+        line = line.strip()
+        if line.startswith('commit'):
+            commit_id = line.replace('commit', '').strip()
+        elif line.startswith('Author:'):
+            author_info = line.replace('Author:', '').strip().split('<')
+            author = author_info[0].strip()
+        elif line.startswith('Date:'):
+            data_detail = line.replace('Date:', '').strip().split(' ')
+            commit_time = '{0} {1} {2}'.format(data_detail[1], data_detail[2], data_detail[3])
+
+    # get the branch info
+    branch_info = subprocess.check_output(['git', 'branch']).decode('utf-8').splitlines()
+    for line in branch_info:
+        if line.startswith('*'):
+            branch = line.replace('*', '').strip()
+            break
+    os.chdir(cur_dir)
+
+    return [branch, commit_id, author, commit_time]
+
+
+def get_arch_name(arch):
+    arch_name = {
+        "alexnet": "Alexnet",
+        "googlenet": "GoogleNet",
+        "overfeat": "Overfeat",
+        "resnet50": "ResNet50",
+        "resnet101": "ResNet101",
+        "resnet152": "ResNet152",
+        "vgga": "VGGA",
+        "vgg16": "VGG16",
+        "vgg19": "VGG19",
+        "googlenet_v2": "GoogleNetV2",
+        "googlenetv2":"GoogleNetV2",
+        "googlenet_v3": "GoogleNetV3",
+        "googlenetv3":"GoogleNetV3",
+        "unet": "Unet",
+        "caffenet": "CaffeNet",
+        "ssd300": "SSD300",
+        "googlenet_aist": "GoogleNetAist",
+        "googlenetaist": "GoogleNetAist"
+    }
+    if arch not in arch_name:
+        raise ValueError("No such arch: {0}".format(arch))
+    return arch_name[arch]
+
+
+def get_memory_info():
+    """Get the total memory size.
+    :return: int, the total memory size.
+    """
+    with open('/proc/meminfo', 'r') as f:
+        mem_info = f.readlines()
+
+    assert len(mem_info) > 0
+    assert mem_info[0].startswith('MemTotal')
+    mem_total = mem_info[0]
+    mem_total = mem_total.replace('MemTotal:', '')
+    mem_total = mem_total.replace('kB', '')
+    mem_total = float(mem_total.strip())
+    mem_total = mem_total // (1024 ** 2)
+    return mem_total
+
+ideep_path = os.path.expanduser('~') + "/Documents/dl_framework-ideep"
+ideep_git_info = GetGitLogInfo(ideep_path)
+
+def post_result(log_path):
+    ref_file = os.path.join(log_path, "all_reference.data")
+    result_file = os.path.join(log_path, "all_result.data")
+    with open(ref_file, 'r') as f:
+        all_data = f.read()
+    # all_data = copy.deepcopy(ref_data)
+    with open(result_file, 'r') as f:
+        opt_data = f.read()
+    opt_data = ast.literal_eval(opt_data)
+    all_data = ast.literal_eval(all_data)
+    for arch_data in opt_data:
+        key = arch_data['key']
+        for data in all_data:
+            if key == data['key']:
+                for data_need_to_append in arch_data['value']:
+                    data['value'].append(data_need_to_append)
+                keys = key.split('#')
+                data['key'] = '{0}#{1}*{2}'.format(keys[0], keys[2], keys[1])
+                break
+    # Get environment info
+    model = get_cpu_info()[0]
+    CPUs = get_cpu_info()[2]
+    Cores = get_cpu_info()[1]
+
+    if sys.version_info[0] == 2:
+        import ConfigParser
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(os.getcwd() + '/hardware.ini'))
+    else:
+        import configparser
+        config = configparser.ConfigParser()
+        config.readfp(open(os.getcwd() + '/hardware.ini'))
+
+    mkldnn_log = os.path.join(log_path, "mkldnn_info.log")
+    with open(mkldnn_log, 'r') as f:
+        mkldnn_git_info = f.read()
+    mkldnn_git_info = ast.literal_eval(mkldnn_git_info)
+
+    chainer_log = os.path.join(log_path, "chainer_info.log")
+    with open(chainer_log, 'r') as f:
+        code_git_info = f.read()
+    code_git_info = ast.literal_eval(code_git_info)
+
+    dnet_log = os.path.join(log_path, "dnet_info.log")
+    with open(dnet_log, 'r') as f:
+        dnet_git_info = f.read()
+    dnet_git_info = ast.literal_eval(dnet_git_info)
+
+    python_info_log = os.path.join(log_path, "python_info.log")
+    with open(python_info_log, 'r') as f:
+        python_info = f.read()
+
+    # Generate the result
+    result_json = {
+        "environment": {
+            "CPU/GPU Model,Core,Socket#":
+                                          str(model) + ", " + str(Cores) + " ," +
+                                          str(config.get(GetHostModel(), "socket")),
+            "CPU/GPU TFLOPS(FP32)":
+                                   config.get(GetHostModel(), "TFLOPS"),
+            "CPU Config":
+                         config.get(GetHostModel(), "tuobo") + ", " +
+                         config.get(GetHostModel(), "HT") + ", " +
+                         config.get(GetHostModel(), "numa"),
+            "RAM Bandwidth":
+                            config.get(GetHostModel(), "RAMBandwidth"),
+            "RAM Capacity":
+                            config.get(GetHostModel(), "RAMCapacity"),
+            "python": python_info,
+            #"CPU(s)": CPUs,
+            #"Cores": Cores,
+            "memory": "{0} GB".format(get_memory_info()),
+            "mkldnn": {
+                "branch": mkldnn_git_info[0],
+                "id": mkldnn_git_info[1][:5],
+                "author": mkldnn_git_info[2],
+                "date": mkldnn_git_info[3]
+            },
+            "chainer": {
+                "branch": code_git_info[0],
+                "id": code_git_info[1][:5],
+                "author": code_git_info[2],
+                "date": code_git_info[3]
+            },
+            "ideep": {
+                "branch": ideep_git_info[0],
+                "id": ideep_git_info[1][:5],
+                "author": ideep_git_info[2],
+                "date": ideep_git_info[3]
+            },
+            "dnet": {
+                "branch": dnet_git_info[0],
+                "id": dnet_git_info[1][:5],
+                "author": dnet_git_info[2],
+                "date": dnet_git_info[3]
+            }
+        },
+        "device": GetHostModel(),
+        "date": time.strftime("%Y-%m-%d"),
+        "results": all_data,
+        "category": "daily_performance"
+    }
+    result_json = json.dumps(result_json).encode('utf-8')
+    print(result_json)
+
+    # POST to the server
+    if sys.version_info[0] == 2:
+        from urllib2 import urlopen
+        from urllib2 import Request
+    else:
+        from urllib.request import urlopen
+        from urllib.request import Request
+
+    #req = Request("http://ctsautotest2.sh.intel.com/api/storedata/chainer/performance", data=result_json)
+    req = Request("http://heims.sh.intel.com/api/storedata/chainer/performance", data=result_json)
+    req.add_header("Content-Type", "application/json")
+    res = urlopen(req)
+    print("Server response: {0}".format(res.getcode()))
+[sys_dltest2@mlt-ace scripts]$ cat  config.py
+archs = ["alexnet", "overfeat", "vgga", "googlenet", "resnet50", "resnet101", "resnet152", "vgg16", "vgg19", "googlenet_v2",
+         "googlenet_v3", "unet","googlenet_aist", "ssd300"]
+
+test_params = {
+    'alexnet': [(1, 224), (2, 224), (4, 224), (128, 224), (224, 224), (256, 224)],
+    'overfeat': [(1, 231), (2, 231), (4, 231), (128, 231)],
+    'vgga': [(1, 224), (2, 224), (4, 224), (64, 224)],
+    'googlenet': [(1, 224), (2, 224), (4, 224), (128, 224)],
+    'resnet50': [(1, 224), (2, 224), (4, 224), (128, 224), (32, 224)],
+    'resnet101': [(1, 224), (2, 224), (4, 224), (128, 224), (32, 224)],
+    'resnet152': [(1, 224), (2, 224), (4, 224), (128, 224), (32, 224)],
+    'vgg16': [(1, 224), (2, 224), (4, 224), (64, 224)],
+    'vgg19': [(1, 224), (2, 224), (4, 224), (64, 224)],
+    'googlenet_v2': [(1, 224), (2, 224), (4, 224), (128, 224), (192, 224)],
+    'googlenet_v3': [(1, 299), (2, 299), (4, 299), (128, 299), (192, 299)],
+    'unet': [(1, 224), (2, 224), (4, 224), (32,224), (64, 224), (128, 224)],
+    'ssd300': [(1, 300), (2, 300), (4, 300), (32,300), (64, 300), (128, 300),],
+    'googlenet_aist': [(1, 2240), (2, 2240), (4, 2240), (5, 2240)]
+}
+
+infer_archs = ["resnet50", "googlenet_v2", "alexnet", "googlenet", "vgg16", "vgg19", "googlenet_v3"]
+
+infer_params = {
+    'resnet50': [(1, 224), (32, 224), (50, 224), (64, 224), (100, 224), (128, 224)],
+    'googlenet_v2': [(1, 224), (32, 224), (64, 224), (96, 224), (128, 224)],
+    'alexnet': [(1, 224), (100, 224), (256, 224), (512, 224), (1024, 224)],
+    'googlenet': [(1, 224), (32, 224), (64, 224), (96, 224), (128, 224)],
+    'vgg16': [(1, 224), (64, 224), (100, 224)],
+    'vgg19': [(1, 224), (64, 224), (100, 224)],
+    'googlenet_v3': [(1, 299), (32, 299), (64, 299), (96, 299), (128, 299)],
+    'caffenet': [(128, 224)]
+}
+
+all_net_keys = ["Alexnet#3*224*224#1", "Alexnet#3*224*224#2", "Alexnet#3*224*224#4", "Alexnet#3*224*224#128", "Alexnet#3*224*224#224", "Alexnet#3*224*224#256",
+                "Overfeat#3*231*231#1", "Overfeat#3*231*231#2", "Overfeat#3*231*231#4", "Overfeat#3*231*231#128",
+                "VGGA#3*224*224#1", "VGGA#3*224*224#2", "VGGA#3*224*224#4", "VGGA#3*224*224#64",
+                "GoogleNet#3*224*224#1", "GoogleNet#3*224*224#2", "GoogleNet#3*224*224#4", "GoogleNet#3*224*224#128",
+                "ResNet50#3*224*224#1", "ResNet50#3*224*224#2", "ResNet50#3*224*224#4", "ResNet50#3*224*224#128", "ResNet50#3*224*224#32",
+                "ResNet101#3*224*224#1", "ResNet101#3*224*224#2", "ResNet101#3*224*224#4", "ResNet101#3*224*224#128","ResNet101#3*224*224#32",
+                "ResNet152#3*224*224#1", "ResNet152#3*224*224#2", "ResNet152#3*224*224#4", "ResNet152#3*224*224#128", "ResNet152#3*224*224#32",
+                "VGG16#3*224*224#1", "VGG16#3*224*224#2", "VGG16#3*224*224#4", "VGG16#3*224*224#64",
+                "VGG19#3*224*224#1", "VGG19#3*224*224#2", "VGG19#3*224*224#4", "VGG19#3*224*224#64",
+                "GoogleNetV2#3*224*224#1", "GoogleNetV2#3*224*224#2", "GoogleNetV2#3*224*224#4", "GoogleNetV2#3*224*224#128", "GoogleNetV2#3*224*224#192",
+                "GoogleNetV3#3*299*299#1", "GoogleNetV3#3*299*299#2", "GoogleNetV3#3*299*299#4", "GoogleNetV3#3*299*299#128", "GoogleNetV3#3*299*299#192",
+                "Unet#3*224*224#1", "Unet#3*224*224#2", "Unet#3*224*224#4", "Unet#3*224*224#32", "Unet#3*224*224#64", "Unet#3*224*224#128",
+                "GoogleNetAist#3*2240*2240#1", "GoogleNetAist#3*2240*2240#2", "GoogleNetAist#3*2240*2240#4", "GoogleNetAist#3*2240*2240#5",
+                "SSD300#3*300*300#1", "SSD300#3*300*300#2", "SSD300#3*300*300#4", "SSD300#3*300*300#32", "SSD300#3*300*300#64", "SSD300#3*300*300#128"]
+[mxnet@labtest02 test]$ cat   testcfg.cfg
+[info]
+age = 21
+name = chen
+gender = male
+[mxnet@labtest02 test]$ cat   testConfigParser.py
+from __future__ import with_statement
+import ConfigParser
+config=ConfigParser.ConfigParser()
+with open("testcfg.cfg","rw") as cfgfile:
+config.readfp(cfgfile)
+name=config.get("info","name")
+age=config.get("info","age")
+print name
+print age
+config.set("info","gender","male")
+config.set("info","age","21")
+age=config.get("info","age")
+print name
+print age
+class Timer(object):
+    def pre_process(self):
+        self.start = time.time()
+    def post_process(self):
+        self.end = time.time()
+    def get_elapse_time(self):
+        return (self.end - self.start) * 1000
+[sys_dltest2@mlt-ace dl_framework-intel_chainer]$ git  log  -1
+commit 3126d91778fb8fd945be0ab20f8d5b8e04ff009e
+Author: yifeilu <yifei.lu@intel.com>
+Date:   Fri May 11 15:38:07 2018 +0800
+    add warmup and multistep extensions with correspounding tests
+[sys_dltest2@mlt-ace dl_framework-intel_chainer]$ git rev-parse HEAD   #获取commit-id
+3126d91778fb8fd945be0ab20f8d5b8e04ff009e
+[sys_dltest2@mlt-ace dl_framework-intel_chainer]$ git rev-parse --verify HEAD   #获取commit-id
+3126d91778fb8fd945be0ab20f8d5b8e04ff009e
+[sys_dltest2@mlt-ace dl_framework-intel_chainer]$ git rev-parse --symbolic –branches   #显示分支
+master_v4
+[sys_dltest2@mlt-ace dl_framework-intel_chainer]$ git  branch
+* master_v4
+[sys_dltest2@mlt-ace dl_framework-intel_chainer]$ git rev-parse --symbolic --tags  #显示里程碑
+v20170329
+v20170428
+v4.0.0a1_i3.0.0a
+v4.0.0a1_i3.0.1a
+v4.0.0b4
+[sys_dltest2@mlt-ace dl_framework-intel_chainer]$ git rev-parse --symbolic --glob=refs/*  #显示引用
+refs/heads/master_v4
+refs/remotes/origin/5.0.0a1_before_merge
+dict = {'runoob': 'runoob.com', 'google': 'google.com'};   #字典
+repr(dict)   #字典转成字符串了
+"{'runoob': 'runoob.com', 'google': 'google.com'}"
+type(repr(dict))
+<class 'str'>
+--------------------------------------
+class  test():
+    name="xiaohua"
+    def run(self):
+        return "HelloWorld"
+t=test()
+hasattr(t, "name")
+True
+hasattr(t, "run")
+True
+getattr(t, "name")
+'xiaohua'
+getattr(t, "run")
+<bound method test.run of <test object at 0x7f46c3c126a0>>
+getattr(t, "run")()
+'HelloWorld'
+getattr(t, "age")
+Traceback (most recent call last):
+  File "/usr/lib/python3.5/code.py", line 91, in runcode
+    exec(code, self.locals)
+  File "<input>", line 1, in <module>
+AttributeError: 'test' object has no attribute 'age'
+getattr(t, "age", "18")
+'18'
+hasattr(t, "age")
+False
+setattr(t, "age", "18")
+hasattr(t, "age")
+True
+getattr(t, "salary")
+Traceback (most recent call last):
+  File "/usr/lib/python3.5/code.py", line 91, in runcode
+    exec(code, self.locals)
+  File "<input>", line 1, in <module>
+AttributeError: 'test' object has no attribute 'salary'
+getattr(t, "salary", setattr(t, "salary",50000))
+50000
+getattr(t,"salary")
+50000
+repr(getattr(t,"salary"))
+'50000'
+line = 'aaa\nbbb\nccc\n'
+line.split('\n')
+['aaa', 'bbb', 'ccc', '']
+line.splitlines()
+['aaa', 'bbb', 'ccc']
+mystr = 'xxxSPAMxxx'
+mystr.find('SPAM')
+3
+mystr = 'xxaaxxaa'
+mystr.replace('aa', 'SPAM')
+'xxSPAMxxSPAM'
+
+mystr = 'xxxSPAMxxx'
+'SPAM' in mystr
+True
+'Ni' in mystr
+False
+mystr.find('Ni')
+-1
+mystr = '\t Ni\n'
+mystr.strip()
+'Ni'
+mystr.rstrip()
+'\t Ni'
+>>> mystr = 'SHRUBBERY'
+>>> mystr.lower()
+'shrubbery'
+>>> mystr.isalpha()
+True
+>>> mystr.isdigit()
+False
+>>> import  string
+>>> string.ascii_lowercase
+'abcdefghijklmnopqrstuvwxyz'
+>>> string.whitespace
+'\t\n\x0b\x0c\r '
+>>>
+from optparse import OptionParser
+if __name__  == "__main__":
+    parser = OptionParser()
+    parser.add_option("-f", "--test_combination", action = "store", dest = "test_combination", help = "test_combination")
+    parser.add_option("-a", "--author", action = "store", dest = "author", help = "author")
+    parser.add_option("-b", "--branch", action = "store", dest = "branch", help = "branch")
+    parser.add_option("-i", "--commit_id", action = "store", dest = "commit_id", help = "commit_id")
+    parser.add_option("--test_type", "--test_type", action = "store", dest = "test_type", help = "test_type(DAILY | PRECI)")
+    parser.add_option("--task_id", "--task_id", action = "store", dest = "task_id", help = "existed task_id")
+    parser.add_option("--official", "--official", action="store_true", dest="official")
+    parser.add_option("--use_db", "--use_db", action="store_true", dest="use_db")
+    (options, args) = parser.parse_args()
+
+
+
+import argparse
+parser = argparse.ArgumentParser(description='SymbolAPI-based CNN perf')
+parser.add_argument('--network', type=str, default='all')
+parser.add_argument('--batch-size', type=int, default=0)
+parser.add_argument('--type', type=str, default='inf')
+parser.add_argument('--gpus', type=str, default='')
+opt = parser.parse_args()
+
+import traceback
+    try:
+    except Exception:
+        print("Exception Raise")
+        traceback.print_exc()
+        with open(log_file, 'a') as f:
+            f.write("%s" %traceback.format_exc())
+    finally:
+        dict2jsonfile(result_dic, result_json)
+
+import sys
+import json
+import subprocess
+import re
+def CallSimpleCommand(command):
+    p = subprocess.Popen(command, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    (stdout, stderr) = p.communicate()
+    exitcode = p.poll()
+
+    if sys.version_info.major == 2:
+        stdout_list = stdout.split("\n")
+        stderr_list = stderr.split("\n")
+        res = stdout_list + stderr_list
+    else:
+        stdout_list = stdout.decode('ascii').split("\n")
+        stderr_list = stderr.decode('ascii').split("\n")
+        res = stdout_list + stderr_list
+    return exitcode, res
+
+def is_cpp_xml_tests_pass(xml_file):
+    from bs4 import BeautifulSoup as BS
+    is_pass = False
+    soup = BS(open(xml_file,'r'),"lxml")
+    fail_num = soup.testsuite["failures"]
+    if fail_num == "0" :
+        is_pass = True
+    return is_pass
+>>> import  re
+>>> some_text = 'a,b,,,,c,d'
+>>> reObj = re.compile('[,]+')
+>>> reObj.split(some_text)
+['a', 'b', 'c', 'd']
+>>> import re
+>>> some_text = 'a,b,,,,c,d'
+>>> re.split('[,]+', some_text)
+['a', 'b', 'c', 'd']
+1.	import sys
+2.	sys.path.append('..') #表示导入当前文件的上层目录到搜索路径中
+3.	sys.path.append('/home/model') # 绝对路径
+4.	from folderA.folderB.fileA import functionA
+
+
+1.	import os,sys
+2.	sys.path.append(os.getcwd())
+3.	os.getcwd()用于获取当前工作目录
+4.	import sys
+5.	sys.path.insert(1, "./model")
+sys.path.insert(1, "./crnn")定义搜索路径的优先顺序，序号从0开始，表示最大优先级，sys.path.insert()加入的也是临时搜索路径，程序退出后失效。
+>>> mystr = 'aaa,bbb,ccc'
+>>> mystr.split(',')
+['aaa', 'bbb', 'ccc']
+>>> mystr  = 'a b\nc\nd'
+>>> mystr.split()
+['a', 'b', 'c', 'd']
+>>> delim = 'NI'
+>>> delim.join(['aaa','bbb','ccc'])
+'aaaNIbbbNIccc'
+>>> ''.join(['A','dead','parrot'])
+'Adeadparrot'
+>>> chars = list('Lorreta')
+>>> chars
+['L', 'o', 'r', 'r', 'e', 't', 'a']
+>>> chars.append('!')
+>>> ''.join(chars)
+'Lorreta!'
+
+
+>>> mystr = 'xxaaxxaa'
+>>> 'SPAM'.join(mystr.split('aa'))
+'xxSPAMxxSPAM'
+>>> int("42"), eval("42")
+(42, 42)
+>>> str(42),repr(42)
+('42', '42')
+>>> ("%d" % 42), '{:d}'.format(42)
+('42', '42')
+>>> "42" + str(1), int("42") + 1
+('421', 43)
+>>> file=open('spam.txt','w')
+>>> file.write(('spam' * 5) + '\n')
+>>> file.close()
+>>> file = open('spam.txt')
+>>> text = file.read()
+>>> text
+'spamspamspamspamspam\n'
+import os
+print os.system('curl  www.baidu.com')
+import os
+print os.system('ifconfig')
+>>> os.getcwd()
+'/root/PycharmProjects/test2'
+>>> os.pathsep
+':'
+>>> os.sep
+'/'
+>>> os.pardir
+'..'
+>>> os.curdir
+'.'
+>>> os.linesep
+'\n'
+>>> os.path.isdir(r'C:\Users'),os.path.isfile(r'C:\Users')
+(False, False)
+>>> os.path.exists(r'/tmp')
+True
+>>> os.path.getsize(r'/tmp')
+4096
+>>> os.path.split(r'/root/data.txt')
+('/root', 'data.txt')
+>>> os.path.join(r'/root/','data.txt')
+'/root/data.txt'
+>>> name = r'/root/data.txt'
+>>> os.path.dirname(name)
+'/root'
+>>> os.path.basename(name)
+'data.txt'
+
+
+>>> os.sep
+'/'
+>>> pathname = r'/root/scripts/'
+>>> os.path.split(pathname)
+('/root/scripts', '')
+>>> pathname.split(os.sep)
+['', 'root', 'scripts', '']
+>>> os.sep.join(pathname.split(os.sep))
+'/root/scripts/'
+>>> os.path.join(*pathname.split(os.sep))
+'root/scripts/'
+>>> mixed = r'C:\temp\public/files/index.html'
+>>> mixed
+'C:\\temp\\public/files/index.html'
+>>> os.path.normpath(mixed)
+'C:\\temp\\public/files/index.html'
+>>> print(os.path.normpath(r'C:\temp\\sub\.\file.ext'))
+C:\temp\\sub\.\file.ext
+>>> os.getcwd()
+'/root/PycharmProjects/test2'
+>>> os.chdir('/root/PycharmProjects')
+>>> os.getcwd()
+'/root/PycharmProjects'
+>>> os.path.abspath('')
+'/root/PycharmProjects'
+>>> os.path.abspath('/test2')
+'/test2'
+>>> os.path.abspath('')
+'/root/PycharmProjects'
+>>> os.path.abspath('.')
+'/root/PycharmProjects'
+>>> os.path.abspath('..')
+'/root'
+>>> os.path.abspath('.')
+'/root/PycharmProjects'
+>>> os.chdir('/root/PycharmProjects/test2')
+>>> os.path.abspath('.')
+'/root/PycharmProjects/test2'
+>>>
+>>> import  os
+>>> text = os.popen('type peoplegui.py').read()
+>>> text
+'peoplegui.py: not found\n'
+>>> text = os.popen('type peoplegui.py').readlines()
+>>> text
+['peoplegui.py: not found\n']
+>>> import  os
+>>> os.system('python  test.py')
+hello world!!!
+0
+>>> output = os.popen('python test.py').read()
+>>> output
+'hello world!!!\n'
+>>> output = os.popen('python test.py').read().strip()
+>>> output
+'hello world!!!'
+
+
+>>>import  subprocess
+>>> subprocess.call('python  test.py',shell=True)
+hello world!!!
+0
+>>> pipe = subprocess.Popen('python  test.py', stdout=subprocess.PIPE, shell=True)
+>>> pipe.communicate()
+('hello world!!!\n', None)   #得到元组
+>>> pipe.returncode
+0
+>>> pipe = subprocess.Popen('python  test.py', stdout=subprocess.PIPE, shell=True)
+>>> pipe.stdout.read()
+'hello world!!!\n'                #得到字符串
+>>> pipe.wait()
+0
+>>> from  subprocess  import Popen, PIPE
+>>> Popen('python test.py', stdout=PIPE, shell=True).communicate()[0]
+'hello world!!!\n'
+>>> import  os
+>>> os.popen('python  test.py').read()
+'hello world!!!\n'
+>>> import  os
+>>> os.listdir(".")   #查看当前目录下有什么文件
+['more.pyc', 'webserver.py', 'cgi101.py', 'cgi101.html', 'tkinter101.py', 'class-shelve', 'testargv.py', 'tkinter103.py', 'more.py', 'changegui.py', 'test.py', '__pycache__', 'tkinter102.py', 'testargv2.py', 'peoplegui.py', 'attachgui.py', '.idea', 'tkinter112.py', 'customizegui.py']
+>>> treatises = ["Arithmetica","Conics","Elements"]
+>>> " ".join(treatises)    #字符串列表或者字符串元组转成字符串
+'Arithmetica Conics Elements'
+
+import  os
+os.getcwd()
+'C:\\Users\\shenglex\\PycharmProjects\\untitled'
+os.listdir(os.getcwd())
+['.git', '.idea', 'Python', 'venv']
+os.listdir(".")
+['.git', '.idea', 'Python', 'venv']
+os.chdir(r"C:\Users\shenglex\PycharmProjects\untitled\Python")
+os.listdir(".")
+
+>>> treatises = ("Arithmetica","Conics","Elements")
+>>> " ".join(treatises)
+'Arithmetica Conics Elements'
+>>> record = "Leo Tolstoy*1828-8-28*1910-11-20"
+>>> fields = record.split("*")
+>>> fields
+['Leo Tolstoy', '1828-8-28', '1910-11-20']
+>>> born = fields[1].split("-")
+>>> born
+['1828', '8', '28']
+>>> died = fields[2].split("-")
+>>> died
+['1910', '11', '20']
+>>> print("lived about",int(died[0])-int(born[0]),"years")
+('lived about', 82, 'years')
+>>> "{{{0}}}{1};-}}".format("I'm in  braces", "I'm not")
+"{I'm in  braces}I'm not;-}"
+>>> "{0}{1}".format("The amount due is $",200)
+'The amount due is $200'
+>>> x = "three"
+>>> s = "{0}{1}{2}"
+>>> s = s.format("The",x,"tops")
+>>> s
+'Thethreetops'
+>>> "{who} turned {age} this  year".format(who="she", age=88)
+'she turned 88 this  year'
+>>> "The {who} was {0} last week".format(12, who="boy")
+'The boy was 12 last week'
+
+>>> stock = ["paper","envelopes", "notepads","pens","paper clips"]
+>>> "We have {0[1]} and {0[2]} in stock".format(stock)
+'We have envelopes and notepads in stock'
+>>> d  = dict(animal="elephant", weight=12000)
+>>> "The {0[animal]} weighs {0[weight]}kg".format(d)
+'The elephant weighs 12000kg'
+>>> from  io import  StringIO
+>>> import  sys
+>>> buff = StringIO()
+>>> temp = sys.stdout
+>>> sys.stdout = buff
+>>> print(42, 'spam', 3.141)
+>>> sys.stdout = temp
+>>> buff.getvalue()
+'42 spam 3.141\n'
+
+
+
+
+>>> from  io  import  BytesIO
+>>> stream = BytesIO()
+>>> stream.write(b'spam')
+4
+>>> stream.getvalue()
+b'spam'
+>>> stream = BytesIO(b'dpam')
+>>> stream.read()
+b'dpam'
+>>> from  io  import  StringIO
+>>> buff = StringIO()
+>>> print(42, file=buff)
+>>> print('spam', file=buff)
+>>> print(buff.getvalue)
+<built-in method getvalue of _io.StringIO object at 0x00000244E995E3A8>
+>>> print(buff.getvalue())
+42
+Spam
+>>> from  redirect import  Output
+>>> buff = Output()
+>>> print(43, file=buff)
+>>> print('eggs', file=buff)
+>>> print(buff.text)
+43
+Eggs
+hello-out.py
+#!/usr/bin/env python
+# encoding: utf-8
+
+print('Hello shell world')
+>>> import  os
+>>> pipe = os.popen('python3 hello-out.py')
+>>> pipe.read()
+'Hello shell world\n'
+>>> print(pipe.close())
+None
+>>> pipe = os.popen('python3 hello-in.py', 'w')
+>>> pipe.write('Gumby\n')
+6
+>>> pipe.close()
+>>> open('hello-in.txt').read()
+'Hello Gumby\n'
+  >>> from  subprocess import Popen, PIPE, call
+>>> X = call('python3  hello-out.py')
+Hello shell world
+>>> X
+0
+>>> pipe = Popen('python3 hello-out.py', stdout=PIPE)
+>>> pipe.communicate()[0]
+b'Hello shell world\r\n'
+>>> pipe.returncode
+0
+>>> pipe = Popen('python3 hello-out.py', stdout=PIPE)
+>>> pipe.stdout.read()
+b'Hello shell world\r\n'
+>>> pipe.wait()
+0
+>>>
+
+>>> from  subprocess import Popen, PIPE, call
+>>> pipe = Popen('python3 reader.py', stdin=PIPE, stdout=PIPE)
+>>> pipe.stdin.write(b'Lumberjack\n')
+11
+>>> pipe.stdin.write(b'12\n')
+3
+>>> pipe.stdin.close()
+>>> output = pipe.stdout.read()
+>>> pipe.wait()
+0
+>>> output
+b'Got this: "Lumberjack"\r\nThe meaning of life is 12 24\r\n'
+>>> from  subprocess  import  Popen,PIPE
+>>> p1 = Popen('python3 writer.py', stdout=PIPE)
+>>> p2 = Popen('python3 reader.py', stdin=p1.stdout, stdout=PIPE)
+>>> output = p2.communicate()[0]
+>>> output
+b'Got this: "Help! Help! I\'m being repressed!"\r\nThe meaning of life is 42 84\r\n'
+>>> p2.returncode
+0
+>>> import  os
+>>> p1 = os.popen('python3 writer.py', 'r')
+>>> p2 = os.popen('python3 reader.py', 'w')
+>>> p2.write(p1.read())
+36
+>>> X = p2.close()
+Got this: "Help! Help! I'm being repressed!"
+The meaning of life is 42 84
+>>> print(X)
+None
+>>>
+>>> file = open('data.txt', 'w')
+>>> file.write('Hello file world!\n')
+18
+>>> file.write('Bye file world.\n')
+16
+>>> file.write('Bye   file world.\n')
+18
+>>> file.close()
+>>> exit()
+
+C:\Users\shenglex\PycharmProjects\untitled\Python>dir  data.txt /B
+data.txt
+
+C:\Users\shenglex\PycharmProjects\untitled\Python>type  data.txt
+Hello file world!
+Bye   file world.
+>>> open('data.txt').readlines()
+['Hello file world!\n', 'Bye   file world.\n']
+>>> list(open('data.txt'))
+['Hello file world!\n', 'Bye   file world.\n']
+>>> lines = [line.rstrip() for line in open('data.txt')]
+>>> lines
+['Hello file world!', 'Bye   file world.']
+>>> lines = [line.upper() for line in open('data.txt')]
+>>> lines
+['HELLO FILE WORLD!\n', 'BYE   FILE WORLD.\n']
+>>> list(map(str.split, open('data.txt')))
+[['Hello', 'file', 'world!'], ['Bye', 'file', 'world.']]
+>>> line  = 'Hello file world!\n'
+>>> line  in  open('data.txt')
+True
+C:\Users\shenglex\PycharmProjects\untitled\Python>python2
+Python 2.7.9 (default, Dec 10 2014, 12:28:03) [MSC v.1500 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import  struct
+>>> data = struct.pack('>i4shf', 2, 'spam', 3, 1.234)
+>>> data
+'\x00\x00\x00\x02spam\x00\x03?\x9d\xf3\xb6'
+>>> file = open('data.bin', 'wb')
+>>> file.write(data)
+>>> file.close()
+>>> import  struct
+>>> file = open('data.bin', 'rb')
+>>> bytes = file.read()
+>>> values = struct.unpack('>i4shf', data)
+>>> values
+(2, 'spam', 3, 1.2339999675750732)
+Import  os
+os.chmod('spam.txt',0o777)  #启用所有访问
+    os.rename(r'C:\Users\shenglex\PycharmProjects\untitled\Python\data.txt',r'
+C:\Users\shenglex\PycharmProjects\untitled\Python\eggs.txt')
+os.remove(r'C:\Users\shenglex\PycharmProjects\untitled\Python\data.txt')
+>>> open('spam.txt', 'w').write('Hello stat world\n')
+17
+>>> import os
+>>> info  = os.stat(r'C:\Users\shenglex\PycharmProjects\untitled\Python\spam.t
+xt')
+>>> info
+os.stat_result(st_mode=33206, st_ino=3659174697261585, st_dev=2184821173, st_n
+link=1, st_uid=0, st_gid=0, st_size=18, st_atime=1535443228, st_mtime=15356949
+93, st_ctime=1535443228)
+>>> info.st_mode, info.st_size
+(33206, 18)
+>>> import stat
+>>> info[stat.ST_MODE], info[stat.ST_SIZE]
+(33206, 18)
+>>> stat.S_ISDIR(info.st_mode), stat.S_ISREG(info.st_mode)
+(False, True)
+>>> path = r'C:\Users\shenglex\PycharmProjects\untitled\Python\spam.txt'
+>>> os.path.isdir(path), os.path.isfile(path), os.path.getsize(path)
+(False, True, 18)
+>>> import sys
+>>> sys.getdefaultencoding()
+'utf-8'
+>>> sys.getfilesystemencoding()
+'mbcs'
+
+
+
