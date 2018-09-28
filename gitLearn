@@ -1,0 +1,2775 @@
+http://www.jqhtml.com/7983.html
+桌面右击git Bash here
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ pwd
+/c/Users/shenglex/git
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ git config  --global  user.email  "837337164@qq.com"
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ git  config  --global  user.name  "sige"
+$ pwd
+/c/Users/shenglex
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ subl  .gitconfig    #win10安装sublime3 配置环境变量path:C:\Program Files\SublimeText3
+[user]
+	name = sige
+	email = 837337164@qq.com
+[http]
+	proxy = http://child-prc.intel.com:913
+shenglex@shenglex-MOBL MINGW64 ~
+$ cd  git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+a/  edu/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  edu/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu
+$ ls
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/edu/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$ pwd
+/c/Users/shenglex/git/edu
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$ ls  -a
+./  ../  .git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$ cd  .git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu/.git (GIT_DIR!)
+$ ls
+config  description  HEAD  hooks/  info/  objects/  refs/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu/.git (GIT_DIR!)
+$ ll
+total 7
+-rw-r--r-- 1 shenglex 1049089 130 Sep 12 15:39 config
+-rw-r--r-- 1 shenglex 1049089  73 Sep 12 15:39 description
+-rw-r--r-- 1 shenglex 1049089  23 Sep 12 15:39 HEAD
+drwxr-xr-x 1 shenglex 1049089   0 Sep 12 15:39 hooks/
+drwxr-xr-x 1 shenglex 1049089   0 Sep 12 15:39 info/
+drwxr-xr-x 1 shenglex 1049089   0 Sep 12 15:39 objects/
+drwxr-xr-x 1 shenglex 1049089   0 Sep 12 15:39 refs/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu/.git (GIT_DIR!)
+$ cd  ..
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$ pwd
+/c/Users/shenglex/git/edu
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$ subl  .git/config
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$ git  config  user.name  "sige123"
+
+shenglex@shenglex-MOBL MINGW64 ~/git/edu (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ pwd
+/c/Users/shenglex/git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/bbs/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ pwd
+/c/Users/shenglex/git/bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ ls -a
+./  ../  .git/
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ pwd
+/c/Users/shenglex/git
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls  -a
+./  ../  bbs/  edu/
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ git  clone   https://github.com/taizilinger123/eluosisquare.git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  eluosisquare/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/eluosisquare (master)
+$ ls
+src/
+$ pwd
+/c/Users/shenglex/git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls -a
+./  ../  .git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        a.php
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git add a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ subl  b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+a.php  b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   a.php
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        b.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git add  b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   a.php
+        new file:   b.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git commit  -m  "测试学习"
+[master (root-commit) 79040f7] 测试学习
+ 2 files changed, 1 insertion(+)
+ create mode 100644 a.php
+ create mode 100644 b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  c.php  d.php  f.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+a.php  b.php  c.php  d.php  f.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        c.php
+        d.php
+        f.php
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   c.php
+        new file:   d.php
+        new file:   f.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  shop
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  shop
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/shop/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ pwd
+/c/Users/shenglex/git/shop
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ subl  .gitignore
+*.txt    #不提交所有以.txt结尾的文件
+!a.txt  #除了a.txt提交到仓库其他都不提交到仓库
+/vendor/index.php  #不提交index.php
+/vendor/*.php  #/vendor下的所有以.php开头的文件都不提交
+/vendor   #不提交/vendor目录
+/vendor/**/*.php  #不提交/vendor及子目录
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ touch  a.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        a.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ ls
+a.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$
+$ touch  b.txt
+$ touch  c.txt
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ mkdir  vendor
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        a.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ touch   vendor/index.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git  status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        a.txt
+        vendor/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git  status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        a.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ touch   vendor/demo.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git  status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        a.txt
+        vendor/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ pwd
+/c/Users/shenglex/git/shop
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ ls
+a.txt  b.txt  c.txt  vendor/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ cd  vendor/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop/vendor (master)
+$ ls
+demo.php  index.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop/vendor (master)
+$ mkdir  composer
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop/vendor (master)
+$ touch  composer/test.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop/vendor (master)
+$ ls
+composer/  demo.php  index.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop/vendor (master)
+$ cd ..
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ git  status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        a.txt
+        vendor/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$ pwd
+/c/Users/shenglex/git/shop
+
+shenglex@shenglex-MOBL MINGW64 ~/git/shop (master)
+$
+$ pwd
+/c/Users/shenglex
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ cd  git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+hd/  shop/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/bbs/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ touch  a.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        a.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  commit -m  "put1"
+[master (root-commit) 4c3c0d3] put1
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ ls
+a.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  rm  a.txt
+rm 'a.txt'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ ls
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ touch  readme.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  commit -m  "aa"
+[master a931400] aa
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename a.txt => readme.txt (100%)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ ls
+readme.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git rm  --cached  readme.txt    ###从版本库里删除，本地还留着这个readme.txt文件
+rm 'readme.txt'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ ls
+readme.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        deleted:    readme.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        readme.txt
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  commit  -m  "aa"   #解决了deleted:    readme.txt状态
+[master 5101b5a] aa
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 readme.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        readme.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ pwd
+/c/Users/shenglex/git/bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ ls
+readme.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        readme.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git commit -m "hd"
+[master 57e12b4] hd
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 readme.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  status
+On branch master
+nothing to commit, working tree clean
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ touch  c.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git commit  -m "add c.php"
+[master 55cbf84] add c.php
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 c.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git mv c.php houdunren.php   #改名文件
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        renamed:    c.php -> houdunren.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  commit  -m  "c.php  rename  houdunren.php"
+[master 438feb7] c.php  rename  houdunren.php
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename c.php => houdunren.php (100%)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ touch  indexController.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git commit -m  "add file"
+[master 9eeffe2] add file
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 indexController.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  mv  indexController.php  IndexController.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ git  commit  -m  "rename  file"
+[master d79d55c] rename  file
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename indexController.php => IndexController.php (100%)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ ls
+houdunren.php  IndexController.php  readme.txt
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$ pwd
+/c/Users/shenglex/git/bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/bbs (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ pwd
+/c/Users/shenglex/git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ rm -rf  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ pwd
+/c/Users/shenglex/git/hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  commit -m  "add a.php"
+[master (root-commit) 08c844e] add a.php
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+a.php  b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ vim  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ cat a.php
+houdunren.com
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ vim a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ cat a.php
+www.houdunren.com
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   a.php
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        b.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  add  .
+warning: LF will be replaced by CRLF in a.php.                           ##
+The file will have its original line endings in your working directory.  ##
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git commit  -m  "two"
+[master 46d77f0] two
+ 2 files changed, 1 insertion(+)
+ create mode 100644 b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  status
+On branch master
+nothing to commit, working tree clean
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+$ git log
+commit 46d77f055be271b05341bf42bb88d527f9b0fa68 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:37:09 2018 +0800
+
+    two
+
+commit 08c844e7dee593030a08fb303c18217398791cea
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:33:44 2018 +0800
+
+    add a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git log –p  #查看文件变动信息
+commit 46d77f055be271b05341bf42bb88d527f9b0fa68 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:37:09 2018 +0800
+
+    two
+
+diff --git a/a.php b/a.php
+index e69de29..8ac34bc 100644
+--- a/a.php
++++ b/a.php
+@@ -0,0 +1 @@
++www.houdunren.com
+diff --git a/b.php b/b.php
+new file mode 100644
+index 0000000..e69de29
+
+commit 08c844e7dee593030a08fb303c18217398791cea
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:33:44 2018 +0800
+
+    add a.php
+
+diff --git a/a.php b/a.php
+new file mode 100644
+index 0000000..e69de29
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git log -p  -1    #查看最近一次行号的提交
+commit 46d77f055be271b05341bf42bb88d527f9b0fa68 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:37:09 2018 +0800
+
+    two
+
+diff --git a/a.php b/a.php
+index e69de29..8ac34bc 100644
+--- a/a.php
++++ b/a.php
+@@ -0,0 +1 @@
++www.houdunren.com
+diff --git a/b.php b/b.php
+new file mode 100644
+index 0000000..e69de29
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git log -p  -2
+commit 46d77f055be271b05341bf42bb88d527f9b0fa68 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:37:09 2018 +0800
+
+    two
+
+diff --git a/a.php b/a.php
+index e69de29..8ac34bc 100644
+--- a/a.php
++++ b/a.php
+@@ -0,0 +1 @@
++www.houdunren.com
+diff --git a/b.php b/b.php
+new file mode 100644
+index 0000000..e69de29
+
+commit 08c844e7dee593030a08fb303c18217398791cea
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:33:44 2018 +0800
+
+    add a.php
+
+diff --git a/a.php b/a.php
+new file mode 100644
+index 0000000..e69de29
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git log  --oneline
+46d77f0 (HEAD -> master) two
+08c844e add a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git log  --oneline  -p
+46d77f0 (HEAD -> master) two
+diff --git a/a.php b/a.php
+index e69de29..8ac34bc 100644
+--- a/a.php
++++ b/a.php
+@@ -0,0 +1 @@
++www.houdunren.com
+diff --git a/b.php b/b.php
+new file mode 100644
+index 0000000..e69de29
+08c844e add a.php
+diff --git a/a.php b/a.php
+new file mode 100644
+index 0000000..e69de29
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+$ git log  --name-only   ###只查看文件有哪些变化
+commit 46d77f055be271b05341bf42bb88d527f9b0fa68 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:37:09 2018 +0800
+
+    two
+
+a.php
+b.php
+
+commit 08c844e7dee593030a08fb303c18217398791cea
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:33:44 2018 +0800
+
+    add a.php
+
+a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+$ git log  --name-status  ###查看文件修改的属性是修改还是添加
+commit 46d77f055be271b05341bf42bb88d527f9b0fa68 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:37:09 2018 +0800
+
+    two
+
+M       a.php
+A       b.php
+
+commit 08c844e7dee593030a08fb303c18217398791cea
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 09:33:44 2018 +0800
+
+    add a.php
+
+A       a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+bbs/  hd/  shop/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ rm -rf  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ cd  hd
+bash: cd: hd: No such file or directory
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ pwd
+/c/Users/shenglex/git/hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git log
+fatal: your current branch 'master' does not have any commits yet
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  commit  -m  "第一次提交"
+[master (root-commit) 601c1a8] 第一次提交
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  log
+commit 601c1a87154d0c01ade4b0f4cbbe5bd6bdbacd2e (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 11:27:22 2018 +0800
+
+    第一次提交
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  commit  --amend
+[master b211a2d] houdunren.com第一次提交
+ Date: Thu Sep 13 11:27:22 2018 +0800
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  log
+commit b211a2d44fa940421a689e9c825e8e6ba689608a (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 11:27:22 2018 +0800
+
+    houdunren.com第一次提交
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   b.php
+
+
+
+
+
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  commit  --amend
+[master 4e4a6ce] houdunren.com第一次提交 增加b.php  a.php
+ Date: Thu Sep 13 11:27:22 2018 +0800
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.php
+ create mode 100644 b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  status
+On branch master
+nothing to commit, working tree clean
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  log
+commit 4e4a6ce42b681bbb58631763994092cbfdd25ce5 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 11:27:22 2018 +0800
+
+    houdunren.com第一次提交
+    增加b.php  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  log  --name-only
+commit 4e4a6ce42b681bbb58631763994092cbfdd25ce5 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Thu Sep 13 11:27:22 2018 +0800
+
+    houdunren.com第一次提交
+    增加b.php  a.php
+
+a.php
+b.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ pwd
+/c/Users/shenglex/git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  xj
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  xj
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/xj/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ ls -a
+./  ../  .git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ touch  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        a.php
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  add  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   a.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  rm --cached  a.php   #后悔提交的文件撤销git add提交的方法
+rm 'a.php'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        a.php
+
+nothing added to commit but untracked files present (use "git add" to track)
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  commit  -m"添加a.php"
+[master (root-commit) cdc8a82] 添加a.php
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ vim a.php
+   xj
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   a.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git add  a.php
+warning: LF will be replaced by CRLF in a.php.
+The file will have its original line endings in your working directory.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   a.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  reset  HEAD  a.php
+Unstaged changes after reset:
+M       a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   a.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ cat  a.php
+xj
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  checkout  -- a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ cat  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  config  --global  alias.a  add
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ pwd
+/c/Users/shenglex/git/xj
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  a  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ cd
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ pwd
+/c/Users/shenglex
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ subl  .gitconfig
+[user]
+	name = sige
+	email = 837337164@qq.com
+[http]
+	proxy = http://child-prc.intel.com:913
+[alias]
+      a = add .
+      c = commit
+  l = log
+  s = status
+
+shenglex@shenglex-MOBL MINGW64 ~
+$
+
+
+
+
+$ pwd
+/c/Users/shenglex
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ cd git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ rm -rf *
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  s
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        a.php
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  a
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  s
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   a.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  c
+[master (root-commit) adf7891] 这是后做人的一个提交信息
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+$ pwd
+/c/Users/shenglex/git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  commit  -m "first"
+[master (root-commit) 9e22fab] first
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  ask   #创建分支
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch
+  ask
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git checkout  ask
+Switched to branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  branch
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ touch   ask.html
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  commit  -m  "ask commit"
+[ask 4d2849f] ask commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.html
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.html  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git branch
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  checkout  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  checkout  -b  bbs   #创建分支并且切换分支
+=git branch  bbs and  git checkout bbs
+Switched to a new branch 'bbs'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git branch
+  ask
+* bbs
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git branch
+  ask
+* bbs
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git  checkout ask
+Switched to branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.html  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  checkout  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch
+  ask
+  bbs
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  merge  ask   #将ask分支合并到master主分支
+Updating 9e22fab..4d2849f
+Fast-forward
+ ask.html | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.html
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+ask.html  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -d  ask   #删除ask分支
+Deleted branch ask (was 4d2849f).
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch   #查看分支
+  bbs
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ vim  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ vim  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ cat  xj.php
+:
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  add  .
+warning: LF will be replaced by CRLF in xj.php.
+The file will have its original line endings in your working directory.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  commit -m "master"
+[master (root-commit) eb05211] master
+ 1 file changed, 1 insertion(+)
+ create mode 100644 xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch
+  ask
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+$ git  checkout   -b  bbs
+Switched to a new branch 'bbs'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git  branch
+  ask
+* bbs
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ ls
+xj.php*
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ vim  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ cat  xj.php
+bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git  add  .
+warning: LF will be replaced by CRLF in xj.php.
+The file will have its original line endings in your working directory.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git  commit  -m  "bbs"
+[bbs b5b825a] bbs
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git  status
+On branch bbs
+nothing to commit, working tree clean
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git  checkout  ask
+Switched to branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  branch
+* ask
+  bbs
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ vim  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ cat  xj.php
+ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  commit  -m  "ask"
+[ask f45e446] ask
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git checkout  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git merge bbs
+Updating eb05211..b5b825a
+Fast-forward
+ xj.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ cat  xj.php
+bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  merge  ask   #多分支改同一个文件合并到主分支master就会产生冲突
+Auto-merging xj.php
+CONFLICT (content): Merge conflict in xj.php
+Automatic merge failed; fix conflicts and then commit the result.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master|MERGING)
+$ vim xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master|MERGING)
+$ cat  xj.php
+bbs
+ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master|MERGING)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master|MERGING)
+$ git  commit  -m  "success"
+[master de79232] success
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch
+  ask
+  bbs
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git   branch   --merged  #查看已经合并的分支
+  ask
+  bbs
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  checkout  -b  test
+Switched to a new branch 'test'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (test)
+$ git  checkout  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git   branch   --merged
+  ask
+  bbs
+* master
+  test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  checkout  test
+Switched to branch 'test'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (test)
+$ touch  mm.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (test)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (test)
+$ git  commit  -m  "test"
+[test 8fbfac1] test
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 mm.php
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (test)
+$ git  checkout  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch  --merged
+  ask
+  bbs
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch  --no-merged
+  test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -d  test
+error: The branch 'test' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D test'.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -d  ask
+Deleted branch ask (was f45e446).
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch
+  bbs
+* master
+  test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch  --no-merged  #查看未合并的分支
+  Test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -D  test
+Deleted branch test (was 8fbfac1).
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch
+  bbs
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch  --merged
+  bbs
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -d  bbs
+Deleted branch bbs (was b5b825a).
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ pwd
+/c/Users/shenglex/git
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git commit  -m  "master  commit"
+[master (root-commit) 8f82107] master  commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  bbs
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  checkout  ask
+Switched to branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  branch
+* ask
+  bbs
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ touch  ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  add   .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  commit  -m'ask'
+[ask eb1933a] ask
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ vim  ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git add .
+warning: LF will be replaced by CRLF in ask.php.
+The file will have its original line endings in your working directory.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  status
+On branch ask
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   ask.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git checkout  bbs
+error: Your local changes to the following files would be overwritten by checkout:
+        ask.php
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  #对git add  .以后未git commit的文件放在暂存起来
+Saved working directory and index state WIP on ask: eb1933a ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  list
+stash@{0}: WIP on ask: eb1933a ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git checkout  bbs
+Switched to branch 'bbs'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$
+$ ls
+master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (bbs)
+$ git  checkout  ask
+Switched to branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  apply  #恢复暂存区的文件
+On branch ask
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   ask.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.php  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  list
+stash@{0}: WIP on ask: eb1933a ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  drop  stash@{0}  #删除存在的暂存区
+Dropped stash@{0} (50eebd8742d9f26f4d910ced609cd4728e9c63dd)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  list #查看暂存区里面有没有东西
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.php  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git stash
+Saved working directory and index state WIP on ask: eb1933a ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  list
+stash@{0}: WIP on ask: eb1933a ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  pop
+On branch ask
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   ask.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (73f54463d2ad518e43ae7382feefe7eef73d2e3f)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  list
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+$ ls
+ask.php  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  commit  -m "test"
+[ask 323a888] test
+ 1 file changed, 1 insertion(+)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ touch  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git stash
+No local changes to save
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git stash
+Saved working directory and index state WIP on ask: 323a888 test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git stash list
+stash@{0}: WIP on ask: 323a888 test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ touch  hd.html
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git add .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git stash
+Saved working directory and index state WIP on ask: 323a888 test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git stash list
+stash@{0}: WIP on ask: 323a888 test
+stash@{1}: WIP on ask: 323a888 test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.php  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  apply  stash@{1}  #恢复暂存区
+On branch ask
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   xj.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.php  master.php  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  stash  apply  stash@{0}
+On branch ask
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   hd.html
+        new file:   xj.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.php  hd.html  master.php  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ pwd
+/c/Users/shenglex/git/hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git tag  v1.0
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git tag  v2.0
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git tag
+v1.0
+v2.0
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+ask.php  hd.html  master.php  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ pwd
+/c/Users/shenglex/git/hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls -a
+./  ../  .git/  ask.php  hd.html  master.php  xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  archive  master  --prefix="hdcms/"  --forma=zip  > hdcms.zip
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ pwd
+/c/Users/shenglex/git/hd  #在win10桌面到这里就能看到打包的文件了
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  s
+On branch ask
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   hd.html
+        new file:   xj.php
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        hdcms.zip
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ cd
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ ls  -a
+ ./                .viminfo             git/                             ntuser.dat.LOG2                                                                                Recent@
+ ../              '3D Objects'/         IntelGraphicsProfiles/           NTUSER.DAT{c600aac8-991a-11e8-b770-288023d8dc85}.TM.blf                                        Roaming/
+ .3T/              AppData/             Links/                           NTUSER.DAT{c600aac8-991a-11e8-b770-288023d8dc85}.TMContainer00000000000000000001.regtrans-ms  'Saved Games'/
+ .android/        'Application Data'@  'Local Settings'@                 NTUSER.DAT{c600aac8-991a-11e8-b770-288023d8dc85}.TMContainer00000000000000000002.regtrans-ms   Searches/
+ .bash_history     Contacts/           'mcafee dlp quarantined files'/   ntuser.ini                                                                                     SendTo@
+ .cache/           Cookies@             Music/                           ntuser.pol                                                                                    'Start Menu'@
+ .cisco/           data.bin            'My Documents'@                   OneDrive/                                                                                     'Syncplicity Folders'/
+ .flasher/         Desktop/             NetHood@                         Pictures/                                                                                      temp
+ .gitconfig        Documents/           new1Python/                      PrintHood@                                                                                     Templates@
+ .PyCharm2018.2/   Downloads/           NTUSER.DAT                       PycharmProjects/                                                                               Videos/
+ .swt/             Favorites/           ntuser.dat.LOG1                  python/
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ subl  .bash_profile
+alias  gs="git status"
+alias  gc="git commit -m "
+alias  gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
+alias  gb="git branch"
+alias  ga="git add ."
+alias  go="git checkout"
+关闭当前的git Bash here重新开一个才能起作用
+
+
+
+
+$ pwd
+/c/Users/shenglex/git/hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git s
+On branch ask
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   hd.html
+        new file:   xj.php
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        hdcms.zip
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gs
+On branch ask
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   hd.html
+        new file:   xj.php
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        hdcms.zip
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gs
+On branch ask
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        new file:   hd.html
+        new file:   hdcms.zip
+        new file:   xj.php
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gc  "com"
+[ask d2a3d6b] com
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 hd.html
+ create mode 100644 hdcms.zip
+ create mode 100644 xj.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gl
+* d2a3d6b - (HEAD -> ask) com (11 seconds ago) <sige>
+* 323a888 - (tag: v2.0, tag: v1.0) test (27 minutes ago) <sige>
+* eb1933a - ask (37 minutes ago) <sige>
+* 8f82107 - (master, bbs) master  commit (40 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/hd/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ pwd
+/c/Users/shenglex/git/hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ touch  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ gc "master"
+[master (root-commit) bb37f66] master
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ gl
+* bb37f66 - (HEAD -> master) master (4 seconds ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ go  -b  ask
+Switched to a new branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gl
+* bb37f66 - (HEAD -> ask, master) master (28 seconds ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gb
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ touch  ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gc  "ask"
+[ask f6b2234] ask
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ gl
+* f6b2234 - (HEAD -> ask) ask (5 seconds ago) <sige>
+* bb37f66 - (master) master (27 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ go master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  merge  ask
+Updating bb37f66..f6b2234
+Fast-forward
+ ask.php | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ gl
+* f6b2234 - (HEAD -> master, ask) ask (37 seconds ago) <sige>
+* bb37f66 - master (28 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ pwd
+/c/Users/shenglex/git/xj
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ touch  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ gc  "master commit"
+[master (root-commit) 7a07c4a] master commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ gl
+* 7a07c4a - (HEAD -> master) master commit (5 seconds ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ go -b  ask
+Switched to a new branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (ask)
+$ touch  ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (ask)
+$
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (ask)
+$ gc "ask commit"
+[ask 3706a92] ask commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (ask)
+$ gl
+* 3706a92 - (HEAD -> ask) ask commit (4 seconds ago) <sige>
+* 7a07c4a - (master) master commit (5 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (ask)
+$ gb
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (ask)
+$ go  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ gb
+  ask
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ touch  m2.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ gc  "m2 commit"
+[master a07a5f0] m2 commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 m2.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ gl
+* a07a5f0 - (HEAD -> master) m2 commit (22 seconds ago) <sige>
+* 7a07c4a - master commit (27 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ gb
+  ask
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ git  merge  ask
+Merge made by the 'recursive' strategy.
+ ask.php | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$ gl
+*   b049840 - (HEAD -> master) houdunren.com Merge branch 'ask' (15 seconds ago) <sige>
+|\
+| * 3706a92 - (ask) ask commit (24 minutes ago) <sige>
+* | a07a5f0 - m2 commit (2 minutes ago) <sige>
+|/
+* 7a07c4a - master commit (28 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/xj (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  houdunren
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd  houdunren/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/houdunren/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ touch  master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ gc  "master commit"
+[master (root-commit) dd29198] master commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 master.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ gl
+* dd29198 - (HEAD -> master) master commit (5 seconds ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ go -b "ask"
+Switched to a new branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ gb
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ touch  ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ gc "ask commit"
+[ask 8a45533] ask commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ gl
+* 8a45533 - (HEAD -> ask) ask commit (5 seconds ago) <sige>
+* dd29198 - (master) master commit (57 seconds ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ go  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ touch  m2.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ ga
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ gc  "m2 commit"
+[master e7398c9] m2 commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 m2.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ go  ask
+Switched to branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ gl
+* 8a45533 - (HEAD -> ask) ask commit (3 minutes ago) <sige>
+* dd29198 - master commit (4 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ git rebase master  ###rebase= replace base
+First, rewinding head to replay your work on top of it...
+Applying: ask commit
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ gl
+* 62f7380 - (HEAD -> ask) ask commit (3 seconds ago) <sige>
+* e7398c9 - (master) m2 commit (2 minutes ago) <sige>
+* dd29198 - master commit (4 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (ask)
+$ go  master
+Switched to branch 'master'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ gl
+* e7398c9 - (HEAD -> master) m2 commit (3 minutes ago) <sige>
+* dd29198 - master commit (5 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ git  merge  ask
+Updating e7398c9..62f7380
+Fast-forward
+ ask.php | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$ gl
+* 62f7380 - (HEAD -> master, ask) ask commit (2 minutes ago) <sige>
+* e7398c9 - m2 commit (3 minutes ago) <sige>
+* dd29198 - master commit (6 minutes ago) <sige>
+
+shenglex@shenglex-MOBL MINGW64 ~/git/houdunren (master)
+$
+$ pwd
+/c/Users/shenglex
+$ ssh-keygen  #一路回车
+Generating public/private rsa key pair.
+Enter file in which to save the key (/c/Users/shenglex/.ssh/id_rsa):
+Created directory '/c/Users/shenglex/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /c/Users/shenglex/.ssh/id_rsa.
+Your public key has been saved in /c/Users/shenglex/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:ZBva+HYjzJ560zO1hmG2OT0382MC+ynhUnZVjyL1GQc shenglex@shenglex-MOBL
+The key's randomart image is:
++---[RSA 2048]----+
+|              E. |
+|            . . o|
+|        +  . . =o|
+|       * o. . +..|
+|      o S  . ..  |
+|       +  +=..   |
+|        *+*B=.   |
+|       oo=O==.=o |
+|      .oo..=o=o+o|
++----[SHA256]-----+
+
+$ cd  ~/.ssh/
+
+shenglex@shenglex-MOBL MINGW64 ~/.ssh
+$ ls
+id_rsa  id_rsa.pub
+
+shenglex@shenglex-MOBL MINGW64 ~/.ssh
+$ subl  id_rsa.pub
+
+shenglex@shenglex-MOBL MINGW64 ~/.ssh
+把里面的公钥添加到github的头像里面的setting里的ssh and GPG keys里
+然后就可以直接克隆了在git Bash here
+$ git  clone  git@github.com:taizilinger123/xjds.git
+$ git  clone  https://github.com/taizilinger123/xjds.git
+shenglex@shenglex-MOBL MINGW64 ~/Desktop
+$ cd  xjds/
+
+shenglex@shenglex-MOBL MINGW64 ~/Desktop/xjds (master)
+$ ls
+LICENSE  README.md
+$ touch  hdxj.houdunren.com
+$ git  push
+
+shenglex@shenglex-MOBL MINGW64 ~
+$ cd  git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+hd/  houdunren/  xj/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ mkdir  test
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd test
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test
+$ git  init
+Initialized empty Git repository in C:/Users/shenglex/git/test/.git/
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ subl  README.md
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ CAT   README.md
+向军大叔教大家学习GITHUB
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ cat   README.md
+向军大叔教大家学习GITHUB
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ git commit  -m  "first  commit"
+[master (root-commit) e20e58b] first  commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ git  log
+commit e20e58b67a833ad28ee9f9d8357bc24cc98032e6 (HEAD -> master)
+Author: sige <837337164@qq.com>
+Date:   Fri Sep 14 10:15:57 2018 +0800
+
+    first  commit
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ git remote  add  origin  git@github.com:taizilinger123/xjds.git  #当前与远程库进行关联
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ git  remote  -v   #可以查到远程库信息
+origin  git@github.com:taizilinger123/xjds.git (fetch)
+origin  git@github.com:taizilinger123/xjds.git (push)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ git  push  -u  origin  master  #把提交的信息提交到master分支
+$ git  branch  -a
+* master
+shenglex@shenglex-MOBL MINGW64 ~/git/test (master)
+$ git checkout  -b ask
+Switched to a new branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$ git  branch
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$ touch  ask.html
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$ ls
+ask.html  README.md
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$ git  commit -m  "ask commit"
+[ask 679f6f3] ask commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 ask.html
+
+$ git  branch -a
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$ git push
+fatal: The current branch ask has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin ask
+
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$   git push --set-upstream origin ask   #把本地分支推送到远程仓库里，然后到远程仓库里就能看到分支信息了。
+
+ssh: connect to host github.com port 22: Connection timed out
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/test (ask)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ pwd
+/c/Users/shenglex/git
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+hd/  houdunren/  test/  xj/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ rm -rf hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ git clone   https://github.com/taizilinger123/xjds.git  hd
+Cloning into 'hd'...
+fatal: NotSupportedException encountered.
+   The ServicePointManager does not support proxies with the https scheme.
+Username for 'https://github.com': 837337164@qq.com
+remote: Counting objects: 8, done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 8 (delta 1), reused 4 (delta 1), pack-reused 0
+Unpacking objects: 100% (8/8), done.
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+hd/  houdunren/  test/  xj/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd   hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+hdxj.houdunren.com*  LICENSE  README.md
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch  -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/ask
+  remotes/origin/master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  pull  origin ask:ask
+fatal: NotSupportedException encountered.
+   The ServicePointManager does not support proxies with the https scheme.
+Username for 'https://github.com': 837337164@qq.com
+From https://github.com/taizilinger123/xjds
+ * [new branch]      ask        -> ask
+Already up to date.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git branch  -a
+  ask
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/ask
+  remotes/origin/master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git checkout  ask
+Switched to branch 'ask'
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git branch
+* ask
+  master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ ls
+hdxj.houdunren.com*  LICENSE  README.md
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ touch  index.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ touch  hello.asp
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  add  .
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git commit -m  "xj first  commit"
+[ask 38371d7] xj first  commit
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 hello.asp
+ create mode 100644 index.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git push
+fatal: The current branch ask has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin ask
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git push --set-upstream origin ask
+fatal: NotSupportedException encountered.
+   The ServicePointManager does not support proxies with the https scheme.
+Username for 'https://github.com': 837337164@qq.com
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 275 bytes | 137.00 KiB/s, done.
+Total 2 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/taizilinger123/xjds.git
+   38a396a..38371d7  ask -> ask
+Branch 'ask' set up to track remote branch 'ask' from 'origin'.
+
+
+
+
+
+
+
+
+$ cd  ..
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ ls
+hd/  houdunren/  test/  xj/
+
+shenglex@shenglex-MOBL MINGW64 ~/git
+$ cd   hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  branch  -a
+* ask
+  master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/ask
+  remotes/origin/master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git checkout  master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git   pull
+fatal: NotSupportedException encountered.
+   The ServicePointManager does not support proxies with the https scheme.
+Username for 'https://github.com': 837337164@qq.com
+Already up to date.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  checkout  ask
+Switched to branch 'ask'
+Your branch is up to date with 'origin/ask'.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  rebase  master
+Current branch ask is up to date.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (ask)
+$ git  checkout  master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ gb
+  ask
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  merge  ask
+Updating 38a396a..38371d7
+Fast-forward
+ hello.asp | 0
+ index.php | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 hello.asp
+ create mode 100644 index.php
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  push
+fatal: NotSupportedException encountered.
+   The ServicePointManager does not support proxies with the https scheme.
+Username for 'https://github.com': 837337164@qq.com
+Total 0 (delta 0), reused 0 (delta 0)
+To https://github.com/taizilinger123/xjds.git
+   38a396a..38371d7  master -> master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  --merged
+  ask
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch
+  ask
+* master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  push  origin  --delete  ask        #删除远程分支
+fatal: NotSupportedException encountered.
+   The ServicePointManager does not support proxies with the https scheme.
+Username for 'https://github.com': 837337164@qq.com
+To https://github.com/taizilinger123/xjds.git
+ - [deleted]         ask
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -a
+  ask
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ ls
+hdxj.houdunren.com*  hello.asp  index.php  LICENSE  README.md
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ pwd
+/c/Users/shenglex/git/hd
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -d  ask                  #删除本地分支
+Deleted branch ask (was 38371d7).
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$ git  branch  -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/master
+
+shenglex@shenglex-MOBL MINGW64 ~/git/hd (master)
+$
+$ git push  -u  origin  master  -f   #强制上推成功
+$ git  pull
+$ git   branch   --set-upstream-to=origin/master  master
+$ pwd
+/c/Users/sige
+
+sige@sige-PC MINGW64 ~
+$ cat  .gitconfig
+[http]
+        sslVerify = false
+[user]
+        email = 837337164@qq.com
+        name = taizlinger123
+[filter "lfs"]
+        clean = git-lfs clean -- %f
+        smudge = git-lfs smudge -- %f
+        process = git-lfs filter-process
+        required = true
+[credential]
+helper = store --file .git-credentials
+#重新再打开git bash第一次要输入用户名和密码以后再也不用输入了
+Myeclipse10.7无法上传项目到github到项目的位置右键找到就用git bash桌面上传
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
