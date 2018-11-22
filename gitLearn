@@ -2756,6 +2756,49 @@ $ cat  .gitconfig
 helper = store --file .git-credentials
 #重新再打开git bash第一次要输入用户名和密码以后再也不用输入了
 Myeclipse10.7无法上传项目到github到项目的位置右键找到就用git bash桌面上传
+################################################################################
+ubantu16.04  git  push 无密码验证上传设置
+git config --global https.proxy http://child-prc.intel.com:913
+git config --global https.proxy https://child-prc.intel.com:913
+git config --global user.name "sige"
+git config --global user.email  837337164@qq.com 
+git config --list 
+git config user.name 
+sige@sige1:~$ touch  .git-credentials
+sige@sige1:~$ vim  .git-credentials 
+sige@sige1:~$ cat  .git-credentials 
+https://837337164@qq.com:自己的git密码@github.com
+sige@sige1:~$ git  config  --global  credential.helper  store
+sige@sige1:~$ cat   ~/.gitconfig 
+[user]
+	name = sige
+	email = 837337164@qq.com
+[push]
+	default = simple
+[https]
+	proxy = http://child-prc.intel.com:913
+[credential]
+	helper = store
+sige@sige1:~$ git  clone  https://github.com/taizilinger123/pythonjichu.git
+Cloning into 'pythonjichu'...
+Username for 'https://github.com': 837337164@qq.com    #输入一次用户名和密码以后就不用输入了
+Password for 'https://837337164@qq.com@github.com': 
+sige@sige1:~/pythonjichu/05-系统编程-2$ vim  thread1.py 
+sige@sige1:~/pythonjichu/05-系统编程-2$ git  add  .
+sige@sige1:~/pythonjichu/05-系统编程-2$ git  status 
+sige@sige1:~/pythonjichu/05-系统编程-2$ git  commit  -m  "2018-11-22"
+sige@sige1:~/pythonjichu/05-系统编程-2$ git push 
+Counting objects: 4, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 341 bytes | 0 bytes/s, done.
+Total 4 (delta 3), reused 0 (delta 0)
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To https://github.com/taizilinger123/pythonjichu.git
+   b4608ea..d09c1c1  master -> master
+
+
+
 
 
 
