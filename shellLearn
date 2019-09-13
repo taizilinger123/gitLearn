@@ -157,3 +157,5 @@ git clone https://github.com/Microsoft/caffe.git caffe-fast-rcnn
 cd caffe-fast-rcnn
 patch -p1 <${TARGET_WORK_DIR}/caffe.patch
 git show
+
+[root@localhost tmp]# grep -niv  '^root' passwd
