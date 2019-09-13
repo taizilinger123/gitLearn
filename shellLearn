@@ -158,4 +158,127 @@ cd caffe-fast-rcnn
 patch -p1 <${TARGET_WORK_DIR}/caffe.patch
 git show
 
-[root@localhost tmp]# grep -niv  '^root' passwd
+[root@localhost tmp]# grep -niv  '^root' passwd   #-v取反
+[root@localhost tmp]# grep  -nB 3 '^ftp' passwd 
+9-mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+10-operator:x:11:0:operator:/ROOT:/sbin/nologin
+11-games:x:12:100:games:/usr/games:/sbin/nologin
+12:ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+[root@localhost tmp]# grep  -nA 3 '^ftp' passwd 
+12:ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+13-nobody:x:99:99:Nobody:/:/sbin/nologin
+14-systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin
+15-dbus:x:81:81:System message bus:/:/sbin/nologin
+[root@localhost tmp]# grep  -nC 3 '^ftp' passwd 
+9-mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+10-operator:x:11:0:operator:/ROOT:/sbin/nologin
+11-games:x:12:100:games:/usr/games:/sbin/nologin
+12:ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+13-nobody:x:99:99:Nobody:/:/sbin/nologin
+14-systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin
+15-dbus:x:81:81:System message bus:/:/sbin/nologin
+[root@localhost tmp]# grep  -w 'hello' passwd   #按单词搜索
+hello  world
+[root@localhost tmp]# grep  'root' passwd 
+root:x:0:0:ROOT:/root:/bin/bash
+[root@localhost tmp]# grep  -o  'root' passwd   #打印匹配关键字
+root
+root
+[root@localhost tmp]# cut  -d: -f1,7  passwd | head  #截取第1列和第7列，不是第一列到第7列
+root:/bin/bash
+bin:/sbin/nologin
+daemon:/sbin/nologin
+adm:/sbin/nologin
+lp:/sbin/nologin
+sync:/bin/sync
+shutdown:/sbin/shutdown
+halt:/sbin/halt
+mail:/sbin/nologin
+operator:/sbin/nologin
+[root@localhost tmp]# cut -c1-5 passwd  #截取列前5个字符
+root:
+bin:x
+daemo
+adm:x
+lp:x:
+[root@localhost tmp]# cut -c10-  passwd  #截取列从第10个字符开始到最后
+0:ROOT:/root:/bin/bash
+:bin:/bin:/sbin/nologin
+2:2:daemon:/sbin:/sbin/nologin
+:adm:/var/adm:/sbin/nologin
+[root@sige1 ~]# runlevel | cut -c3
+5
+[root@sige1 ~]# runlevel | cut -d ' ' -f2
+5
+[root@sige1 ~]# grep -v '^#' /etc/inittab | cut -d: -f2
+5
+[root@sige1 ~]# grep  '^id' /etc/inittab | cut -d: -f2
+5
+[root@sige1 ~]# grep "initdefault:$" /etc/inittab|cut -c4
+5
+[root@sige1 tmp]# sort -nr -t: -k3 1.txt    #-n以数字排序，r降序，-t分隔符  -k3第3列
+uucp:x:10:14:uucp:/var/spool/uucp:/sbin/nologin
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+halt:x:7:0:halt:/sbin:/sbin/halt
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+sync:x:5:0:sync:/sbin:/bin/sync
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+bin:x:1:1:bin:/bin:/sbin/nologin
+root:x:0:0:root:/root:/bin/bash
+
+[root@sige1 tmp]# sort -nr -t: -k3 1.txt -o 2.txt   #把文件输出到2.txt文件里-o就是output
+[root@sige1 tmp]# cat 2.txt
+[root@sige1 tmp]# cat 3.txt
+aaa
+111
+aaa
+444
+555
+555
+555
+111
+aaa
+aaa
+[root@sige1 tmp]# sort -u 3.txt   #-u去重复排序
+111
+444
+555
+aaa
+[root@sige1 tmp]# sort -uR 3.txt  #R随机排序
+[root@sige1 tmp]# uniq 3.txt      #去除连续的重复的行,不连续不去除
+aaa
+111
+aaa
+444
+555
+111
+aaa
+[root@sige1 tmp]# sort -u 3.txt  #去除所有重复的行,不管连不连续
+111
+444
+555
+aaa
+[root@sige1 tmp]# uniq -c 3.txt  #统计重复行的个数
+      1 aaa
+      1 111
+      1 aaa
+      1 444
+      3 555
+      1 111
+      2 aaa
+[root@sige1 tmp]# uniq -d 3.txt  #只显示重复的行
+555
+aaa
+[root@sige1 tmp]# uniq -cd 3.txt
+      3 555
+      2 aaa
+
+
+
+
+
+
+
+
