@@ -332,6 +332,25 @@ alias grep='grep --color=auto'
 6a6,7
 > 333
 > world
+[root@sige1 tmp]# diff -c  file1 file2
+*** file1	2019-09-14 23:51:04.498485266 +0800
+--- file2	2019-09-14 23:51:37.160485346 +0800
+***************
+*** 1,6 ****
+! aaaa
+  111
+- hello world
+  222
+- 333
+  bbb
+--- 1,7 ----
+! aaa
+! hello
+  111
+  222
+  bbb
++ 333
++ world
 
 
 
