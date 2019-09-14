@@ -304,6 +304,21 @@ tcp_wrappers=YES
 [root@sige1 vsftpd]# tail  -1  /etc/bashrc
 alias grep='grep --color=auto'
 [root@sige1 vsftpd]# source  /etc/bashrc
+[root@sige1 tmp]# cat  file1
+aaaa
+111
+hello world
+222
+333
+bbb
+[root@sige1 tmp]# cat  file2
+aaa
+hello
+111
+222
+bbb
+333
+world
 [root@sige1 tmp]# cat -n  file1
      1	aaaa
      2	111
@@ -351,6 +366,23 @@ alias grep='grep --color=auto'
   bbb
 + 333
 + world
+[root@sige1 tmp]# >file1   #清空file1文件里的内容
+[root@sige1 tmp]# diff  -u  file1 file2
+--- file1	2019-09-15 00:04:47.016485030 +0800
++++ file2	2019-09-14 23:51:37.160485346 +0800
+@@ -1,7 +1,7 @@
+-aaaa
++aaa
++hello
+ 111
+-hello world
+ 222
+-333
+ bbb
+-
++333
++world
+
 
 
 
