@@ -382,6 +382,62 @@ world
 -
 +333
 +world
+[root@sige1 tmp]# ll  -R  dir*
+dir1:
+总用量 0
+-rw-r--r-- 1 root root 0 9月  15 21:31 file1
+-rw-r--r-- 1 root root 0 9月  15 21:31 file2
+-rw-r--r-- 1 root root 0 9月  15 21:31 file3
+-rw-r--r-- 1 root root 0 9月  15 21:31 file4
+-rw-r--r-- 1 root root 0 9月  15 21:31 file5
+
+dir2:
+总用量 0
+-rw-r--r-- 1 root root 0 9月  15 21:32 file1
+-rw-r--r-- 1 root root 0 9月  15 21:32 file2
+-rw-r--r-- 1 root root 0 9月  15 21:32 file3
+-rw-r--r-- 1 root root 0 9月  15 21:32 test1
+-rw-r--r-- 1 root root 0 9月  15 21:32 test2
+[root@sige1 tmp]# diff  -q  dir1 dir2
+Only in dir1: file4
+Only in dir1: file5
+Only in dir2: test1
+Only in dir2: test2
+[root@sige1 tmp]# diff  -u  file1 file2 > file.patch
+[root@sige1 tmp]# cat  file.patch 
+--- file1	2019-09-15 00:04:47.016485030 +0800
++++ file2	2019-09-14 23:51:37.160485346 +0800
+@@ -1,7 +1,7 @@
+-aaaa
++aaa
++hello
+ 111
+-hello world
+ 222
+-333
+ bbb
+-
++333
++world
+[root@sige1 tmp]# patch file1 file.patch 
+patching file file1
+[root@sige1 tmp]# diff  file1 file2
+[root@sige1 tmp]# cat  file1 
+aaa
+hello
+111
+222
+bbb
+333
+world
+[root@sige1 tmp]# cat  file2
+aaa
+hello
+111
+222
+bbb
+333
+world
 
 
 
