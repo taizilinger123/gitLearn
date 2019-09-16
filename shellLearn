@@ -438,7 +438,121 @@ hello
 bbb
 333
 world
+[root@sige1 tmp]# >file1
+[root@sige1 tmp]# >file2
+[root@sige1 tmp]# vim  file1
+[root@sige1 tmp]# vim  file2
+[root@sige1 tmp]# cat -n file1
+     1	hello world
+     2	8888
+[root@sige1 tmp]# cat -n file2
+     1	heima itcast
+     2	999
+     3	oooo
+[root@sige1 tmp]# paste file1 file2 
+hello world	heima itcast
+8888	999
+	oooo
+[root@sige1 tmp]# cat -n file2
+     1	heima itcast
+     2	999
+     3	oooo
+[root@sige1 tmp]# paste -d: file1 file2 
+hello world:heima itcast
+8888:999
+:oooo
+[root@sige1 tmp]# paste  file1 file2
+hello world	heima itcast
+8888	999
+	oooo
+[root@sige1 tmp]# paste -s  file1 file2
+hello world	8888
+heima itcast	999	oooo
+[root@sige1 tmp]# cat  file1  file2
+hello world
+8888
+heima itcast
+999
+oooo
+[root@sige1 tmp]# paste  file1 file2
+hello world	heima itcast
+8888	999
+	oooo
 
+vim  passwd 
+:set  list 
+[root@sige1 tmp]# tr 'a-z' 'A-Z' < 1.txt
+ROOT:X:0:0:ROOT:/ROOT:/BIN/BASH
+BIN:X:1:1:BIN:/BIN:/SBIN/NOLOGIN
+DAEMON:X:2:2:DAEMON:/SBIN:/SBIN/NOLOGIN
+ADM:X:3:4:ADM:/VAR/ADM:/SBIN/NOLOGIN
+LP:X:4:7:LP:/VAR/SPOOL/LPD:/SBIN/NOLOGIN
+SYNC:X:5:0:SYNC:/SBIN:/BIN/SYNC
+SHUTDOWN:X:6:0:SHUTDOWN:/SBIN:/SBIN/SHUTDOWN
+HALT:X:7:0:HALT:/SBIN:/SBIN/HALT
+MAIL:X:8:12:MAIL:/VAR/SPOOL/MAIL:/SBIN/NOLOGIN
+UUCP:X:10:14:UUCP:/VAR/SPOOL/UUCP:/SBIN/NOLOGIN
+[root@sige1 tmp]# cat  1.txt
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+uucp:x:10:14:uucp:/var/spool/uucp:/sbin/nologin
+[root@sige1 tmp]# tr  '0-9' '@' < 1.txt
+[root@sige1 tmp]# tr  -d  'a-z' < 1.txt
+::0:0::/://
+::1:1::/://
+::2:2::/://
+::3:4:://://
+::4:7::///://
+::5:0::/://
+::6:0::/://
+::7:0::/://
+::8:12::///://
+::10:14::///://
+[root@sige1 tmp]# tr -d ':/ 0-9 ,' < 1.txt
+rootxrootrootbinbash
+binxbinbinsbinnologin
+daemonxdaemonsbinsbinnologin
+admxadmvaradmsbinnologin
+lpxlpvarspoollpdsbinnologin
+syncxsyncsbinbinsync
+shutdownxshutdownsbinsbinshutdown
+haltxhaltsbinsbinhalt
+mailxmailvarspoolmailsbinnologin
+uucpxuucpvarspooluucpsbinnologin
+[root@sige1 tmp]# tr -d '[:/ 0-9 ,]' < 1.txt
+[root@sige1 tmp]# cat  1.txt
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+dae,mon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+uucp:x:10:14:uucp:/var/spool/uucp:/sbin/nologin
+aaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbcccccccccccccc
+abcabcabc
+[root@sige1 tmp]# tr -s 'a-z' < 1.txt
+rot:x:0:0:rot:/rot:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+dae,mon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spol/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spol/mail:/sbin/nologin
+ucp:x:10:14:ucp:/var/spol/ucp:/sbin/nologin
+abc
+abcabcabc
 
 
 
