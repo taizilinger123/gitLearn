@@ -553,6 +553,35 @@ mail:x:8:12:mail:/var/spol/mail:/sbin/nologin
 ucp:x:10:14:ucp:/var/spol/ucp:/sbin/nologin
 abc
 abcabcabc
+[root@sige1 tmp]# ifconfig eth0 | grep 'Bcast' | cut -d: -f2|tr -d 'a-zA-Z '
+192.168.239.164
+[root@sige1 tmp]# ifconfig eth0 | grep 'Bcast' | cut -d: -f2|cut -d' ' -f1
+192.168.239.164
+[root@sige1 tmp]# ifconfig eth0 | grep 'Bcast'|tr -d 'a-zA-Z:'
+           192.168.239.164  192.168.239.255  255.255.255.0
+[root@sige1 tmp]# ifconfig eth0 | grep 'Bcast'|tr -d 'a-zA-Z:'|tr ' ' '\n'|grep -v '^$'
+192.168.239.164
+192.168.239.255
+255.255.255.0
+[root@sige1 tmp]# ifconfig eth0 | grep 'HW'| tr -s ' '
+eth0 Link encap:Ethernet HWaddr 00:0C:29:CA:40:D9 
+[root@sige1 tmp]# ifconfig eth0 | grep 'HW'| tr -s ' '|cut -d' ' -f5
+00:0C:29:CA:40:D9
+[root@sige1 tmp]# grep 'bash$' passwd
+root:x:0:0:root:/root:/bin/bash
+gongli:x:500:500::/home/gongli:/bin/bash
+[root@sige1 tmp]# grep 'bash$' passwd | grep -v 'root'
+gongli:x:500:500::/home/gongli:/bin/bash
+[root@sige1 tmp]# grep 'bash$' passwd | grep -v 'root'|cut -d: -f1,2,7
+gongli:x:/bin/bash
+[root@sige1 tmp]# grep 'bash$' passwd | grep -v 'root'|cut -d: -f1,2,7|tr ':' '\t'
+gongli	x	/bin/bash
+[root@sige1 tmp]# grep 'bash$' passwd | grep -v 'root'|cut -d: -f1,2,7|tr ':' '\t'|tee abc.txt
+gongli	x	/bin/bash
+[root@sige1 tmp]# cat  abc.txt 
+gongli	x	/bin/bash
+
+
 
 
 
