@@ -580,6 +580,18 @@ gongli	x	/bin/bash
 gongli	x	/bin/bash
 [root@sige1 tmp]# cat  abc.txt 
 gongli	x	/bin/bash
+sige@sige1:~/shell$ echo "1 2 3 4 5"|awk -v istor=100 '{if(istor==100){print $0}}'
+1 2 3 4 5
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $0}'
+a b c d
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $1}'
+a
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print NF}'
+4
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $NF}'
+d
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $(NF-1)}'
+c
 
 
 
