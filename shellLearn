@@ -592,8 +592,14 @@ sige@sige1:~/shell$ echo 'a b c d'|awk '{print $NF}'
 d
 sige@sige1:~/shell$ echo 'a b c d'|awk '{print $(NF-1)}'
 c
-
-
+sige@sige1:~/shell$ array=(bill   chen  bai   hu);
+sige@sige1:~/shell$ echo ${#array[@]}
+4
+sige@sige1:~/shell$ echo ${array[*]}
+bill chen bai hu
+sige@sige1:~/shell$ str="hello"
+sige@sige1:~/shell$ echo  ${#str}
+5
 
 
 
