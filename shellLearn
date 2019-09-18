@@ -600,7 +600,20 @@ bill chen bai hu
 sige@sige1:~/shell$ str="hello"
 sige@sige1:~/shell$ echo  ${#str}
 5
-
+sige@sige1:~/shell$ cat  num.txt
+11
+22
+33
+44
+55
+66
+sige@sige1:~/shell$ sed  -e 's/11/22/;s/33/99/g' num.txt
+22
+22
+99
+44
+55
+66
 
 
 
