@@ -580,6 +580,7 @@ gongli	x	/bin/bash
 gongli	x	/bin/bash
 [root@sige1 tmp]# cat  abc.txt 
 gongli	x	/bin/bash
+<<<<<<< HEAD
 $ date +%F
 2019-09-26
 $ echo "$(date +%F)"
@@ -603,6 +604,42 @@ echo sum=$sum
 
 
 
+=======
+sige@sige1:~/shell$ echo "1 2 3 4 5"|awk -v istor=100 '{if(istor==100){print $0}}'
+1 2 3 4 5
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $0}'
+a b c d
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $1}'
+a
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print NF}'
+4
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $NF}'
+d
+sige@sige1:~/shell$ echo 'a b c d'|awk '{print $(NF-1)}'
+c
+sige@sige1:~/shell$ array=(bill   chen  bai   hu);
+sige@sige1:~/shell$ echo ${#array[@]}
+4
+sige@sige1:~/shell$ echo ${array[*]}
+bill chen bai hu
+sige@sige1:~/shell$ str="hello"
+sige@sige1:~/shell$ echo  ${#str}
+5
+sige@sige1:~/shell$ cat  num.txt
+11
+22
+33
+44
+55
+66
+sige@sige1:~/shell$ sed  -e 's/11/22/;s/33/99/g' num.txt
+22
+22
+99
+44
+55
+66
+>>>>>>> e7235efe3cc21f6194a23eee5212fa17c85b8531
 
 
 
