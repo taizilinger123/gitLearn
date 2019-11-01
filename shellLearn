@@ -655,6 +655,14 @@ $(date +%F)
 2019-11-01
 [root@docker-git-harbor ~]# echo $(echo "`date +%F`")
 2019-11-01
+bash -x  first_shell.sh 
+bash -n first_shell.sh  //检测语法有没有问题
+source  first_shell.sh 
+[root@docker-git-harbor ~]# date +'%F %T'
+2019-11-01 09:49:12
+[root@docker-git-harbor ~]# echo "我$(date +'%F %T')"
+我2019-11-01 09:49:38
+
 
 
 
