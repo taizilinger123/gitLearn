@@ -639,8 +639,22 @@ sige@sige1:~/shell$ sed  -e 's/11/22/;s/33/99/g' num.txt
 44
 55
 66
->>>>>>> e7235efe3cc21f6194a23eee5212fa17c85b8531
-
+[root@docker-git-harbor ~]# date +%F
+2019-11-01
+[root@docker-git-harbor ~]# echo  "hello world"
+hello world
+[root@docker-git-harbor ~]# echo  'hello world'
+hello world
+[root@docker-git-harbor ~]# echo "$(date +%F)"
+2019-11-01
+[root@docker-git-harbor ~]# echo '$(date +%F)'
+$(date +%F)
+[root@docker-git-harbor ~]# echo "$(date +%F)"
+2019-11-01
+[root@docker-git-harbor ~]# echo "`date +%F`"
+2019-11-01
+[root@docker-git-harbor ~]# echo $(echo "`date +%F`")
+2019-11-01
 
 
 
