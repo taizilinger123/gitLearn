@@ -970,7 +970,7 @@ dir1  file1  file2  variable.sh
 0
 [root@docker-git-harbor shell02]# [[ -f ./test1 ]];echo $?
 1
-
+ps -aux | grep sleep| awk '{print $2}' | xargs kill
 
 
 
