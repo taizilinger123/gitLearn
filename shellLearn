@@ -936,6 +936,36 @@ quit
 [root@docker-git-harbor shell02]# let y=++j
 [root@docker-git-harbor shell02]# echo $y
 2
+[root@docker-git-harbor shell02]# man test
+[root@docker-git-harbor shell02]# ll
+total 4
+-rwxr-xr-x 1 root root 235 Nov  2 05:38 variable.sh
+[root@docker-git-harbor shell02]# touch file1
+[root@docker-git-harbor shell02]# echo hello > file2
+[root@docker-git-harbor shell02]# ll
+total 8
+-rw-r--r-- 1 root root   0 Nov  2 06:34 file1
+-rw-r--r-- 1 root root   6 Nov  2 06:34 file2
+-rwxr-xr-x 1 root root 235 Nov  2 05:38 variable.sh
+[root@docker-git-harbor shell02]# mkdir dir1
+[root@docker-git-harbor shell02]# test -e ./file1
+[root@docker-git-harbor shell02]# echo $?
+0
+[root@docker-git-harbor shell02]# test -e ./test1
+[root@docker-git-harbor shell02]# echo $?
+1
+[root@docker-git-harbor shell02]# [ -d ./dir1 ];echo $?
+0
+[root@docker-git-harbor shell02]# ls
+dir1  file1  file2  variable.sh
+[root@docker-git-harbor shell02]# [ -d ./file1 ];echo $?
+1
+[root@docker-git-harbor shell02]# ln -s file1 test1
+[root@docker-git-harbor shell02]# [ -L ./test1 ];echo $?
+0
+[root@docker-git-harbor shell02]# rm -rf file1
+[root@docker-git-harbor shell02]# [ -L ./test1 ];echo $?
+0
 
 
 
