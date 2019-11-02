@@ -662,6 +662,121 @@ source  first_shell.sh
 2019-11-01 09:49:12
 [root@docker-git-harbor ~]# echo "我$(date +'%F %T')"
 我2019-11-01 09:49:38
+[root@docker-git-harbor ~]# A=hello
+[root@docker-git-harbor ~]# echo $A
+hello
+[root@docker-git-harbor ~]# echo ${A}
+hello
+[root@docker-git-harbor ~]# A=world
+[root@docker-git-harbor ~]# echo $A
+world
+[root@docker-git-harbor ~]# unset A
+[root@docker-git-harbor ~]# echo $A
+
+[root@docker-git-harbor ~]# A="hello world"
+[root@docker-git-harbor ~]# echo $A
+hello world
+[root@docker-git-harbor ~]# A='hello world'
+[root@docker-git-harbor ~]# echo $A
+hello world
+[root@docker-git-harbor ~]# _A=hello
+[root@docker-git-harbor ~]# echo $_A
+hello
+[root@docker-git-harbor ~]# echo ${_A}
+hello
+[root@docker-git-harbor ~]# A =123
+bash: A: command not found...
+[root@docker-git-harbor ~]# A= 123
+bash: 123: command not found...
+[root@docker-git-harbor ~]# A = 123
+bash: A: command not found...
+[root@docker-git-harbor ~]# A=123456
+[root@docker-git-harbor ~]# echo $A
+123456
+[root@docker-git-harbor ~]# echo ${A}
+123456
+[root@docker-git-harbor ~]# echo ${A:2:3}
+345
+[root@docker-git-harbor ~]# hostname
+docker-git-harbor
+[root@docker-git-harbor ~]# A=`hostname`
+[root@docker-git-harbor ~]# echo $A
+docker-git-harbor
+[root@docker-git-harbor ~]# cat /etc/redhat-release 
+CentOS Linux release 7.4.1708 (Core) 
+[root@docker-git-harbor ~]# uname -r
+3.10.0-693.el7.x86_64
+[root@docker-git-harbor ~]# B=$(uname -r)
+[root@docker-git-harbor ~]# echo $B
+3.10.0-693.el7.x86_64
+[root@docker-git-harbor ~]# read name
+harry
+[root@docker-git-harbor ~]# echo $name
+harry
+[root@docker-git-harbor ~]# read -p "Input your name:" name
+Input your name:jack
+[root@docker-git-harbor ~]# echo $name
+jack
+[root@docker-git-harbor ~]# read -s -p "Input your password:" pass
+Input your password:[root@docker-git-harbor ~]# 
+[root@docker-git-harbor ~]# echo $pass
+123456
+[root@docker-git-harbor ~]# read -n 5 -p "Input your name:" name
+Input your name:harry[root@docker-git-harbor ~]# 
+[root@docker-git-harbor ~]# read -n 5 -p "Input your name:" name
+Input your name:jack
+[root@docker-git-harbor ~]# read -t 3 -p "name:" name
+name:1111[root@docker-git-harbor ~]# 
+[root@docker-git-harbor ~]# echo $name
+
+[root@docker-git-harbor ~]# read -t 3 -p "name:" name
+name:344
+[root@docker-git-harbor ~]# echo $name
+344
+[root@docker-git-harbor ~]# vim ip.txt
+[root@docker-git-harbor ~]# read -p "请输入IP地址:" IP MASK <ip.txt
+[root@docker-git-harbor ~]# echo $IP
+10.1.1.1
+[root@docker-git-harbor ~]# echo $MASK
+255.255.255.0
+[root@docker-git-harbor ~]# cat ip.txt
+10.1.1.1  255.255.255.0
+[root@docker-git-harbor ~]# 
+[root@docker-git-harbor ~]# A=123
+[root@docker-git-harbor ~]# echo $A
+123
+[root@docker-git-harbor ~]# A=hello
+[root@docker-git-harbor ~]# echo $A
+hello
+[root@docker-git-harbor ~]# declare -i A=123  //定义整数变量
+[root@docker-git-harbor ~]# echo $A
+123
+[root@docker-git-harbor ~]# A=hello
+[root@docker-git-harbor ~]# echo $A
+0
+[root@docker-git-harbor ~]# A=333
+[root@docker-git-harbor ~]# echo $A
+333
+[root@docker-git-harbor ~]# declare -r B=hello  //定义只读变量
+[root@docker-git-harbor ~]# echo $B
+hello
+[root@docker-git-harbor ~]# B=8888
+-bash: B: readonly variable
+[root@docker-git-harbor ~]# unset B
+-bash: unset: B: cannot unset: readonly variable
+[root@docker-git-harbor ~]# exit  //退出去B就可以用了
+[root@docker-git-harbor ~]# AAAA=heima
+[root@docker-git-harbor ~]# env|grep AAAA
+[root@docker-git-harbor ~]# export AAAA
+[root@docker-git-harbor ~]# env|grep AAAA
+AAAA=heima
+[root@docker-git-harbor ~]# declare -x BBBB=itcast  //定义环境变量
+[root@docker-git-harbor ~]# env|grep BBBB
+BBBB=itcast
+
+
+
+
 
 
 
