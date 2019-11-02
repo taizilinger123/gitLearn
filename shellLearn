@@ -966,6 +966,10 @@ dir1  file1  file2  variable.sh
 [root@docker-git-harbor shell02]# rm -rf file1
 [root@docker-git-harbor shell02]# [ -L ./test1 ];echo $?
 0
+[root@docker-git-harbor shell02]# [[ -f ./file2 ]];echo $?
+0
+[root@docker-git-harbor shell02]# [[ -f ./test1 ]];echo $?
+1
 
 
 
