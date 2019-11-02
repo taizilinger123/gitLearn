@@ -898,6 +898,44 @@ expr: syntax error
 [root@docker-git-harbor shell02]# let n=n**3
 [root@docker-git-harbor shell02]# echo $n
 512
+[root@docker-git-harbor shell02]# echo $[1+1.5]
+-bash: 1+1.5: syntax error: invalid arithmetic operator (error token is ".5")
+[root@docker-git-harbor shell02]# echo 1+1.5|bc
+2.5
+[root@docker-git-harbor shell02]# bc
+bc 1.06.95
+Copyright 1991-1994, 1997, 1998, 2000, 2004, 2006 Free Software Foundation, Inc.
+This is free software with ABSOLUTELY NO WARRANTY.
+For details type `warranty'. 
+1+4.5
+5.5
+quit
+[root@docker-git-harbor shell02]# bc
+bc 1.06.95
+Copyright 1991-1994, 1997, 1998, 2000, 2004, 2006 Free Software Foundation, Inc.
+This is free software with ABSOLUTELY NO WARRANTY.
+For details type `warranty'. 
+2^7
+128
+2**7
+(standard_in) 2: syntax error
+quit
+[root@docker-git-harbor shell02]# i=1;let i++;echo $i
+2
+[root@docker-git-harbor shell02]# j=1;let ++j;echo $j
+2
+[root@docker-git-harbor shell02]# unset i j
+[root@docker-git-harbor shell02]# echo $i
+
+[root@docker-git-harbor shell02]# echo $j
+
+[root@docker-git-harbor shell02]# i=1;j=1
+[root@docker-git-harbor shell02]# let x=i++
+[root@docker-git-harbor shell02]# echo $x
+1
+[root@docker-git-harbor shell02]# let y=++j
+[root@docker-git-harbor shell02]# echo $y
+2
 
 
 
