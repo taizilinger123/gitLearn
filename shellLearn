@@ -971,13 +971,98 @@ dir1  file1  file2  variable.sh
 [root@docker-git-harbor shell02]# [[ -f ./test1 ]];echo $?
 1
 ps -aux | grep sleep| awk '{print $2}' | xargs kill
+if [ condition ];then 
+     command
+     command
+fi
+
+if  test 条件;then 
+     命令
+fi 
+
+if [[ 条件 ]];then
+    命令
+fi 
+
+[ 条件 ] && command
+
+if [ condition ];then
+      command1
+else
+      command2
+fi 
+
+[ 条件 ] && command1 || command2
+
+sige@sige1:~/shell$ cat  if1.sh
+#!/bin/env bash 
+# ......
+
+if [ "$1" = "hello" ];then
+      echo  world
+   else 
+      echo  hello
+fi
+
+sige@sige1:~/shell$ cat  if2.sh
+#!/bin/env  bash 
+
+read  -p '请输入一个字符串:' str 
+if [ "$str" = 'hello' ];then
+     echo  'world'
+   else 
+     echo '请输入hello!'
+fi
+
+#!/bin/env bash 
+
+A=hello
+B=world
+C=hello
+
+if [ "$1" = "$A" ];then 
+      echo  "$B"
+else
+      echo  "$C"
+fi 
+
+read -p '请输入一个字符串:' str;
+[ "$str" = 'hello' ] && echo 'world' || echo '请输入hello!'
+
+if [ condition1 ];then 
+      command1  
+elif [ condition2 ];then 
+      command2
+else
+      command3
+fi 
+
+#!/bin/env  bash 
+#.....
+
+if [ 1 -eq 2  ];then 
+     echo  1
+elif [ 0 -ne 2  ];then 
+     echo  2
+elif [ 0 -ne 2 ];then 
+     echo 999
+elif [ 0 -ne 2 ];then 
+     echo 888
+else
+     echo 3
+fi 
 
 
+#!/bin/env  bash 
+#该脚本用于判断当前主机是否和远程指定主机互通
 
-
-
-
-
+read  -p "请输入你要ping的主机的IP:" ip
+ping -c1 $ip &>/dev/null
+if [ $? -eq 0 ];then
+  echo "当前主机和远程主机$ip是互通的"
+else 
+  echo "当前主机和远程主机$ip不通的"
+fi
 
 
 
