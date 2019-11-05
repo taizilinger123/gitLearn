@@ -1064,6 +1064,9 @@ else
   echo "当前主机和远程主机$ip不通的"
 fi
 
+pgrep httpd
+ps aux|grep httpd|grep -v  'grep'
+
 
 
 
