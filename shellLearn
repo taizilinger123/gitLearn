@@ -1064,6 +1064,7 @@ else
   echo "当前主机和远程主机$ip不通的"
 fi
 
+<<<<<<< HEAD
 sige@sige1:~$ for i in {1..100..2};do echo $i;done
 sige@sige1:~$ for i in $(seq 10);do echo $i;done
 sige@sige1:~$ for i in {10..1};do echo $i;done
@@ -1098,6 +1099,31 @@ sige@sige1:~$ sh   for3.sh  a  b c
 a b c
 a b c
 a b c
+=======
+pgrep httpd
+ps aux|grep httpd|grep -v  'grep'
+
+#!/bin/env bash 
+#判断一个程序(httpd)的进程是否存在
+pgrep httpd &>/dev/null
+if [ $? -ne 0 ];then 
+     echo "当前httpd进程不存在"
+else 
+     echo "当前httpd进程存在"
+fi
+或者
+test $? -eq 0 &&  echo "当前httpd进程存在" || echo "当前httpd进程不存在"
+
+#!/bin/env bash 
+# 判断门户网站是否能够正常提供服务
+#定义变量
+web_server=www.baidu.com 
+#访问网站
+wget -P /tmp $web_server &>/dev/null
+[ $? -eq 0 ] && echo "当前网站服务是ok" && rm -f /tmp/index.* || echo "当前网站服务不ok,请立刻处理"
+
+
+>>>>>>> cea3b4c6438f65eceba1c23191388aaeab411d98
 
 sige@sige1:~$ for ((i=1;i<=5;i++));do echo $i;done
 1
