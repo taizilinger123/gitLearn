@@ -7,7 +7,6 @@ python mkldnn_sha_monitor.py
 #!/bin/bash -xe
 cd /home/lab_idljenk/conv_perf_bench
 ./weekly.sh
-
 case "$DATA_TYPE" in
         TxtDataLayer)
             DATA_TYPE="image"
@@ -1141,3 +1140,4 @@ sige@sige1:~$ for ((i=2;i<=10;i+=2));do echo $i;done
 6
 8
 10
+ grep  -Ev  "^#"   ubuntu-server.seed |grep -Ev  "^$|^ +$" 
