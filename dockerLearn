@@ -723,4 +723,671 @@ info|version
 •	version
 root@sige:~# docker  top  cct5
 docker   history  dormancypres/df_test1
+##############################################################
+[root@test ~]# docker  images
+repository          tag                 image id            created             size
+hello-world         latest              bf756fb1ae65        7 months ago        13.3kb
+[root@test ~]# docker  images  -a
+repository          tag                 image id            created             size
+hello-world         latest              bf756fb1ae65        7 months ago        13.3kb
+[root@test ~]# docker  images  -q
+bf756fb1ae65
+[root@test ~]# docker  images  -qa
+bf756fb1ae65
+[root@test ~]# docker  images 
+repository          tag                 image id            created             size
+hello-world         latest              bf756fb1ae65        7 months ago        13.3kb
+[root@test ~]# docker  images  --digests
+repository          tag                 digest                                                                    image id            created             size
+hello-world         latest              sha256:49a1c8800c94df04e9658809b006fd8a686cab8028d33cfba2cc049724254202   bf756fb1ae65        7 months ago        13.3kb
+[root@test ~]# docker  images  --digests --no-trunc
+repository          tag                 digest                                                                    image id                                                                  created             size
+hello-world         latest              sha256:49a1c8800c94df04e9658809b006fd8a686cab8028d33cfba2cc049724254202   sha256:bf756fb1ae65adf866bd8c456593cd24beb6a0a061dedf42b26a993176745f6b   7 months ago        13.3kb
+[root@test ~]# docker search  tomcat
+[root@test ~]# docker search -s  30 tomcat
+flag --stars has been deprecated, use --filter=stars=3 instead
+name                description                                     stars               official            automated
+tomcat              apache tomcat is an open source implementati…   2794                [ok]                
+tomee               apache tomee is an all-apache java ee certif…   80                  [ok]                
+dordoka/tomcat      ubuntu 14.04, oracle jdk 8 and tomcat 8 base…   54                                      [ok]
+bitnami/tomcat      bitnami tomcat docker image                     35                                      [ok]
+[root@test ~]# docker search -s  30 --no-trunc --automated  tomcat
+flag --stars has been deprecated, use --filter=stars=3 instead
+flag --automated has been deprecated, use --filter=is-automated=true instead
+name                description                                                       stars               official            automated
+dordoka/tomcat      ubuntu 14.04, oracle jdk 8 and tomcat 8 based docker container.   54                                      [ok]
+bitnami/tomcat      bitnami tomcat docker image                                       35                                      [ok]
+[root@test ~]# docker  pull  tomcat
+docker  images 
+docker  rmi   hello-world 
+docker  rmi  -f  hello-world nginx
+docker  rmi  -f $(docker images -qa)
+docker pull  nginx
+[root@test ~]# docker  ps  -l     #列出上一次跑的容器
+container id        image               command             created             status                      ports               names
+48605ab17079        831691599b88        "/bin/bash"         13 minutes ago      exited (0) 10 minutes ago                       magical_pasteur
+[root@test ~]# docker  ps  -n  3  #列出上三次跑的容器
+container id        image               command             created             status                      ports               names
+48605ab17079        831691599b88        "/bin/bash"         14 minutes ago      exited (0) 11 minutes ago                       magical_pasteur
+40bd19c9c5eb        831691599b88        "/bin/bash"         3 hours ago         exited (0) 15 minutes ago                       mystifying_vaughan
+6ba8cbc524ac        hello-world         "/hello"            4 hours ago         exited (0) 4 hours ago                          sleepy_yonath
+#docker  ps  -a:列出当前所有正在运行的容器+历史上运行过的
+#docker  ps  -l:显示最近创建的容器
+#docker  ps  -n:显示最近n个创建的容器
+#docker  ps  -q:静默模式，只显示容器编号
+#docker  ps  --no-trunc:不截断输出
+[root@test ~]# docker  run  -it  --name mycentos0115  centos
+[root@b25e29e59db1 /]#ctrl+p+q [root@test ~]#  不退出容器推出
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+b25e29e59db1        centos              "/bin/bash"         2 minutes ago       Up 2 minutes                            mycentos0115
+
+[root@test ~]# docker  ps  -n  2
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES
+b25e29e59db1        centos              "/bin/bash"         4 minutes ago       Up 4 minutes                                    mycentos0115
+48605ab17079        831691599b88        "/bin/bash"         32 minutes ago      Exited (0) 29 minutes ago                       magical_pasteur
+[root@test ~]# docker  start  48605ab17079
+48605ab17079
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+b25e29e59db1        centos              "/bin/bash"         5 minutes ago       Up 5 minutes                            mycentos0115
+48605ab17079        831691599b88        "/bin/bash"         34 minutes ago      Up 3 seconds                            magical_pasteur
+[root@test ~]# docker  restart  b25e29e59db1
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+b25e29e59db1        centos              "/bin/bash"         7 minutes ago       Up 1 second                             mycentos0115
+48605ab17079        831691599b88        "/bin/bash"         36 minutes ago      Up About a minute                       magical_pasteur
+[root@test ~]# docker  stop  b25e29e59db1
+b25e29e59db1
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+48605ab17079        831691599b88        "/bin/bash"         37 minutes ago      Up 3 minutes                            magical_pasteur
+[root@test ~]# docker  kill  48605ab17079   #强制停止容器
+48605ab17079
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@test ~]# docker rm  48605ab17079   #删除容器  rmi的i是image镜像不加i是删除容器
+48605ab17079
+[root@test ~]# docker  ps  -n  2
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES
+b25e29e59db1        centos              "/bin/bash"         12 minutes ago      Exited (0) 3 minutes ago                        mycentos0115
+40bd19c9c5eb        831691599b88        "/bin/bash"         4 hours ago         Exited (0) 42 minutes ago                       mystifying_vaughan
+一次性删除多个容器:docker rm -f $(docker ps -a -q)或者docker ps -a -q|xargs docker rm 
+[root@test ~]# docker run  -d centos /bin/sh -c "while true;do echo hello zzyy;sleep 2;done"
+1aecf3a0803fa676af36e0e6b704802a46566c9794fc8acae2ff9c0ccf3121cf
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+1aecf3a0803f        centos              "/bin/sh -c 'while t…"   11 seconds ago      Up 10 seconds                           eager_chebyshev
+[root@test ~]# docker logs -t -f  --tail  3 1aecf3a0803f
+2020-08-02T11:58:43.254466670Z hello zzyy
+2020-08-02T11:58:45.258272771Z hello zzyy
+2020-08-02T11:58:47.265417005Z hello zzyy
+2020-08-02T11:58:49.274342224Z hello zzyy
+2020-08-02T11:58:51.280333097Z hello zzyy
+2020-08-02T11:58:53.285258147Z hello zzyy
+[root@test ~]# docker ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+1aecf3a0803f        centos              "/bin/sh -c 'while t…"   5 minutes ago       Up 5 minutes                            eager_chebyshev
+[root@test ~]# docker  top  1aecf3a0803f
+UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
+root                31941               31925               0                   19:56               ?                   00:00:00            /bin/sh -c while true;do echo hello zzyy;sleep 2;done
+root                32261               31941               0                   20:02               ?                   00:00:00            /usr/bin/coreutils --coreutils-prog-shebang=sleep /usr/bin/sleep 2
+[root@test ~]# docker inspect 1aecf3a0803f
+[root@test ~]# docker run -it  centos /bin/bash
+[root@test ~]# docker  attach 796e54bd0ba9
+[root@796e54bd0ba9 /]#
+[root@test ~]# docker ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+796e54bd0ba9        centos              "/bin/bash"         2 minutes ago       Up 2 minutes                            trusting_tharp
+[root@test ~]# docker exec -t 796e54bd0ba9 ls -l /tmp
+total 8
+-rwx------. 1 root root 1379 Jun 11 02:35 ks-script-585nin8f
+-rwx------. 1 root root  671 Jun 11 02:35 ks-script-z6zw_bhq
+[root@test ~]# docker exec -it 796e54bd0ba9 ls -l /tmp
+total 8
+-rwx------. 1 root root 1379 Jun 11 02:35 ks-script-585nin8f
+-rwx------. 1 root root  671 Jun 11 02:35 ks-script-z6zw_bhq
+[root@test ~]# docker exec -it 796e54bd0ba9  /bin/bash 
+[root@796e54bd0ba9 /]# ls -l /tmp
+total 8
+-rwx------. 1 root root 1379 Jun 11 02:35 ks-script-585nin8f
+-rwx------. 1 root root  671 Jun 11 02:35 ks-script-z6zw_bhq
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e0e054f29e87        centos              "/bin/sh -c 'while t…"   5 seconds ago       Up 4 seconds                            wizardly_bhaskara
+[root@test ~]# docker run -it  centos /bin/bash
+[root@7acff94911db /]# cd  /tmp
+[root@7acff94911db tmp]# ls
+ks-script-585nin8f  ks-script-z6zw_bhq
+[root@7acff94911db tmp]# exit
+[root@test ~]# docker cp e0e054f29e87:/tmp/ks-script-585nin8f  /root
+[root@test ~]# ls
+anaconda-ks.cfg  ks-script-585nin8f  vmware-tools-distrib
+[root@test ~]# docker images tomcat 
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+tomcat              latest              9a9ad4f631f8        4 days ago          647MB
+[root@test ~]# docker run -it -p 8888:8080  tomcat   
+#http://localhost:8888  访问8888就是访问8080
+[root@test ~]# docker run -it -P tomcat 
+#-P随机分配端口32768到8080,http://localhost:32768
+[root@test ~]# docker  ps  -n 5
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                     NAMES
+2c71bd3c0bb7        tomcat              "catalina.sh run"        28 seconds ago      Up 27 seconds                 0.0.0.0:32768->8080/tcp   wonderful_yonath
+564184a974ac        tomcat              "catalina.sh run"        5 minutes ago       Exited (130) 3 minutes ago                              keen_lamport
+7acff94911db        centos              "/bin/bash"              33 minutes ago      Exited (0) 32 minutes ago                               infallible_northcutt
+e0e054f29e87        centos              "/bin/sh -c 'while t…"   33 minutes ago      Up 33 minutes                                           wizardly_bhaskara
+1358823cd9ab        centos              "/bin/sh -c 'while t…"   35 minutes ago      Exited (137) 34 minutes ago                             confident_taussig
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+f2c7cbcdc7dc        tomcat              "catalina.sh run"        4 minutes ago       Up 4 minutes        0.0.0.0:8888->8080/tcp   stupefied_bhaskara
+e0e054f29e87        centos              "/bin/sh -c 'while t…"   45 minutes ago      Up 45 minutes                                wizardly_bhaskara
+[root@test ~]# docker exec -it  f2c7cb  /bin/bash 
+root@f2c7cbcdc7dc:/usr/local/tomcat#
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+f2c7cbcdc7dc        tomcat              "catalina.sh run"        4 minutes ago       Up 4 minutes        0.0.0.0:8888->8080/tcp   stupefied_bhaskara
+e0e054f29e87        centos              "/bin/sh -c 'while t…"   45 minutes ago      Up 45 minutes                                wizardly_bhaskara
+[root@test ~]# docker commit -a="sige" -m="tomcat without docs" f2c7cbcdc7dc atguigu/mytomcat:1.2
+sha256:f0737009039ef3597a4181b7efa75640172a097629c6c29dc6893aa6c8eababa
+[root@test ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+atguigu/mytomcat    1.2                 f0737009039e        8 seconds ago       647MB
+mongo               latest              aa22d67221a0        2 days ago          493MB
+tomcat              latest              9a9ad4f631f8        4 days ago          647MB
+nginx               latest              8cf1bfb43ff5        11 days ago         132MB
+centos              latest              831691599b88        6 weeks ago         215MB
+hello-world         latest              bf756fb1ae65        7 months ago        13.3kB
+[root@test ~]# docker rm  -f $(docker ps -q)
+f2c7cbcdc7dc
+e0e054f29e87
+[root@test ~]# docker search  tomcat 
+[root@test ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+atguigu/mytomcat    1.2                 f0737009039e        4 minutes ago       647MB
+mongo               latest              aa22d67221a0        2 days ago          493MB
+tomcat              latest              9a9ad4f631f8        4 days ago          647MB
+nginx               latest              8cf1bfb43ff5        11 days ago         132MB
+centos              latest              831691599b88        6 weeks ago         215MB
+hello-world         latest              bf756fb1ae65        7 months ago        13.3kB
+[root@test ~]# docker run  -it -p 7777:8080 atguigu/mytomcat:1.2
+[root@test ~]# docker run  -it -p 7788:8080  tomcat
+[root@test ~]# docker run -d  -p 6666:8080  tomcat    #以后台运行
+d4d1696f4ead4e6ee898d6e3ab110fafcc7da0e6c3ec479916f3fac45c1106d7
+[root@test ~]# docker ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+d4d1696f4ead        tomcat              "catalina.sh run"   11 seconds ago      Up 10 seconds       0.0.0.0:6666->8080/tcp   great_kapitsa
+[root@test ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+atguigu/mytomcat    1.2                 f0737009039e        About an hour ago   647MB
+mongo               latest              aa22d67221a0        2 days ago          493MB
+tomcat              latest              9a9ad4f631f8        4 days ago          647MB
+nginx               latest              8cf1bfb43ff5        11 days ago         132MB
+centos              latest              831691599b88        6 weeks ago         215MB
+hello-world         latest              bf756fb1ae65        7 months ago        13.3kB
+[root@test ~]# docker run -it -v  /myDataVolume:/dataVolumeContainer  centos
+                              虚拟机          容器里     
+同时创建了2个文件
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+2dddba4971c5        centos              "/bin/bash"         2 minutes ago       Up 2 minutes                            loving_dijkstra
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@test ~]# docker  ps -l 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+2dddba4971c5        centos              "/bin/bash"         15 minutes ago      Exited (0) 2 minutes ago                       loving_dijkstra
+[root@test ~]# docker  start 2dddba4971c5
+2dddba4971c5
+[root@test ~]# docker ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+2dddba4971c5        centos              "/bin/bash"         15 minutes ago      Up 3 seconds                            loving_dijkstra
+[root@test ~]# docker attach  2dddba4971c5
+[root@2dddba4971c5 /]# cd /dataVolumeContainer/
+[root@2dddba4971c5 dataVolumeContainer]# ls
+container.txt  host.txt  host02.txt
+[root@2dddba4971c5 dataVolumeContainer]# cat host.txt 
+container update 01
+host update 01
+[root@2dddba4971c5 dataVolumeContainer]#
+[root@test ~]# docker inspect 2dddba4971c5
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/myDataVolume",
+                "Destination": "/dataVolumeContainer",
+                "Mode": "",
+                "RW": true,      #有读写权限
+                "Propagation": "rprivate"
+            }
+        ],
+在主机文件夹里创建的文件在容器里也能看到,退出容器了，也能同步数据
+docker run -it 镜像名
+docker run -it -v  /myDataVolume:/dataVolumeContainer  –privileged=true  镜像名  
+docker run -it -v  /宿主机绝对路径目录:/容器内目录:ro   镜像名
+docker run -it -v  /myDataVolume:/dataVolumeContainer:ro  centos
+#容器里只能看到宿主机新建的文件，容器里不能修改和添加，只能看
+[root@test /]# mkdir mydocker
+[root@test /]# cd  mydocker
+[root@test mydocker]# pwd
+/mydocker
+
+
+
+[root@test mydocker]# cat  Dockerfile
+#volume test 
+FROM centos 
+VOLUME ["/dataVolumeContainer1","dataVolumeContainer2"]
+CMD echo "finished,--------success1"
+CMD /bin/bash
+就相当于
+#docker run -it -v /host1: /dataVolumeContainer1 -v /host2: /dataVolumeContainer2 centos /bin/bash 
+[root@test mydocker]# docker build -f /mydocker/Dockerfile -t  zzyy/centos .
+[root@test mydocker]# docker images zzyy/centos
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+zzyy/centos         latest              aff9f18e3f11        2 minutes ago       215MB
+[root@test mydocker]# docker run -it zzyy/centos
+[root@78d4e82a3a17 /]# ls
+bin  dataVolumeContainer1  dataVolumeContainer2  dev  etc  home  lib  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  srv  sys  tmp	usr  var
+[root@78d4e82a3a17 /]# cd dataVolumeContainer1
+[root@78d4e82a3a17 dataVolumeContainer1]# touch  container01.txt
+[root@78d4e82a3a17 dataVolumeContainer1]# ls
+container01.txt
+[root@test ~]# docker ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+78d4e82a3a17        zzyy/centos         "/bin/sh -c /bin/bash"   2 minutes ago       Up 2 minutes                            charming_cerf
+[root@test ~]# docker inspect  78d4e82a3a17
+        "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "17492b42b2cce578e5be232f5207ecf12eb8bcc76038dec2b8c75ae9e925082b",
+                "Source": "/var/lib/docker/volumes/17492b42b2cce578e5be232f5207ecf12eb8bcc76038dec2b8c75ae9e925082b/_data",
+                "Destination": "/dataVolumeContainer1",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            },
+            {
+                "Type": "volume",
+                "Name": "76b007f338c88e2075742181d52eef8b051c02013d6ed36ede0030a668eb54a4",
+                "Source": "/var/lib/docker/volumes/76b007f338c88e2075742181d52eef8b051c02013d6ed36ede0030a668eb54a4/_data",
+                "Destination": "dataVolumeContainer2",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+[root@test~]#cd  /var/lib/docker/volumes/17492b42b2cce578e5be232f5207ecf12eb8bcc76038dec2b8c75ae9e925082b/_data
+[root@test _data]# ls
+container01.txt
+[root@test _data]# cat container01.txt 
+[root@test _data]# touch  host.txt
+[root@test _data]# ls
+container01.txt  host.txt
+[root@78d4e82a3a17 dataVolumeContainer1]# ls   #容器里也看到了
+container01.txt  host.txt
+[root@test /]# docker run  -it --name dc01 zzyy/centos
+[root@6759dddb97e6 /]# ls
+bin  dataVolumeContainer1  dataVolumeContainer2  dev  etc  home  lib  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  srv  sys  tmp	usr  var
+[root@6759dddb97e6 /]# cd  dataVolumeContainer2
+[root@6759dddb97e6 dataVolumeContainer2]# touch dc01_add.txt
+[root@6759dddb97e6 dataVolumeContainer2]# [root@test /]# 
+[root@test /]# docker ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+6759dddb97e6        zzyy/centos         "/bin/sh -c /bin/bash"   51 seconds ago      Up 50 seconds                           dc01
+[root@test /]# docker run  -it --name dc02 --volumes-from dc01  zzyy/centos
+[root@be51d418bd2f /]# cd dataVolumeContainer2
+[root@be51d418bd2f dataVolumeContainer2]# ls
+dc01_add.txt
+[root@be51d418bd2f dataVolumeContainer2]# touch dc02_add.txt
+[root@be51d418bd2f dataVolumeContainer2]# cd dataVolumeContainer2[root@test /]# ctrl+p+q
+[root@test /]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS               NAMES
+be51d418bd2f        zzyy/centos         "/bin/sh -c /bin/bash"   About a minute ago   Up About a minute                       dc02
+6759dddb97e6        zzyy/centos         "/bin/sh -c /bin/bash"   3 minutes ago        Up 3 minutes                            dc01
+[root@test /]# docker run  -it --name dc03 --volumes-from dc01  zzyy/centos
+[root@e0fdd23f3c36 /]# cd  dataVolumeContainer2
+[root@e0fdd23f3c36 dataVolumeContainer2]# ls
+dc01_add.txt  dc02_add.txt
+[root@e0fdd23f3c36 dataVolumeContainer2]# touch dc03_add.txt
+[root@e0fdd23f3c36 dataVolumeContainer2]# ls
+dc01_add.txt  dc02_add.txt  dc03_add.txt
+[root@e0fdd23f3c36 dataVolumeContainer2]# [root@test /]# 
+[root@test /]# docker ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e0fdd23f3c36        zzyy/centos         "/bin/sh -c /bin/bash"   53 seconds ago      Up 52 seconds                           dc03
+be51d418bd2f        zzyy/centos         "/bin/sh -c /bin/bash"   2 minutes ago       Up 2 minutes                            dc02
+6759dddb97e6        zzyy/centos         "/bin/sh -c /bin/bash"   5 minutes ago       Up 5 minutes                            dc01
+[root@test /]# docker attach dc01
+[root@6759dddb97e6 dataVolumeContainer2]# pwd
+/dataVolumeContainer2
+[root@6759dddb97e6 dataVolumeContainer2]# ls
+dc01_add.txt  dc02_add.txt  dc03_add.txt
+[root@test /]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e0fdd23f3c36        zzyy/centos         "/bin/sh -c /bin/bash"   3 minutes ago       Up 3 minutes                            dc03
+be51d418bd2f        zzyy/centos         "/bin/sh -c /bin/bash"   5 minutes ago       Up 5 minutes                            dc02
+6759dddb97e6        zzyy/centos         "/bin/sh -c /bin/bash"   7 minutes ago       Up 7 minutes                            dc01
+[root@test /]# docker attach  dc02
+[root@be51d418bd2f dataVolumeContainer2]# ls
+dc01_add.txt  dc02_add.txt  dc03_add.txt
+[root@be51d418bd2f dataVolumeContainer2]# read escape sequence(ctrl+p+q)
+[root@test /]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e0fdd23f3c36        zzyy/centos         "/bin/sh -c /bin/bash"   4 minutes ago       Up 4 minutes                            dc03
+be51d418bd2f        zzyy/centos         "/bin/sh -c /bin/bash"   5 minutes ago       Up 5 minutes                            dc02
+6759dddb97e6        zzyy/centos         "/bin/sh -c /bin/bash"   8 minutes ago       Up 8 minutes                            dc01
+[root@test /]# docker rm  -f  dc01 
+dc01
+[root@test /]# docker ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e0fdd23f3c36        zzyy/centos         "/bin/sh -c /bin/bash"   4 minutes ago       Up 4 minutes                            dc03
+be51d418bd2f        zzyy/centos         "/bin/sh -c /bin/bash"   6 minutes ago       Up 6 minutes                            dc02
+[root@test /]# docker attach dc02
+[root@be51d418bd2f dataVolumeContainer2]# ls
+dc01_add.txt  dc02_add.txt  dc03_add.txt
+[root@be51d418bd2f dataVolumeContainer2]# touch dc02_update.txt
+[root@be51d418bd2f dataVolumeContainer2]# ls
+dc01_add.txt  dc02_add.txt  dc02_update.txt  dc03_add.txt
+[root@be51d418bd2f dataVolumeContainer2]# read escape sequence
+[root@test /]# docker attach dc03
+[root@e0fdd23f3c36 dataVolumeContainer2]# ls
+dc01_add.txt  dc02_add.txt  dc02_update.txt  dc03_add.txt
+DockerFile: FROM,  基础镜像，当前新镜像是基于哪个镜像的
+MAINTAINER, 镜像维护者的姓名和邮箱地址  
+RUN.   容器构建时需要运行的命令     
+EXPOSE, 当前容器对外暴露出的端口
+WORKDIR, 
+ENV,
+ADD,
+COPY,
+VOLUME,
+CMD,
+ENTRYPOINT,
+ONBUILD
+[root@test mydocker]# pwd
+/mydocker
+[root@test mydocker]# cat Dockerfile2
+FROM  centos 
+MAINTAINER  zzyy<zzyy167@126.com>
+
+ENV  MYPATH /usr/local 
+WORKDIR  $MYPATH 
+
+
+RUN   yum  -y  install  vim  
+RUN  yum  -y  install net-tools
+
+EXPOSE  80  
+
+CMD  echo $MYPATH 
+CMD  echo "success.....................ok"
+CMD  /bin/bash
+[root@test mydocker]# docker build -f /mydocker/Dockerfile2  -t  mycentos:1.3  .
+[root@test mydocker]# docker images mycentos
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+mycentos            1.3                 76f457ac9e02        About a minute ago   295MB
+[root@test mydocker]# docker run -it mycentos:1.3
+[root@5df60857c9ed local]# pwd 
+/usr/local
+[root@5df60857c9ed local]# vim  test.txt
+[root@5df60857c9ed local]# ifconfig 
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.17.0.2  netmask 255.255.0.0  broadcast 172.17.255.255
+        ether 02:42:ac:11:00:02  txqueuelen 0  (Ethernet)
+[root@test ~]# docker  images  mycentos
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+mycentos            1.3                 76f457ac9e02        7 minutes ago       295MB
+[root@test ~]# docker history 76f457ac9e02
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+76f457ac9e02        7 minutes ago       /bin/sh -c #(nop)  CMD ["/bin/sh" "-c" "/bin…   0B                  
+81f67e465c67        7 minutes ago       /bin/sh -c #(nop)  CMD ["/bin/sh" "-c" "echo…   0B                  
+1e1ab391bb9d        7 minutes ago       /bin/sh -c #(nop)  CMD ["/bin/sh" "-c" "echo…   0B                  
+d56b51589bc5        7 minutes ago       /bin/sh -c #(nop)  EXPOSE 80                    0B                  
+7b442940220e        7 minutes ago       /bin/sh -c yum  -y  install net-tools           22.8MB              
+ba9d9d3cb403        7 minutes ago       /bin/sh -c yum  -y  install  vim                57.3MB              
+e91ca1cbedbe        7 minutes ago       /bin/sh -c #(nop) WORKDIR /usr/local            0B                  
+98ee21ab40f4        7 minutes ago       /bin/sh -c #(nop)  ENV MYPATH=/usr/local        0B                  
+59a0b3cd9082        7 minutes ago       /bin/sh -c #(nop)  MAINTAINER zzyy<zzyy167@1…   0B                  
+831691599b88        6 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B                  
+<missing>           6 weeks ago         /bin/sh -c #(nop)  LABEL org.label-schema.sc…   0B                  
+<missing>           6 weeks ago         /bin/sh -c #(nop) ADD file:84700c11fcc969ac0…   215MB
+[root@test mydocker]# pwd
+/mydocker
+[root@test mydocker]# vim  Dockerfile3
+[root@test mydocker]# cat   Dockerfile3
+FROM centos 
+RUN  yum  install  -y curl 
+CMD  [ "curl", "-s", "http://ip.cn" ] 
+[root@test mydocker]# 
+[root@test mydocker]# docker build -f /mydocker/Dockerfile3  -t myip .
+[root@test mydocker]# docker images myip 
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+myip                latest              dbea2f9f5d3c        23 seconds ago      235MB
+[root@test mydocker]# docker run  -it myip
+[root@test mydocker]# cat  Dockerfile4
+FROM centos 
+RUN  yum  install  -y curl 
+ENTRYPOINT  [ "curl", "-s", "http://ip.cn" ] 
+[root@test mydocker]# docker build -f /mydocker/Dockerfile4  -t  myip2 .
+[root@test mydocker]# docker run  myip2  -i  #追加参数
+[root@test mydocker]# cat  Dockerfile4
+FROM centos 
+RUN  yum  install  -y curl 
+ENTRYPOINT  [ "curl", "-s", "http://ip.cn" ]
+ONBUILD  RUN  echo "father images  onbuild......886" 
+[root@test mydocker]# docker build -f /mydocker/Dockerfile4  -t  myip_father .
+[root@test mydocker]# cp  Dockerfile3  Dockerfile5
+[root@test mydocker]# ls
+Dockerfile  Dockerfile2  Dockerfile3  Dockerfile4  Dockerfile5
+[root@test mydocker]# vim  Dockerfile5
+[root@test mydocker]# cat   Dockerfile5
+FROM  myip_father 
+RUN  yum  install  -y curl 
+CMD  [ "curl", "-s", "http://ip.cn" ] 
+[root@test mydocker]# docker build -f /mydocker/Dockerfile5  -t  myip_son .
+Sending build context to Docker daemon  6.144kB
+Step 1/3 : FROM  myip_father
+# Executing 1 build trigger
+ ---> Running in 0f83e2372220
+father images  onbuild......886
+Removing intermediate container 0f83e2372220
+[root@test tomcat9]# pwd
+/zzyyuse/mydockerfile/tomcat9
+[root@test tomcat9]# cat   Dockerfile
+FROM  centos 
+MAINTAINER  zzyy<zzyybs@126.com>
+#把宿主机当前上下文的c.txt拷贝到容器/usr/local/路径下
+COPY c.txt /usr/local/cincontainer.txt 
+#把java与tomcat添加到容器中
+#移动并解压包到/usr/local
+ADD jdk-8u171-linux-x64.tar.gz  /usr/local   
+ADD apache-tomcat-9.0.8.tar.gz  /usr/local 
+#安装vim编辑器
+RUN yum  -y  install vim  
+#设置工作访问时候的WORKDIR路径，登录落脚点
+ENV MYPATH /usr/local
+WORKDIR  $MYPATH  
+#配置java与tomcat环境变量
+ENV JAVA_HOME  /usr/local/jdk1.8.0_171
+ENV CLASSPATH  $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar 
+ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.8 
+ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.8
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin 
+#容器运行时监听的端口
+EXPOSE 8080 
+#启动时运行tomcat 
+#ENTRYPOINT ["/usr/local/apache-tomcat-9.0.8/bin/startup.sh"]
+#CMD ["/usr/local/apache-tomcat-9.0.8/bin/catalina.sh", "run"]
+CMD /usr/local/apache-tomcat-9.0.8/bin/startup.sh && tail  -F  /usr/local/apache-tomcat-9.0.8/bin/logs/catalina.out 
+ 
+[root@test tomcat9]# docker build  -t zzyytomcat9 .
+Sending build context to Docker daemon  3.584kB
+^C
+[root@test tomcat9]# docker images zzyytomcat9
+
+[root@test tomcat9]# docker run  -d -p 9080:8080 --name myt9 
+-v  /zzyyuse/mydockerfile/tomcat9/test:/usr/local/apache-tomcat-9.0.8/webapps/test  
+-v  /zzyyuse/mydockerfile/tomcat9/tomcat9logs: /usr/local/apache-tomcat-9.0.8/logs 
+--privileged=true zzyytomcat9   
+#--privileged=true这个是添加读写的权限
+docker ps  
+docker exec $(docker ps -q)  ls -l 
+docker exec $(docker ps -q)  java -version 
+docker restart $(docker ps -q)
+[root@test ~]# docker  search  mysql
+[root@test ~]# docker pull mysql:5.6
+[root@test ~]# docker images  mysql
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+mysql               5.6                 a599e29874aa        11 days ago         302MB                 #版本
+docker rm  -f  $(docker ps -q)
+[root@test ~]# docker run -p 123456:3306 --name mysql -v /zzyyuse/mysql/conf:/etc/mysql/conf.d  -v /zzyyuse/mysql/logs:/logs -v /zzyyuse/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456  -d  mysql:5.6
+[root@test ~]# docker run  --net=host  --name mysql -v /zzyyuse/mysql/conf:/etc/mysql/conf.d  -v /zzyyuse/mysql/logs:/logs -v /zzyyuse/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456  -d  mysql:5.6 
+e128a067c788bec45ed04fb137f878451a39e07e991507211c7ed7143aa8cc1c
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e128a067c788        mysql:5.6           "docker-entrypoint.s…"   3 minutes ago       Up 6 seconds                            mysql
+a3f73d65d346        centos              "/bin/bash"              38 minutes ago      Up 38 minutes                           unruffled_jennings
+[root@test ~]# docker exec -it e128a067c788  /bin/bash
+root@test:/# mysql  -uroot -p
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| test               |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create database db01;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use db01;
+Database changed
+mysql> create table t_book(id int not null primary key,bookName varchar(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show  tables;
++----------------+
+| Tables_in_db01 |
++----------------+
+| t_book         |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> insert into t_book values(1, "java");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *  from t_book;
++----+----------+
+| id | bookName |
++----+----------+
+|  1 | java     |
++----+----------+
+1 row in set (0.00 sec)
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e128a067c788        mysql:5.6           "docker-entrypoint.s…"   12 minutes ago      Up 8 minutes                            mysql
+a3f73d65d346        centos              "/bin/bash"              47 minutes ago      Up 47 minutes                           unruffled_jennings
+
+[root@test ~]# docker rm -f a3f73d65d346
+a3f73d65d346
+[root@test ~]# docker  ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+e128a067c788        mysql:5.6           "docker-entrypoint.s…"   12 minutes ago      Up 9 minutes                            mysql
+[root@test ~]# docker exec $(docker ps -q) sh -c 'exec mysqldump --all-databases -uroot -p"123456"' > /zzyyuse/all-databases.sql
+Warning: Using a password on the command line interface can be insecure.
+mysqldump: Got error: 1045: Access denied for user 'root'@'localhost' (using password: YES) when trying to connect
+[root@test ~]# docker exec $(docker ps -q) sh -c 'exec mysqldump --all-databases -uroot -p ' > /zzyyuse/all-databases.sql
+Enter password: [root@test ~]# 
+[root@test ~]# 
+[root@test ~]# cd  /zzyyuse/ 
+[root@test zzyyuse]# ls
+all-databases.sql  mydockerfile  mysql
+[root@test zzyyuse]# vim all-databases.sql
+[root@test ~]# docker pull redis:3.2
+[root@test ~]# docker images redis
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+redis               3.2                 87856cc39862        21 months ago       76MB
+[root@test ~]# docker run -p 6379:6379 -v /zzyyuse/myredis/data:/data -v /zzyyuse/myredis/conf/redis.conf:/usr/local/etc/redis/redis.conf -d redis:3.2 redis-server /usr/local/etc/redis/redis.conf –appendonly yes
+docker ps 
+docker exec -it redis容器ID redis-cli 
+set k1 v1 
+set k2 v2 
+set k3 c3 
+shutdown 
+[root@test ~]# docker images mycentos 
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+mycentos            1.3                 76f457ac9e02        23 hours ago        295MB
+[root@test ~]# docker run -it mycentos:1.3
+[root@5797e852618f local]# [root@test ~]# 
+[root@test ~]# docker ps 
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+5797e852618f        mycentos:1.3        "/bin/sh -c /bin/bash"   9 seconds ago       Up 7 seconds        80/tcp              unruffled_cerf
+e128a067c788        mysql:5.6           "docker-entrypoint.s…"   33 minutes ago      Up 30 minutes                           mysql
+[root@test ~]# docker commit -a zzyy -m "new mycentos1.4 with vim and ifconfig"  5797e852618f mycentos:1.4
+sha256:c0d62a3d5668b25c06267fe784b7e7229a323ed8a13bd716c0f1048b56cf36e3
+[root@test ~]# docker images mycentos
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+mycentos            1.4                 c0d62a3d5668        21 seconds ago      295MB
+mycentos            1.3                 76f457ac9e02        23 hours ago        295MB
+[root@test ~]# docker login --username=registry.cn-hangzhou.aliyuncs.com
+Password: 
+[root@test ~]# docker tag   c0d62a3d5668  registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos:1.4.1
+[root@test ~]# docker push  registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos:1.4.1
+[root@test ~]# docker images registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos
+REPOSITORY                                           TAG                 IMAGE ID            CREATED             SIZE
+registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos   1.4.1               c0d62a3d5668        12 minutes ago      295MB
+[root@test ~]# docker rmi -f registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos:1.4.1
+Untagged: registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos:1.4.1
+[root@test ~]# docker images
+[root@test ~]# docker pull  registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos:1.4.1
+[root@test ~]# docker images
+REPOSITORY                                           TAG                 IMAGE ID            CREATED             SIZE
+mycentos                                             1.4                 c0d62a3d5668        17 minutes ago      295MB
+myip_son                                             latest              de07b8f0323b        23 hours ago        245MB
+myip_father                                          latest              0ea3a7a70221        23 hours ago        235MB
+myip2                                                latest              cc59c79e0319        23 hours ago        235MB
+myip                                                 latest              dbea2f9f5d3c        23 hours ago        235MB
+mycentos                                             1.3                 76f457ac9e02        24 hours ago        295MB
+zzyy/centos                                          latest              aff9f18e3f11        25 hours ago        215MB
+atguigu/mytomcat                                     1.2                 f0737009039e        28 hours ago        647MB
+mongo                                                latest              aa22d67221a0        3 days ago          493MB
+tomcat                                               latest              9a9ad4f631f8        5 days ago          647MB
+mysql                                                5.6                 a599e29874aa        11 days ago         302MB
+nginx                                                latest              8cf1bfb43ff5        12 days ago         132MB
+centos                                               latest              831691599b88        6 weeks ago         215MB
+hello-world                                          latest              bf756fb1ae65        7 months ago        13.3kB
+redis                                                3.2                 87856cc39862        21 months ago       76MB
+registry.cn-hangzhou.aliyuncs.com/zzyybuy/mycentos   1.4.1               a266d818788e        2 years ago         359MB
+[root@test ~]# docker run -it a266d818788e  /bin/bash
+[root@b9e3f4fbb0e9 local]# pwd
+/usr/local
+[root@b9e3f4fbb0e9 local]# vim a.txt
+[root@b9e3f4fbb0e9 local]# ifconfig 
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.17.0.3  netmask 255.255.0.0  broadcast 172.17.255.255
+        ether 02:42:ac:11:00:03  txqueuelen 0  (Ethernet)
+        RX packets 8  bytes 656 (656.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+http://192.168.61.33:8080/view/%E5%A4%A7%E6%99%BA%E6%85%A7-%E5%BA%9F%E5%BC%83/job/192.168.61.35-job/configure
+cd /root/itcmp/job
+buildate=`date +%Y%m%d%H`
+docker stop job
+docker rm job
+docker build -t job:$buildate .
+docker run -tid --restart=always --net=host  --name job job:$buildate
 
