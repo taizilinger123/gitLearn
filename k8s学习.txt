@@ -2437,7 +2437,51 @@ PING 172.7.21.2 (172.7.21.2) 56(84) bytes of data.
 64 bytes from 172.7.21.2: icmp_seq=1 ttl=64 time=0.121 ms
 64 bytes from 172.7.21.2: icmp_seq=2 ttl=64 time=0.074 ms
 
+#######################################################################
+下面就是host-gw模式的原理
+[root@hdss7-21 ~}#route add -net 172.7.22.0/24 gw 10.4.7.22 dev eth0
 
+[root@hdss7-22~}#route add -net 172.7.21.0/24 gw 10.4.7.21 dev eth0
+
+[root@hdss7-21 flannel]# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         10.4.7.254      0.0.0.0         UG    100    0        0 eth0
+10.4.7.0        0.0.0.0         255.255.255.0   U     100    0        0 eth0
+172.7.21.0      0.0.0.0         255.255.255.0   U     0      0        0 docker0
+172.7.22.0      10.4.7.22       255.255.255.0   UG    0      0        0 eth0
+
+[root@hdss7-22 flannel]# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         10.4.7.254      0.0.0.0         UG    100    0        0 eth0
+10.4.7.0        0.0.0.0         255.255.255.0   U     100    0        0 eth0
+172.7.21.0      10.4.7.21       255.255.255.0   UG    0      0        0 eth0
+172.7.22.0      0.0.0.0         255.255.255.0   U     0      0        0 docker0
+
+注意还要优化一条iptables规则：
+~]#  iptables -t filter -I FORWARD -d 172.7.21.0/24 -j ACCEPT
+#############################################################################
+[root@hdss61-22 ~]# supervisorctl   stop  flanneld-61-22   
+
+[root@hdss61-22 ~]# ps aux |  grep flanneld
+root      8373  0.0  0.0 112708   976 pts/1    S+   00:15   0:00 grep --color=auto flanneld
+root     30526  0.0  0.2 892228 25644 ?        Sl   Aug17   1:12 ./flanneld --public-ip=192.168.61.120 --etcd-endpoints=https://192.168.61.117:2379,https://192.168.61.119:2379,https://192.168.61.120:2379 --etcd-keyfile=./cert/client-key.pem --etcd-certfile=./cert/client.pem --etcd-cafile=./cert/ca.pem --iface=eth0 --subnet-file=./subnet.env --healthz-port=2401
+[root@hdss61-22 ~]# kill  -9  30526
+
+2、删除host-gw模型创建的路由
+route del -net 172.7.21.0/24 gw 10.4.7.21     hdss7-22上
+route del -net 172.7.22.0/24 gw 10.4.7.22     hdss7-21上
+
+3、在etcd节点修改
+./etcdctl get /coreos.com/network/config
+./etcdctl rm /coreos.com/network/config
+etcd]# ./etcdctl set /coreos.com/network/config '{"Network": "172.7.0.0/16", "Backend": {"Type": "VxLAN"}}'
+./etcdctl get /coreos.com/network/config
+4、supervisorctl start flanneld-7-21
+    supervisorctl start flanneld-7-22
+5、查看ifconfig 会多了一个flannel 1的设备，route -n是没有路由的
+#######################################################################
 
 
 
