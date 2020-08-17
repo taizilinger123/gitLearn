@@ -2012,8 +2012,10 @@ NAME                 TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
 service/kubernetes   ClusterIP   192.168.0.1   <none>        443/TCP   2d13h
 NAME                      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
 daemonset.apps/nginx-ds   0         0         0       0            0           <none>          15h
+
 [root@hdss-21 ~]# kubectl create namespace app  
 namespace/app created
+
 [root@hdss-21 ~]# kubectl get ns
 NAME              STATUS   AGE
 app               Active   6s
@@ -2021,68 +2023,270 @@ default           Active   2d13h
 kube-node-lease   Active   2d13h
 kube-public       Active   2d13h
 kube-system       Active   2d13h
+
 [root@hdss-21 ~]# kubectl  delete  ns  app 
 namespace "app" deleted
+
 [root@hdss-21 ~]# kubectl get ns
 NAME              STATUS   AGE
 default           Active   2d13h
 kube-node-lease   Active   2d13h
 kube-public       Active   2d13h
 kube-system       Active   2d13h
+
 [root@hdss-21 ~]# kubectl get all -n default  #与下面一样
+
 [root@hdss-21 ~]# kubectl get all
+
 [root@hdss-21 ~]# kubectl  create deployment nginx-dp --image=harbor.od.com/public/nginx:v1.7.9 -n kube-public
 deployment.apps/nginx-dp created
+
+
 [root@hdss-21 ~]# kubectl  get deployment -n kube-public
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 nginx-dp   0/1     0            0           34s
+
+[root@hdss61-21 ~]# kubectl  get deployment -n kube-public  
+NAME       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+nginx-db   1         1         1            1           1d
+
 [root@hdss-21 ~]#  kubectl  get pods  -n kube-public
 NAME                        READY   STATUS         RESTARTS   AGE
 nginx-dp-5dfc689474-kn4j5   0/1     ErrImagePull   0          4h24m
+
+[root@hdss61-21 ~]#  kubectl  get pods  -n kube-public  
+NAME                       READY     STATUS    RESTARTS   AGE
+nginx-db-c67cdb84c-tt4lx   1/1       Running   0          1d
+
+
 [root@hdss-21 ~]#  kubectl  get pods  -n kube-public  -o wide 
 NAME                        READY   STATUS             RESTARTS   AGE     IP           NODE               NOMINATED NODE   READINESS GATES
 nginx-dp-5dfc689474-kn4j5   0/1     ImagePullBackOff   0          4h25m   172.7.21.2   hdss-21.host.com   <none>           <none>
+
+[root@hdss61-21 ~]# kubectl  get pods  -n kube-public  -o wide  
+NAME                       READY     STATUS    RESTARTS   AGE       IP           NODE
+nginx-db-c67cdb84c-tt4lx   1/1       Running   0          1d        172.7.22.3   hdss61-22.host.com
+
+[root@hdss61-21 ~]#  kubectl get pod -n kube-public -o wide  
+NAME                       READY     STATUS    RESTARTS   AGE       IP           NODE
+nginx-db-c67cdb84c-tt4lx   1/1       Running   0          1d        172.7.22.3   hdss61-22.host.com
+
+
 [root@hdss-21 ~]#  kubectl  get  deployment   -n kube-public  -o wide 
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES                              SELECTOR
 nginx-dp   0/1     1            0           4h34m   nginx        harbor.od.com/public/nginx:v1.7.9   app=nginx-dp
+
+[root@hdss61-21 ~]# kubectl  get  deployment   -n kube-public  -o wide  
+NAME       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+nginx-db   1         1         1            1           1d
+
+
 [root@hdss-21 ~]# kubectl describe deployment nginx-dp -n kube-public
+
 [root@hdss-21 ~]#  kubectl   get pods
 NAME             READY   STATUS              RESTARTS   AGE
 nginx-ds-bc6wt   0/1     ContainerCreating   0          8m13s
 nginx-ds-d2jsc   0/1     ImagePullBackOff    0          8m13s
+
+[root@hdss61-21 ~]# kubectl get all -n default
+NAME             CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+svc/kubernetes   192.168.0.1      <none>        443/TCP    3d
+svc/nginx-ds     192.168.52.225   <none>        8080/TCP   1d
+
+curl  192.168.52.225  
+
+
+NAME                READY     STATUS    RESTARTS   AGE
+po/nginx-ds-9kbmj   1/1       Running   0          1d
+po/nginx-ds-ks6cp   1/1       Running   0          1d
+
 [root@hdss-21 ~]#  kubectl   get  pods  -n  kube-public 
 NAME                        READY   STATUS              RESTARTS   AGE
 nginx-dp-5dfc689474-ndhxk   0/1     ContainerCreating   0          10m
+
 [root@hdss-21 ~]# kubectl  exec  -ti  nginx-dp-5dfc689474-ndhxk  /bin/bash  -n  kube-public
+
 [root@hdss-22 ~]# docker  ps  -a | grep  nginx-dp
 5dfaaf336c76        84581e99d807                        "nginx -g 'daemon of…"   About an hour ago   Exited (255) 32 minutes ago                       k8s_nginx_nginx-dp-5dfc689474-ndhxk_kube-public_85c15723-c5be-457c-8708-a38eb9162fd7_0
 95a239d8001f        harbor.od.com/public/pause:latest   "/pause"                 About an hour ago   Exited (255) 32 minutes ago                       k8s_POD_nginx-dp-5dfc689474-ndhxk_kube-
 [root@hdss-22 ~]# docker exec -ti  5dfa bash 
+
 [root@hdss-22 bin]# kubectl delete pod nginx-dp-5dfc689474-rv8fz  -n kube-public
 pod "nginx-dp-5dfc689474-rv8fz" deleted
+
 [root@hdss-22 bin]#  kubectl  get pods  -n  kube-public 
 NAME                        READY     STATUS        RESTARTS   AGE
 nginx-dp-5dfc689474-68nxh   0/1       Pending       0          2s
 nginx-dp-5dfc689474-ndhxk   1/1       Terminating   0          1h
+
 [root@hdss-22 bin]# kubectl  get  pods -n kube-public -o  wide
 NAME                        READY     STATUS        RESTARTS   AGE       IP           NODE
 nginx-dp-5dfc689474-68nxh   0/1       Pending       0          48s       <none>       
 nginx-dp-5dfc689474-ndhxk   1/1       Terminating   0          1h        172.7.22.2   hdss-22.host.com
- kubectl delete pod nginx-dp-5dfc689474-rv8fz  -n kube-public --force --grace-period=0
- [root@hdss-21 ~]#  kubectl expose deployment nginx-dp --port=80 -n kube-public
+
+[root@hdss-21 ~]# kubectl delete pod nginx-dp-5dfc689474-rv8fz  -n kube-public --force --grace-period=0
+ 
+[root@hdss-21 ~]# kubectl expose deployment nginx-dp --port=80 -n kube-public
 service/nginx-dp exposed
+
 [root@hdss-21 ~]# kubectl  get all -n kube-public 
+
 [root@hdss-21 ~]# kubectl  get pods  -n kube-public  -o  wide 
+
 [root@hdss-22 bin]# kubectl  delete deploy nginx-dp -n  kube-public 
 deployment "nginx-dp" deleted
+
 [root@hdss-22 bin]# kubectl  get all -n kube-public 
 NAME                           READY     STATUS        RESTARTS   AGE
 po/nginx-dp-5dfc689474-ndhxk   1/1       Terminating   0          2h
+
 [root@hdss-22 bin]# kubectl  delete   po/nginx-dp-5dfc689474-ndhxk  -n  kube-public   --grace-period=0 --force 
 warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
 pod "nginx-dp-5dfc689474-ndhxk" deleted
+
 [root@hdss-22 bin]# kubectl  get all -n kube-public 
 No resources found.
+
+[root@hdss61-22 ~]# ipvsadm -Ln  
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.0.1:443 nq
+  -> 192.168.61.119:6443          Masq    1      0          0         
+  -> 192.168.61.120:6443          Masq    1      0          0         
+TCP  192.168.52.225:8080 nq
+  -> 172.7.21.2:80                Masq    1      0          0         
+  -> 172.7.22.2:80                Masq    1      0          0         
+TCP  192.168.220.66:80 nq
+  -> 172.7.22.3:80                Masq    1      0          0   
+
+[root@hdss61-21 ~]# kubectl describe svc nginx-db  -n kube-public
+Name:			nginx-db
+Namespace:		kube-public
+Labels:			app=nginx-db
+Selector:		app=nginx-db
+Type:			ClusterIP
+IP:			192.168.220.66
+Port:			<unset>	80/TCP
+Endpoints:		172.7.22.3:80
+Session Affinity:	None
+No events.
+
+[root@hdss61-21 ~]# kubectl scale deployment nginx-db  --replicas=2  -n kube-public  
+deployment "nginx-db" scaled
+
+[root@hdss61-21 ~]# ipvsadm -Ln  
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.0.1:443 nq
+  -> 192.168.61.119:6443          Masq    1      0          0         
+  -> 192.168.61.120:6443          Masq    1      0          0         
+TCP  192.168.52.225:8080 nq
+  -> 172.7.21.2:80                Masq    1      0          0         
+  -> 172.7.22.2:80                Masq    1      0          0         
+TCP  192.168.220.66:80 nq
+
+kubectl命令大全：
+* --help
+* http://doce.kubernetes.org.cn
+
+[root@hdss61-21 ~]#  kubectl get pods -n kube-public -o wide   
+NAME                       READY     STATUS             RESTARTS   AGE       IP           NODE
+nginx-db-c67cdb84c-2btcw   0/1       ImagePullBackOff   0          4m        172.7.22.3   hdss61-22.host.com
+nginx-db-c67cdb84c-66jx2   0/1       ImagePullBackOff   0          4m        172.7.21.3   hdss61-21.host.com
+
+[root@hdss61-21 ~]#  kubectl get pods nginx-db-c67cdb84c-2btcw  -o yaml -n kube-public
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: 2020-08-17T15:39:39Z
+  generateName: nginx-db-c67cdb84c-
+
+[root@hdss61-22 ~]# kubectl get service -n kube-public  
+NAME       CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+nginx-db   192.168.220.66   <none>        80/TCP    1d
+
+[root@hdss61-22 ~]#  kubectl get service nginx-db  -o yaml  -n kube-public   
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: 2020-08-16T12:42:33Z
+  labels:
+    app: nginx-db
+  name: nginx-db
+  namespace: kube-public
+  resourceVersion: "232175"
+  selfLink: /api/v1/namespaces/kube-public/services/nginx-db
+  uid: 2d653347-79a8-4c4d-b03f-52073db27db0
+spec:
+  clusterIP: 192.168.220.66
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx-db
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+
+[root@hdss61-22 ~]#  kubectl explain service.metadata
+
+[root@hdss61-21 ~]# cat  nginx-ds-svc.yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx-ds
+  name: nginx-ds
+  namespace: default
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx-ds
+  sessionAffinity: None
+  type: ClusterIP
+
+[root@hdss61-21 ~]#  kubectl create -f nginx-ds-svc.yaml   
+
+[root@hdss61-21 ~]# kubectl get svc -n default
+NAME         CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+kubernetes   192.168.0.1      <none>        443/TCP    3d
+nginx-ds     192.168.52.225   <none>        8080/TCP   1d
+
+[root@hdss61-21 ~]#  kubectl get svc nginx-ds -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+
+[root@hdss61-21 ~]#  kubectl edit svc nginx-ds  #修改资源配置清单
+
+[root@hdss61-21 ~]#  kubectl get svc  
+NAME         CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+kubernetes   192.168.0.1      <none>        443/TCP    3d
+nginx-ds     192.168.52.225   <none>        8080/TCP   1d
+
+[root@hdss61-21 ~]# vi nginx-ds-svc.yaml  #离线修改 
+
+[root@hdss61-21 ~]# kubectl apply -f nginx-ds-svc.yaml   
+
+[root@hdss61-21 ~]#  kubectl delete svc nginx-ds  #陈述式删除 
+
+[root@hdss61-21 ~]# kubectl delete -f nginx-ds-svc.yaml  #声明式删除 
+service "nginx-ds" deleted    
+
+1.2.7.声明式用法总结
+声明式资源管理，依赖于统一资源配置清单文件对资源进行管理
+对资源的管理，通过事先定义在统一配置清单内，在通过陈述式-f命令应用到k8s集群里
+语法格式：kubectl create/apply/delete -f /path/to/yaml
+不懂的，善用explain查询
+
 #########################################################################
 [root@hdss-200 ~]# cd  /opt/certs
 [root@hdss-200 certs]# cfssl-certinfo  -cert apiserver.pem 
@@ -2139,7 +2343,7 @@ No resources found.
     "kubernetes.default.svc.cluster.local",
     "127.0.0.1",
     "192.168.0.1",
-    "192.168.61.110",
+    "192.168.61.110",   #注意这个vip地址一定要加不然报kubectl  get  nodes no resource 
     "192.168.61.119",
     "192.168.61.120"
   ],
@@ -2150,8 +2354,88 @@ No resources found.
   "subject_key_id": "17:F9:FC:4A:2E:9C:99:E5:18:5B:14:3F:66:8D:CE:BB:4:78:78:6A",
   "pem": "-----BEGIN CERTIFICATE-----\nMIIEaTCCA1GgAwIBAgIUKYLqGL0IYph5WKfe2FwVLyNxS/cwDQYJKoZIhvcNAQEL\nBQAwYDELMAkGA1UEBhMCQ04xEDAOBgNVBAgTB0JlaUppbmcxEDAOBgNVBAcTB0Jl\naUppbmcxCzAJBgNVBAoTAm9kMQwwCgYDVQQLEwNvcHMxEjAQBgNVBAMTCU9sZGJv\neUVkdTAeFw0yMDA4MTYwNzI2MDBaFw00MDA4MTEwNzI2MDBaMGQxCzAJBgNVBAYT\nAkNOMRAwDgYDVQQIEwdiZWlqaW5nMRAwDgYDVQQHEwdiZWlqaW5nMQswCQYDVQQK\nEwJvZDEMMAoGA1UECxMDb3BzMRYwFAYDVQQDEw1rOHMtYXBpc2VydmVyMIIBIjAN\nBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRpxAHEcskS6NxrrNuWYb99FlkFG\nUjOB2sVclU1sIgNbzVS76OXmFN1nPzcL870YfPhukb6KtYvwITiRSL+QoKp0B2no\ndgg+5bncC5WC2VAWKUv0Qp9T2350m8BLGOwBULe6CD6Dabv24MbBO1DA1VL5uHG5\nvIIszzAc5Lfo2qCl8DThg30Cr0L2BAgzkUW/yE3mMUF9HIFNPyAC42d4n6nI1G11\nQicaCUusFOI1dulve726dhk0aa+R65G6bU1v66lcZw78KW46IQpHZd5waaEQGB0J\ndmeTOm2PdltuJ4OyGfDEB+zisRtKG0htuVtgn2Uqk363qXN3rG5m4ZAWmwIDAQAB\no4IBFTCCAREwDgYDVR0PAQH/BAQDAgWgMBMGA1UdJQQMMAoGCCsGAQUFBwMBMAwG\nA1UdEwEB/wQCMAAwHQYDVR0OBBYEFBf5/EounJnlGFsUP2aNzrsEeHhqMB8GA1Ud\nIwQYMBaAFIdAaxJq00tJzeD05+L1/R2nNArpMIGbBgNVHREEgZMwgZCCEmt1YmVy\nbmV0ZXMuZGVmYXVsdIIWa3ViZXJuZXRlcy5kZWZhdWx0LnN2Y4Iea3ViZXJuZXRl\ncy5kZWZhdWx0LnN2Yy5jbHVzdGVygiRrdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNs\ndXN0ZXIubG9jYWyHBH8AAAGHBMCoAAGHBMCoPW6HBMCoPXeHBMCoPXgwDQYJKoZI\nhvcNAQELBQADggEBAJvPaGRSegmyn4oOXPFXwyuWcnw5tvUaJkGv0yhLhjpS96wh\nEuxzjwAopxsBXYDlO+zkTUcNaQfILBQiC7yorVMK/7eL5gEAOtEyT6vkpcw8knhc\nvZ8SqbHN4m+BmdnG32WC5JX6nR/XVJOwFQ/qEX5uvPmOCrXjdiz0vrbOJaCiGw5R\nIMwoUGNyER9JrX+5o68qkg0VxKdpA7WdinApeKcwRh8Ub6E9XkOaBy3XOoStv45U\nfXoDpvcgGqHIDqwtacp3QS0AiU8pt/W7NKHabzQANmr3sbnqG5gfRM0JGEPmcb6N\ngl/z8q/bgCFA8qGIRWycxjZkDzmU2ZQF7mMWxvE=\n-----END CERTIFICATE-----\n"
 }
+################################################################################
+1.K8S的CNI网络插件-Flannel
 
-
+[root@hdss61-21/22 ~]# cd  /opt/src  
+wget https://github.com/coreos/flannel/releases/download/v0.11.0/flannel-v0.11.0-linux-amd64.tar.gz 
+mkdir /opt/flannel-v0.11.0 
+tar xf flannel-v0.11.0-linux-amd64.tar.gz  -C /opt/flannel-v0.11.0/  
+ln -s /opt/flannel-v0.11.0/ /opt/flannel  
+mkdir /opt/flannel/cert  
+scp hdss61-200:/opt/certs/ca.pem .  
+scp hdss61-200:/opt/certs/client.pem .
+scp hdss61-200:/opt/certs/client-key.pem . 
+[root@hdss61-21 flannel]# cat  subnet.env 
+FLANNEL_NETWORK=172.7.0.0/16
+FLANNEL_SUBNET=172.7.21.1/24
+FLANNEL_MTU=1500
+FLANNEL_IPMASQ=false
+[root@hdss61-21 flannel]# cat  flanneld.sh 
+#!/bin/sh
+./flanneld \
+  --public-ip=192.168.61.119 \
+  --etcd-endpoints=https://192.168.61.117:2379,https://192.168.61.119:2379,https://192.168.61.120:2379 \
+  --etcd-keyfile=./cert/client-key.pem \
+  --etcd-certfile=./cert/client.pem \
+  --etcd-cafile=./cert/ca.pem \
+  --iface=eth0 \
+  --subnet-file=./subnet.env \
+  --healthz-port=2401
+chmod +x flanneld.sh 
+mkdir -p /data/logs/flanneld  
+[root@hdss61-21 flannel]# cat   /etc/supervisord.d/flannel.ini 
+[program:flanneld-61-21]
+command=/opt/flannel/flanneld.sh                             ; the program (relative uses PATH, can take args)
+numprocs=1                                                   ; number of processes copies to start (def 1)
+directory=/opt/flannel                                       ; directory to cwd to before exec (def no cwd)
+autostart=true                                               ; start at supervisord start (default: true)
+autorestart=true                                             ; retstart at unexpected quit (default: true)
+startsecs=30                                                 ; number of secs prog must stay running (def. 1)
+startretries=3                                               ; max # of serial start failures (default 3)
+exitcodes=0,2                                                ; 'expected' exit codes for process (default 0,2)
+stopsignal=QUIT                                              ; signal used to kill process (default TERM)
+stopwaitsecs=10                                              ; max num secs to wait b4 SIGKILL (default 10)
+user=root                                                    ; setuid to this UNIX account to run the program
+redirect_stderr=true                                         ; redirect proc stderr to stdout (default false)
+stdout_logfile=/data/logs/flanneld/flanneld.stdout.log       ; stderr log path, NONE for none; default AUTO
+stdout_logfile_maxbytes=64MB                                 ; max # logfile bytes b4 rotation (default 50MB)
+stdout_logfile_backups=4                                     ; # of stdout logfile backups (default 10)
+stdout_capture_maxbytes=1MB                                  ; number of bytes in 'capturemode' (default 0)
+stdout_events_enabled=false                                  ; emit events on stdout writes (default false)
+[root@hdss61-21 etcd]# ./etcdctl set /coreos.com/network/config '{"Network": "172.7.0.0/16", "Backend": {"Type": "host-gw"}}'
+[root@hdss61-21 etcd]#  ./etcdctl get /coreos.com/network/config 
+{"Network": "172.7.0.0/16", "Backend": {"Type": "host-gw"}}
+[root@hdss61-21 etcd]# supervisorctl  update 
+[root@hdss61-21 etcd]# supervisorctl  status 
+etcd-server-61-21                RUNNING   pid 28755, uptime 1 day, 8:28:12
+flanneld-61-21                   RUNNING   pid 29222, uptime 22:23:35
+kube-apiserver-61-21             RUNNING   pid 28754, uptime 1 day, 8:28:12
+kube-controller-manager-61-21    RUNNING   pid 28761, uptime 1 day, 8:28:12
+kube-kubelet-61-21               RUNNING   pid 28756, uptime 1 day, 8:28:12
+kube-proxy-61-21                 RUNNING   pid 28759, uptime 1 day, 8:28:12
+kube-scheduler-61-21             RUNNING   pid 28757, uptime 1 day, 8:28:12
+[root@hdss61-21 flannel]# tail -fn 200 /data/logs/flanneld/flanneld.stdout.log 
+其他节点基本和hdss7-21相同，注意修改一下文件：
+subnet.env
+flanneld.sh
+/etc/supervisord.d/flannel.ini
+[root@hdss61-21 flannel]# kubectl  get  pods  -o  wide 
+NAME             READY     STATUS    RESTARTS   AGE       IP           NODE
+nginx-ds-9kbmj   1/1       Running   0          1d        172.7.21.2   hdss61-21.host.com
+nginx-ds-ks6cp   1/1       Running   0          1d        172.7.22.2   hdss61-22.host.com
+[root@hdss61-21 flannel]#  ping 172.7.22.2
+PING 172.7.22.2 (172.7.22.2) 56(84) bytes of data.
+64 bytes from 172.7.22.2: icmp_seq=1 ttl=63 time=0.767 ms
+64 bytes from 172.7.22.2: icmp_seq=2 ttl=63 time=0.565 ms
+^C
+--- 172.7.22.2 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.565/0.666/0.767/0.101 ms
+[root@hdss61-21 flannel]#  ping 172.7.21.2
+PING 172.7.21.2 (172.7.21.2) 56(84) bytes of data.
+64 bytes from 172.7.21.2: icmp_seq=1 ttl=64 time=0.121 ms
+64 bytes from 172.7.21.2: icmp_seq=2 ttl=64 time=0.074 ms
 
 
 
