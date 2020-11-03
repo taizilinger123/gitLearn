@@ -1141,3 +1141,416 @@ sige@sige1:~$ for ((i=2;i<=10;i+=2));do echo $i;done
 8
 10
  grep  -Ev  "^#"   ubuntu-server.seed |grep -Ev  "^$|^ +$" 
+ 
+ if [ "$(uname -r | cut -c 12-14)" = "el6" ];then
+	filesystem=ext4
+	elif [ "$(uname -r | cut -c 12-14)" = "el7" ];then
+	filesystem=xfs
+	else
+	logging 'The current system software pack is missing.' 
+fi
+Part_Size="$1 $3 $5 $7"
+Monit_Point="$2 $4 $6 $8"
+
+echo ${Part_Size}
+echo ${Monit_Point}
+
+ 
+ function check_execution_result(){
+        if [[ ! -z $RETVAL ]];then
+                unset RETVAL
+        fi
+        RETVAL=$?
+        if [[ $RETVAL -ne 0 ]];then
+                echo execution failed! 
+                exit $RETVAL
+        else
+                echo execution successfully! 
+        fi
+        unset RETVAL
+}
+
+ONLINE_SCSI_DISK_NEWADD=$(lsblk | grep disk | grep -v fd | awk '{print $1}' |grep -v da| xargs echo | sed "s/$ONLINE_SCSI_DISK_PRESENT//g")
+
+for BLOCK in $ONLINE_SCSI_DISK_NEWADD; do
+    ONLINE_SCSI_DISK_NEWADD_FILENAME="/dev/"$BLOCK
+    # end-of-file contents and eof mark must start row1
+    fdisk $ONLINE_SCSI_DISK_NEWADD_FILENAME >/dev/null 2>&1<<eof
+n
+p
+1
+ 
+ 
+ 
+t
+8e
+w
+eof
+
+for i in ${Part_Size}; do
+    Lv_Size=$i
+    
+    for m in ${Monit_Point}; do
+        Name=`echo $m | awk -F '/' {'print $NF'}`
+        if [[ ! -n ${Name} ]];then Name='root';fi
+        Mount_Path=$m        
+        Create_LV 0
+        Monit_Point=`echo ${Monit_Point} | awk {'print $2,$3,$4'}`
+        break
+    done
+done
+
+#! /usr/bin/env sh
+# $1: root_dir 		软件包目录
+# $2: file_url 		软件包下载url
+# $3: user	 	    管理用户
+# $4: password		管理用户密码
+# $5: node1_ip 		节点1的ip地址
+# $6: node1_pass 	节点1的登陆密码
+# $7: node2_ip 		节点2的ip地址
+# $8: node2_pass	节点2的登陆密码
+# $9: hostname1     节点1的主机名
+# rpm install
+# need Advance install openssh-clients
+function logging(){
+	local_date=$(date +"%H:%M:%S")
+	logger -t $0 $1
+	echo "[ $USER $local_date ]: $1" | tee -a ${log_path}
+}
+
+# 初始化文件下载方法
+function download(){
+	logging "Downloading the file from $url ."
+	rm -f $root_dir/$file_name
+	curl -k -o ${root_dir}/${file_name} ${file_url}/${file_name} &>>${log_path}
+	if [[ ! -f $root_dir/$file_name ]];then
+		logging "Download was failed from $url ."
+		exit 400
+	fi
+}
+
+root_dir=/opt
+log_path=/var/log/rabbitmq_install.log
+user=admin
+password=pssword
+
+if [ "$(uname -r | cut -c 12-14)" = "el6" ];then
+	file_name=rabbitmq315_el6.tar.gz
+	file_url=http://192.168.61.30/software/rabbitmq/
+elif [ "$(uname -r | cut -c 12-14)" = "el7" ];then
+        file_name=rabbitmq381_el7.tar.gz
+	file_url=http://192.168.61.30/software/rabbitmq/
+elif [ "$(awk  -F " "  '{print $4}' /etc/redhat-release)" = "7.8.2003" ];then 
+        file_name=rabbitmq335_el7.tar.gz
+	file_url=http://192.168.61.30/software/rabbitmq/
+else
+	logging 'The rabbitmq package is missing.' 
+fi
+
+if [[ -n $1 ]];then
+  root_dir=$1
+fi
+
+if [[ -n $2 ]];then
+  file_url=$2
+fi
+
+if [[ -n $3 ]];then
+  user=$3
+fi
+
+if [[ -n $4 ]];then
+  password=$4
+fi
+
+if [[ ! -n $5 ]];then
+  exit
+fi
+node1_ip=$5
+
+if [[ ! -n $6 ]];then
+  exit
+fi
+node1_pass=$6
+
+if [[ ! -n $7 ]];then
+  exit
+fi
+node2_ip=$7
+
+if [[ ! -n $8 ]];then
+  exit
+fi
+node2_pass=$8
+
+if [[ ! -n $9 ]];then
+  exit
+fi
+hostname1=$9
+
+IP=`/sbin/ip add | grep 'inet '| grep -v '127.0.0.1' | cut -d/ -f1 | awk '{ print $2}' | head -n1`
+
+pack_dir=$(tar tf ${root_dir}/${file_name} |head -1)
+
+
+if [ "$(uname -r | cut -c 12-14)" = "el6" ];then
+     service   iptables  stop  &>>${log_path}
+     chkconfig   iptables  off &>>${log_path}
+     sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "service   iptables  stop && chkconfig   iptables  off" &>>${log_path}
+     sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "service   iptables  stop && chkconfig   iptables  off" &>>${log_path}
+else
+     systemctl stop firewalld &>>${log_path}
+     systemctl disable firewalld &>>${log_path}
+     sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "systemctl stop firewalld && systemctl disable firewalld" &>>${log_path}
+     sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "systemctl stop firewalld && systemctl disable firewalld" &>>${log_path}
+fi
+
+logging "Completed, next startup rabbitmq service ..."
+if [ "$(uname -r | cut -c 12-14)" = "el6" ];then
+     /usr/lib/rabbitmq/bin/rabbitmq-plugins  enable   rabbitmq_management  &>>${log_path}
+	 sleep 3
+	 rabbitmq-server -detached &>>${log_path}
+	 chkconfig rabbitmq-server on &>/dev/null
+	 sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "/usr/lib/rabbitmq/bin/rabbitmq-plugins  enable   rabbitmq_management" &>>${log_path}
+	 sleep 3
+	 sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "rabbitmq-server -detached" &>>${log_path}
+	 sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "chkconfig rabbitmq-server on" &>>${log_path}
+	 sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "ps -ef | grep rabbitmq | grep -v grep | awk '{print \$2}' | xargs kill -9" &>>${log_path}
+	 sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "/usr/lib/rabbitmq/bin/rabbitmq-plugins  enable   rabbitmq_management" &>>${log_path}
+	 sleep 3
+	 sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "rabbitmq-server -detached" &>>${log_path}
+	 sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "chkconfig rabbitmq-server on" &>>${log_path}
+	 sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "ps -ef | grep rabbitmq | grep -v grep | awk '{print \$2}' | xargs kill -9" &>>${log_path} 
+	 sshpass -p"${node1_pass}" scp -rp -o stricthostkeychecking=no /var/lib/rabbitmq/.erlang.cookie root@${node1_ip}:/var/lib/rabbitmq/.erlang.cookie
+     sshpass -p"${node2_pass}" scp -rp -o stricthostkeychecking=no /var/lib/rabbitmq/.erlang.cookie root@${node2_ip}:/var/lib/rabbitmq/.erlang.cookie
+     if [[ ! $? -eq 0 ]];then
+          logging "send cookie failed,pls checkout ${log_path} ..."
+          exit
+     fi
+	 sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "rabbitmq-server -detached" &>>${log_path}
+	 sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip}  "rabbitmq-server -detached" &>>${log_path}
+else 
+	rabbitmq-plugins enable rabbitmq_management  &>>${log_path}
+	sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "rabbitmq-plugins enable rabbitmq_management" &>>${log_path}
+	sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "rabbitmq-plugins enable rabbitmq_management" &>>${log_path}
+	sleep 3
+	service  rabbitmq-server  start &>>${log_path}
+    if [ $? -eq  0 ];then
+         chkconfig rabbitmq-server on &>/dev/null
+         systemctl enable rabbitmq-server &>/dev/null
+         logging "service startup completion!"
+    else
+         service rabbitmq-server status &>>${log_path}
+         logging "Service startup failed, pls checkout ${log_path} ."
+         exit
+    fi
+	sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "service rabbitmq-server start" &>>${log_path}
+    sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "service rabbitmq-server start" &>>${log_path}
+    if [[ ! $? -eq 0 ]];then
+        logging "cluster start failed,pls checkout ${log_path} ..."
+        exit
+    fi
+	sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "service rabbitmq-server stop" &>>${log_path}
+    sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "service rabbitmq-server stop" &>>${log_path}
+	sshpass -p"${node1_pass}" scp -rp -o stricthostkeychecking=no /var/lib/rabbitmq/.erlang.cookie root@${node1_ip}:/var/lib/rabbitmq/.erlang.cookie
+    sshpass -p"${node2_pass}" scp -rp -o stricthostkeychecking=no /var/lib/rabbitmq/.erlang.cookie root@${node2_ip}:/var/lib/rabbitmq/.erlang.cookie
+    if [[ ! $? -eq 0 ]];then
+         logging "send cookie failed,pls checkout ${log_path} ..."
+         exit
+    fi
+	sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "service rabbitmq-server start" &>>${log_path}
+    sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "service rabbitmq-server start" &>>${log_path}
+fi 
+
+logging "####################################"
+logging "url: http://${IP}:15672"
+logging "Username: admin"
+logging "Password: ${password} "
+logging "####################################"
+echo 0
+
+##########################
+# 接受用户变量
+##########################
+
+if [[ -n $1 ]];then username=$1;fi
+if [[ -n $2 ]];then password=$2;fi
+if [[ -n $3 ]];then gdbname=$3;fi
+if [[ -n $4 ]];then oracle_sid=$4;fi
+if [[ -n $5 ]];then oracle_sid_standby=$5;fi
+if [[ -n $6 ]];then master=$6;fi
+if [[ -n $7 ]];then standby=$7;fi
+if [[ -n $8 ]];then base_dir=$8;fi
+if [[ -n $9 ]];then package_name=$9;fi
+if [[ -n ${10} ]];then master_password=${10};fi
+
+if [[ ! -n $(grep $install_group /etc/group) ]];then
+  logging 'Create default installation group.'
+  groupadd -g 3001 $install_group &>>${log_path}
+fi
+
+if [[ $(id $username &>>${log_path};echo $?) -eq 0 ]];then
+  logging 'The user ['$username'] is exists, skip create.'
+  usermod -g oinstall -G dba,asmdba,oper,$install_group $username &>>${log_path}
+else
+  logging 'Create user ['$username'].'
+  useradd -g oinstall -G dba,asmdba,oper,$install_group $username &>>${log_path}
+  logging 'Update secret pass.'
+  echo "$password" | passwd --stdin $username &>>${log_path}
+fi
+
+if [[ ! $? -eq 0 ]];then
+ echo "depend install failed"
+# exit 2
+fi
+
+logging 'Completed, configuration hosts mapping.'
+/etc/init.d/oracleasm configure <<EOF
+grid
+oinstall
+y
+y
+EOF
+
+#数据盘自动分区	
+ disk=`cat /proc/partitions|grep -v name|grep -v ram|awk '{print $4}'|grep -v '^$'|grep -v '[0-9]$'|grep -v 'vda'|grep -v 'xvda'|grep -v 'sda'|grep -e 'vd' -e 'sd' -e 'xvd'|tail -1`
+ isM=`df -P|grep '/dev/${disk}1'`
+		if [ "$isM" != "" ];then
+			echo "/dev/${disk}1 has been mounted."
+			continue;
+		fi
+			
+		#判断是否存在未分区磁盘
+		isP=`fdisk -l /dev/$disk |grep -v 'bytes'|grep "$disk[1-9]*"`
+		if [ "$isP" = "" ];then
+				#开始分区
+				fdisk -S 56 /dev/$disk << EOF
+n
+p
+1
+
+
+wq
+EOF
+&>>${log_path}
+			sleep 5
+			#检查是否分区成功
+			checkP=`fdisk -l /dev/$disk|grep "/dev/${disk}1"`
+			if [ "$checkP" != "" ];then
+			echo "diskpart is ok"
+			fi
+		fi
+		
+###########################################################################
+oracleasm createdisk ORACLEFRA1 /dev/sdc1 &>>${log_path}
+if [[ ! $? -eq 0 ]];then
+ echo "exec failed"
+  exit 2
+fi
+###########################################################################
+
+oracleasm createdisk ORACLEASM1 /dev/${disk}1 &>>${log_path}
+if [[ ! $? -eq 0 ]];then
+ echo "exec failed"
+  exit 2
+fi
+
+# 配置hosts文件
+cat >> /etc/hosts << EOF
+$master       $oracle_sid_standby
+$standby     $oracle_sid
+EOF
+
+limits_list=(
+"$username soft nproc unlimited"
+"$username hard nproc unlimited"
+"$username soft nofile unlimited"
+"$username hard nofile unlimited"
+"$username soft stack unlimited"
+)
+
+for ((i=0; i< ${#limits_list[*]}; i++))
+do
+line=$(echo "${limits_list[$i]}"|awk '{printf $1}')
+sed -i "/$line/d" /etc/security/limits.conf &>>${log_path}
+echo "${limits_list[$i]}" >>/etc/security/limits.conf
+done
+
+#安装grid
+logging 'Completed, start install grid app .'
+su - grid -c "$temp_dir/grid/runInstaller -responseFile $temp_dir/grid/response/grid_install.rsp -silent -ignorePrereq -showProgress -IgnoreSysPreReqs "
+if [[ ! $? -eq 0 ]];then
+ echo "exec failed"
+  exit 2
+fi
+
+# Watching the installation process.
+running=true
+while ($running); do
+	#statements
+	sleep 10
+	printf "."
+	if [ -f $oracle_inventory/logs/silentInstall*.log ]; then
+		if [[ $(grep "successful" $oracle_inventory/logs/silentInstall*.log) ]]; then
+			echo -e '\n'
+			logging "Completed, Start setting the default database."
+			running=false
+		fi
+	fi
+	if [ -f $oracle_inventory/log/*.err ]; then
+		if [ $(cat $oracle_inventory/logs/*.err) ];then
+			echo -e '\n'
+			logging "Failed, check out [$log_path]."
+			exit 2
+		fi
+	fi
+done
+
+$grid_home/root.sh &>>${log_path}
+if [[ ! $? -eq 0 ]];then
+ echo "exec failed"
+ exit 2
+fi
+sleep 10
+
+cat > /home/grid/cfgrsp.properties <<EOF
+oracle.assistants.asm|S_ASMPASSWORD=$password
+oracle.assistants.asm|S_ASMMONITORPASSWORD=$password
+EOF
+
+
+su - grid -c "$grid_home/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/cfgrsp.properties"  &>>${log_path}
+if [[ ! $? -eq 0 ]];then
+ echo "exec failed"
+fi
+sleep 10
+
+logging 'Completed, start install oracle app .'
+su - $username -c "unset DISPLAY;$temp_dir/database/runInstaller -silent -ignorePrereq -responseFile $oracle_install_file" &>>${log_path}
+
+# Watching the installation process.
+running=true
+while ($running); do
+	#statements
+	sleep 10
+	printf "."
+	if [[ $(grep "Oracle Database 11g was successful" $oracle_inventory/logs/silentInstall*.log) ]]; then
+			echo -e '\n'
+			logging "Completed, Start setting the default database."
+			running=false
+	fi
+	if [ -f $oracle_inventory/log/*.err ]; then
+		if [ $(cat $oracle_inventory/logs/*.err) ];then
+			echo -e '\n'
+			logging "Failed, check out [$log_path]."
+			exit 2
+		fi
+	fi
+done
+
+sqlplus /nolog <<EOF
+conn / as sysdba;
+startup;
+alter database recover managed standby database using current logfile disconnect;
+exit;
+EOF
