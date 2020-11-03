@@ -1569,3 +1569,16 @@ mysql -uroot -p"${temporary}" --connect-expired-password  -e "alter user user() 
 mysql -uroot -p"${password}" -e "grant replication slave, replication client, reload on *.* to '${repl}'@'%' identified by '${repl_password}';"
 mysqldump -uroot -p"${password}" -R --single-transaction --set-gtid-purged=OFF --master-data=2 -A > ${root_dir}/full_backup.sql
 sshpass -p"${slave_pass}" scp -rp -o stricthostkeychecking=no ${root_dir}/full_backup.sql root@${slave_ip}:/tmp  &>>${log_path}
+
+for i in {0..2}
+do /usr/local/redis/${package_dir}/utils/install_server.sh <<EOF
+700$i
+
+/usr/local/redis/bin/redis-server
+
+EOF
+done  &>>${log_path}
+
+for q in {3..5} 
+do sshpass -p"${node_pass}" ssh -o stricthostkeychecking=no root@${node_ip} "/usr/local/redis/${package_dir}/utils/install_server.sh <<EOF 
+700$q
