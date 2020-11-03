@@ -1564,3 +1564,8 @@ service mysqld start
     logging "Service startup failed, pls checkout ${log_path} ."
     exit
   fi
+temporary=$(grep generated $root_dir/log/error.log | awk  '{print $NF}')
+mysql -uroot -p"${temporary}" --connect-expired-password  -e "alter user user() identified by '${password}';" &>>${log_path}
+mysql -uroot -p"${password}" -e "grant replication slave, replication client, reload on *.* to '${repl}'@'%' identified by '${repl_password}';"
+mysqldump -uroot -p"${password}" -R --single-transaction --set-gtid-purged=OFF --master-data=2 -A > ${root_dir}/full_backup.sql
+sshpass -p"${slave_pass}" scp -rp -o stricthostkeychecking=no ${root_dir}/full_backup.sql root@${slave_ip}:/tmp  &>>${log_path}
