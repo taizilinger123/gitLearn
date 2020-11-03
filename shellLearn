@@ -1618,3 +1618,63 @@ logging "Username: admin"
 logging "Password: ${password} "
 logging "####################################"
 echo 0
+
+# 初始化日志输出方法
+function logging(){
+        local_date=$(date +"%H:%M:%S")
+        logger -t $0 $1
+        echo "[ $USER $local_date ]: $1" | tee -a ${log_path}
+}
+
+function yum_server(){
+logging "Completed, next setting up repository ..."
+if [ "$(uname -r | cut -c 12-14)" = "el6" ];then
+  cat >/etc/yum.repos.d/rhel6.repo<<EOF
+[base]
+name=Red Hat Enterprise Linux 6.4
+baseurl=http://192.16.4.61/rhel6.4/
+enabled=1
+gpgcheck=0
+EOF
+	elif [ "$(uname -r | cut -c 12-14)" = "el7" || "$(awk  -F " "  '{print $4}' /etc/redhat-release)" = "7.8.2003" ];then
+    cat >/etc/yum.repos.d/rhel7.repo<<EOF
+[base]
+name=Red Hat Enterprise Linux 7.4
+baseurl=http://192.16.4.61/rhel7.4/
+enabled=1
+gpgcheck=0
+EOF
+	else
+	logging 'The current system software pack is missing.' 
+fi
+yum repolist &>>${log_path}
+if [[ ! $? -eq 0 ]];then
+  "setting up repository failed, pls checkout ${log_path} ."
+  exit
+fi
+}
+
+yum install gcc gcc-c++ make automake autoconf libtool pcre pcre-devel zlib openssl openssl-devel -y &>>${log_path}
+if [[ ! $? -eq 0 ]];then
+  logging "install failed, pls checkout ${log_path} ."
+  exit
+fi
+
+logging "Completed, next downloading nginx ..."
+curl -k -o ${root_dir}/${file_name} ${file_url}/${file_name} &>>${log_path}
+package_dir=`tar tf ${root_dir}/${file_name} |head -1`
+
+tar xf ${root_dir}/${file_name} -C ${root_dir}
+
+logging "Completed, next install nginx ..."
+cd ${root_dir}/${package_dir}
+./configure --prefix=${root_dir} --user=nginx --group=nginx  --with-http_ssl_module --with-http_realip_module   &>>${log_path}
+make  &>>${log_path} && make install  &>>${log_path}
+if [[ ! $? -eq 0 ]];then
+  logging "install failed, pls checkout ${log_path} ."
+  exit
+fi
+
+logging "###########################################"
+logging "URL地址: http://$IP"
+logging "###########################################"
