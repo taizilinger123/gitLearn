@@ -1554,3 +1554,13 @@ startup;
 alter database recover managed standby database using current logfile disconnect;
 exit;
 EOF
+
+service mysqld start
+  if [[ $? -eq 0 ]];then
+    chkconfig mysqld on
+    logging "Completed, startup by systemd ."
+  else
+    service mysqld status &>>${log_path}
+    logging "Service startup failed, pls checkout ${log_path} ."
+    exit
+  fi
