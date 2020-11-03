@@ -1582,3 +1582,32 @@ done  &>>${log_path}
 for q in {3..5} 
 do sshpass -p"${node_pass}" ssh -o stricthostkeychecking=no root@${node_ip} "/usr/local/redis/${package_dir}/utils/install_server.sh <<EOF 
 700$q
+
+
+logging "Completed, next start the installation node2 rabbitmq ..."
+sshpass -p"${node1_pass}" scp -rp -o stricthostkeychecking=no ${root_dir}/${pack_dir} root@${node1_ip}:${root_dir} &>>${log_path}
+sshpass -p"${node2_pass}" scp -rp -o stricthostkeychecking=no ${root_dir}/${pack_dir} root@${node2_ip}:${root_dir} &>>${log_path}
+sshpass -p"${node1_pass}" scp -rp -o stricthostkeychecking=no /etc/yum.repos.d/rabbitmq.repo root@${node1_ip}:/etc/yum.repos.d/ &>>${log_path}
+sshpass -p"${node2_pass}" scp -rp -o stricthostkeychecking=no /etc/yum.repos.d/rabbitmq.repo root@${node2_ip}:/etc/yum.repos.d/ &>>${log_path}
+
+
+logging "start system configuration ..."
+#hostname mq01
+hostnamectl --static set-hostname mq01
+sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "hostnamectl --static set-hostname mq02"  &>>${log_path}
+sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "hostnamectl --static set-hostname mq03"  &>>${log_path}
+
+#sed -i 's/^HOSTNAME=.*/HOSTNAME=mq01/' /etc/sysconfig/network
+#sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "sed -i 's/^HOSTNAME=.*/HOSTNAME=mq02/' /etc/sysconfig/network"  &>>${log_path}
+#sshpass -p"${node2_pass}" ssh -o stricthostkeychecking=no root@${node2_ip} "sed -i 's/^HOSTNAME=.*/HOSTNAME=mq03/' /etc/sysconfig/network"  &>>${log_path}
+
+cat >> /etc/hosts <<EOF
+$IP mq01
+$node1_ip mq02
+$node2_ip mq03
+EOF
+sshpass -p"${node1_pass}" ssh -o stricthostkeychecking=no root@${node1_ip} "cat >> /etc/hosts <<EOF
+$IP mq01
+$node1_ip mq02
+$node2_ip mq03
+EOF"  &>>${log_path}
