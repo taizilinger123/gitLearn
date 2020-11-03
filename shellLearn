@@ -1611,3 +1611,10 @@ $IP mq01
 $node1_ip mq02
 $node2_ip mq03
 EOF"  &>>${log_path}
+
+logging "####################################"
+logging "url: http://${IP}:15672"
+logging "Username: admin"
+logging "Password: ${password} "
+logging "####################################"
+echo 0
