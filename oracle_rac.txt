@@ -1,0 +1,54 @@
+静默安装19C RAC的脚本
+脚本为3个：
+
+        1 为基础设置脚本。--PreRACConfiguatiion.sh
+
+        2 为grid安装脚本。 --SilentInstallGrid19CRAC.sh
+
+        3 为rdbms和instance安装脚本。 --SilentInstall19CRACRdbmsAndInstance.sh
+
+注意：
+
+        1 基础设置脚本可以重复执行
+
+        2 grid和db安装脚本，在没有执行安装前停止都可以重复执行。
+
+        3 脚本只在rhel 7.6上测试，其他系统和版本不保证。
+
+
+
+一 执行基础设置脚本前，要保证下面的问题完成：
+
+        1 挂载ISO镜像。
+
+        2 把不存在ISO镜像的RPM放到脚本相同目录，我习惯放/u01。
+
+        3 设置好主机名。
+
+
+
+二 执行grid安装脚本前：
+
+        1 完成所有节点的/etc/hosts文件内容补充。
+
+        2 根据基础设置脚本的提示完成ssh配置。
+
+        3 绑定磁盘阵列的LUN，或使用asmlib完成配置。
+
+        4 19c的grid安装包放入grid家目录
+
+
+
+三 执行rdbms和instance脚本前：
+
+        1 19c的db安装包放入oracle家目录
+
+        2 创建asm磁盘组
+
+
+
+脚本下载地址：http://blog.itpub.net/28572479/viewspace-2740409/
+1.PreRACConfiguatiion.sh：
+2.SilentInstallGrid19CRAC.sh：
+3.SilentInstall19CRACRdbmsAndInstance.sh：
+
